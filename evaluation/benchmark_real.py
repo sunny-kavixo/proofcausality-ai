@@ -1,6 +1,9 @@
+from __future__ import annotations
+import os, sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 """Empirical benchmark evaluation on genuine curated tabletop action cases with Wilson score intervals."""
 
-from __future__ import annotations
 
 import csv
 import json

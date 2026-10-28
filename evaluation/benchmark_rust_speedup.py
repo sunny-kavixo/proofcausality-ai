@@ -1,6 +1,9 @@
+from __future__ import annotations
+import os, sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 """High-resolution latency benchmarking comparing pure NumPy vs Rust native acceleration."""
 
-from __future__ import annotations
 
 import ctypes
 import json

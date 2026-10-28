@@ -17,7 +17,7 @@
       <div class="brand-tagline">Prove what happened. Detect what is missing. Capture the evidence that changes the decision.</div>
     </div>
     <div class="nav-meta">
-      <span class="badge badge-neutral" id="engine-badge">Engine v0.2.3</span>
+      <span class="badge badge-neutral" id="engine-badge">Engine v0.2.4</span>
       <span class="badge badge-success" id="rust-badge">Rust Native: Active</span>
       <span class="badge badge-accent" id="provider-badge">Meta: Fallback Mode</span>
     </div>
@@ -48,6 +48,31 @@
         </p>
       </div>
 
+      <div class="card mb-4">
+        <div class="card-header flex-between">
+          <h3>Evidence Provenance Gate (P0 Integrity Layer)</h3>
+          <span class="badge badge-success">Invariant Rules Enforced</span>
+        </div>
+        <div class="p-3">
+          <p class="text-muted mb-2">Every piece of evidence is categorized into one of 8 mutually exclusive provenance types to prevent unsubstantiated claims:</p>
+          <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+            <span class="badge badge-neutral">REAL_PHOTOGRAPH</span>
+            <span class="badge badge-neutral">PUBLIC_DATASET_ANNOTATION</span>
+            <span class="badge badge-neutral">HUMAN_ANNOTATION</span>
+            <span class="badge badge-neutral">MODEL_PREDICTION</span>
+            <span class="badge badge-neutral">GEOMETRIC_FALLBACK</span>
+            <span class="badge badge-neutral">SYNTHETIC_FIXTURE</span>
+            <span class="badge badge-neutral">USER_SUPPLIED_METADATA</span>
+            <span class="badge badge-neutral">VERIFIED_TEMPORAL_OBSERVATION</span>
+          </div>
+          <ul class="text-sm text-muted" style="line-height:1.6; padding-left:18px;">
+            <li><strong>Rule 1:</strong> A geometric bounding-box fallback is strictly prohibited from claiming independent segmentation.</li>
+            <li><strong>Rule 2:</strong> A human-supplied bounding box never automatically proves physical object identity.</li>
+            <li><strong>Rule 3:</strong> A single static photograph cannot prove physical rest or release without verified temporal observations.</li>
+            <li><strong>Rule 4:</strong> User-supplied follow-up metadata without submitted media is classified as <code>METADATA_ONLY</code> and cannot claim independent verification.</li>
+          </ul>
+        </div>
+      </div>
       <div class="grid-2col">
         <div class="card">
           <div class="card-header">
@@ -439,6 +464,7 @@
       <div class="dataset-switcher mb-3">
         <button class="btn btn-primary" id="btn-dataset-real" onclick="switchBenchmarkDataset('real')">Real-World Tabletop Evaluation (12 Cases)</button>
         <button class="btn btn-outline" id="btn-dataset-synthetic" onclick="switchBenchmarkDataset('synthetic')">Synthetic Baseline (25 Cases)</button>
+        <button class="btn btn-outline" id="btn-dataset-coco" onclick="switchBenchmarkDataset('coco')">COCO 2017 Real Photographs (20 Images, 218 Anns)</button>
       </div>
 
       <div class="metrics-grid">
@@ -469,7 +495,40 @@
           <h3 id="bench-table-title">Case-by-Case Evaluation Matrix</h3>
           <button class="btn btn-sm btn-outline" id="btn-refresh-benchmarks">Refresh Data</button>
         </div>
-        <div class="table-container">
+        <div id="coco-benchmark-view" style="display:none;" class="mt-4">
+        <div class="grid-2col mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h3>COCO 2017 Real Photographic Benchmark (Held-Out Test Split)</h3>
+            </div>
+            <div class="p-3">
+              <p class="text-muted mb-2">Evaluated on 10 held-out authentic photographs with 119 controlled interventions per category.</p>
+              <table class="data-table">
+                <thead>
+                  <tr><th>Corruption Category</th><th>LabelCourt Detected</th><th>Naive BBox Detected</th><th>Delta</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>CLASS_SWAP</code></td><td class="text-success font-bold">119 / 119 (100.0%)</td><td class="text-danger">5 / 119 (4.2%)</td><td class="text-cyan">+95.8%</td></tr>
+                  <tr><td><code>ENLARGED_MASK</code></td><td class="text-success font-bold">119 / 119 (100.0%)</td><td class="text-danger">34 / 119 (28.6%)</td><td class="text-cyan">+71.4%</td></tr>
+                  <tr><td><code>REDUCED_MASK</code></td><td class="text-success font-bold">114 / 119 (95.8%)</td><td class="text-danger">29 / 119 (24.4%)</td><td class="text-cyan">+71.4%</td></tr>
+                  <tr><td><code>SHIFTED_MASK</code></td><td class="text-success font-bold">119 / 119 (100.0%)</td><td>106 / 119 (89.1%)</td><td class="text-cyan">+10.9%</td></tr>
+                  <tr><td><code>MISSING_OBJECT</code></td><td class="text-success font-bold">119 / 119 (100.0%)</td><td>119 / 119 (100.0%)</td><td>0.0%</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3>Real Image Visual Disagreement Heatmap</h3>
+            </div>
+            <div class="p-3 text-center">
+              <img src="/static/labelcourt_coco_sample_overlay.png" alt="LabelCourt Real Photographic Disagreement Overlay" style="max-width:100%; border-radius:6px; border:1px solid var(--border-color);">
+              <p class="text-muted mt-2 text-sm">COCO 2017 Val sample <code>000000397133.jpg</code> with controlled boundary shift overlay generated by LabelCourt.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="table-container">
           <table class="data-table">
             <thead>
               <tr>

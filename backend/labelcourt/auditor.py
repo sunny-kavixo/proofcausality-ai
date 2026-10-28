@@ -52,6 +52,8 @@ class LabelCourtAuditor:
         image_gray: Optional[np.ndarray] = None,
         image_rgb: Optional[np.ndarray] = None,
         independent_class_candidate: Optional[str] = None,
+        extra_measurements: Optional[dict[str, Any]] = None,
+        provenance: Optional[dict[str, Any]] = None,
     ) -> tuple[AnnotationAuditResult, EvidenceReceipt]:
         """Perform an objective audit on a single annotation item against a candidate segmentation mask."""
         height, width = candidate_mask.shape
@@ -133,21 +135,26 @@ class LabelCourtAuditor:
             f"{human_annotation.id}_{human_annotation.category_name}_{human_annotation.bbox.model_dump_json()}_{iou:.4f}"
         )
 
+        meas = {
+            "iou": round(iou, 4),
+            "boundary_agreement": round(boundary_agreement, 4),
+            "area_ratio": round(area_ratio, 4),
+            "bbox_displacement": round(bbox_disp, 4),
+            "class_match": class_match,
+        }
+        if extra_measurements:
+            meas.update(extra_measurements)
+
         receipt = generate_receipt(
             report_id=report_id,
             engine_name="LabelCourt Visual Annotation Evidence Auditor",
             software_version="0.2.3",
             inputs_hash=inputs_digest,
-            measurements={
-                "iou": round(iou, 4),
-                "boundary_agreement": round(boundary_agreement, 4),
-                "area_ratio": round(area_ratio, 4),
-                "bbox_displacement": round(bbox_disp, 4),
-                "class_match": class_match,
-            },
+            measurements=meas,
             signals=signals,
             verdict=verdict.value,
             recapture_directive=recapture_plan.directive if recapture_plan else None,
+            provenance=provenance,
         )
 
         return audit_result, receipt

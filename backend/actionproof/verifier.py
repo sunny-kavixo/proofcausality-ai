@@ -41,6 +41,8 @@ class ActionProofVerifier:
         after_mask: np.ndarray,
         after_image_gray: Optional[np.ndarray] = None,
         has_final_state: bool = True,
+        extra_measurements: Optional[dict[str, Any]] = None,
+        provenance: Optional[dict[str, Any]] = None,
     ) -> tuple[ActionVerificationResult, EvidenceReceipt]:
         """Verify before/after physical action with explicit uncertainty decomposition."""
         report_id = f"AP-{uuid.uuid4().hex[:12].upper()}"
@@ -136,20 +138,25 @@ class ActionProofVerifier:
             f"{request.task_type}_{request.object_name}_{displacement:.2f}_{verdict.value}"
         )
 
+        meas = {
+            "task_type": request.task_type,
+            "displacement_px": round(displacement, 2),
+            "distance_to_target_px": round(distance_to_target, 2) if distance_to_target is not None else None,
+            "has_final_state": has_final_state,
+        }
+        if extra_measurements:
+            meas.update(extra_measurements)
+
         receipt = generate_receipt(
             report_id=report_id,
             engine_name="ActionProof Physical Action Verification Engine",
             software_version="0.2.3",
             inputs_hash=inputs_digest,
-            measurements={
-                "task_type": request.task_type,
-                "displacement_px": round(displacement, 2),
-                "distance_to_target_px": round(distance_to_target, 2) if distance_to_target is not None else None,
-                "has_final_state": has_final_state,
-            },
+            measurements=meas,
             signals=signals,
             verdict=verdict.value,
             recapture_directive=recapture_plan.directive if recapture_plan else None,
+            provenance=provenance,
         )
 
         return result, receipt

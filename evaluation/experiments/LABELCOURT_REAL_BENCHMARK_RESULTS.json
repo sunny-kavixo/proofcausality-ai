@@ -1,0 +1,201 @@
+{
+  "metadata": {
+    "benchmark_name": "LabelCourt Real-World Photographic Evaluation",
+    "dataset": "MS COCO 2017 Validation Subset (20 authentic photographs)",
+    "engine_version": "v0.2.4",
+    "random_seed": 42,
+    "date": "2026-10-28 17:31:30Z"
+  },
+  "development_split": {
+    "total_annotations_evaluated": 96,
+    "total_scenarios_run": 576,
+    "labelcourt": {
+      "TP": 476,
+      "FP": 13,
+      "TN": 83,
+      "FN": 4,
+      "precision": 0.9734,
+      "precision_wilson_ci95": [
+        0.9551,
+        0.9844
+      ],
+      "recall": 0.9917,
+      "recall_wilson_ci95": [
+        0.9788,
+        0.9968
+      ],
+      "f1_score": 0.9825,
+      "mean_latency_ms": 15.279,
+      "p50_latency_ms": 16.952,
+      "p95_latency_ms": 20.897
+    },
+    "naive_bbox_baseline": {
+      "TP": 248,
+      "FP": 4,
+      "TN": 92,
+      "FN": 232,
+      "precision": 0.9841,
+      "precision_wilson_ci95": [
+        0.9599,
+        0.9938
+      ],
+      "recall": 0.5167,
+      "recall_wilson_ci95": [
+        0.472,
+        0.5611
+      ],
+      "f1_score": 0.6776,
+      "mean_latency_ms": 0.439,
+      "p50_latency_ms": 0.494,
+      "p95_latency_ms": 0.569
+    },
+    "breakdown_by_corruption": {
+      "CLEAN": {
+        "total": 96,
+        "lc_detected": 13,
+        "naive_detected": 4
+      },
+      "SHIFTED_MASK": {
+        "total": 96,
+        "lc_detected": 96,
+        "naive_detected": 78
+      },
+      "REDUCED_MASK": {
+        "total": 96,
+        "lc_detected": 92,
+        "naive_detected": 35
+      },
+      "ENLARGED_MASK": {
+        "total": 96,
+        "lc_detected": 96,
+        "naive_detected": 35
+      },
+      "CLASS_SWAP": {
+        "total": 96,
+        "lc_detected": 96,
+        "naive_detected": 4
+      },
+      "MISSING_OBJECT": {
+        "total": 96,
+        "lc_detected": 96,
+        "naive_detected": 96
+      }
+    },
+    "breakdown_by_scale": {
+      "small": {
+        "TP": 260,
+        "FN": 0,
+        "TN": 49,
+        "FP": 3
+      },
+      "medium": {
+        "TP": 144,
+        "FN": 1,
+        "TN": 25,
+        "FP": 4
+      },
+      "large": {
+        "TP": 72,
+        "FN": 3,
+        "TN": 9,
+        "FP": 6
+      }
+    }
+  },
+  "held_out_test_split": {
+    "total_annotations_evaluated": 119,
+    "total_scenarios_run": 714,
+    "labelcourt": {
+      "TP": 590,
+      "FP": 15,
+      "TN": 104,
+      "FN": 5,
+      "precision": 0.9752,
+      "precision_wilson_ci95": [
+        0.9595,
+        0.9849
+      ],
+      "recall": 0.9916,
+      "recall_wilson_ci95": [
+        0.9805,
+        0.9964
+      ],
+      "f1_score": 0.9833,
+      "mean_latency_ms": 19.56,
+      "p50_latency_ms": 19.193,
+      "p95_latency_ms": 24.914
+    },
+    "naive_bbox_baseline": {
+      "TP": 293,
+      "FP": 5,
+      "TN": 114,
+      "FN": 302,
+      "precision": 0.9832,
+      "precision_wilson_ci95": [
+        0.9613,
+        0.9928
+      ],
+      "recall": 0.4924,
+      "recall_wilson_ci95": [
+        0.4524,
+        0.5325
+      ],
+      "f1_score": 0.6562,
+      "mean_latency_ms": 0.546,
+      "p50_latency_ms": 0.56,
+      "p95_latency_ms": 0.629
+    },
+    "breakdown_by_corruption": {
+      "CLEAN": {
+        "total": 119,
+        "lc_detected": 15,
+        "naive_detected": 5
+      },
+      "SHIFTED_MASK": {
+        "total": 119,
+        "lc_detected": 119,
+        "naive_detected": 106
+      },
+      "REDUCED_MASK": {
+        "total": 119,
+        "lc_detected": 114,
+        "naive_detected": 29
+      },
+      "ENLARGED_MASK": {
+        "total": 119,
+        "lc_detected": 119,
+        "naive_detected": 34
+      },
+      "CLASS_SWAP": {
+        "total": 119,
+        "lc_detected": 119,
+        "naive_detected": 5
+      },
+      "MISSING_OBJECT": {
+        "total": 119,
+        "lc_detected": 119,
+        "naive_detected": 119
+      }
+    },
+    "breakdown_by_scale": {
+      "small": {
+        "TP": 320,
+        "FN": 0,
+        "TN": 62,
+        "FP": 2
+      },
+      "medium": {
+        "TP": 221,
+        "FN": 4,
+        "TN": 36,
+        "FP": 9
+      },
+      "large": {
+        "TP": 49,
+        "FN": 1,
+        "TN": 6,
+        "FP": 4
+      }
+    }
+  }
+}

@@ -122,4 +122,5 @@ class EvidenceReceipt(BaseModel):
     uncertainty_signals: List[dict[str, Any]]
     verdict: str
     recapture_directive: Optional[str] = None
+    provenance: Optional[dict[str, Any]] = None
     receipt_sha256: str

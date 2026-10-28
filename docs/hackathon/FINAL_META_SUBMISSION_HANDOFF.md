@@ -78,17 +78,17 @@ Evaluated on 37 benchmark cases (12 curated tabletop geometric metadata pairs + 
 ## 6. Official Architecture Diagrams & Live Screenshots
 
 ### Vector Architecture Diagrams
-- System Architecture: [`docs/architecture/system-architecture.svg`](file:///Users/sunny/Projects/proofcausality-ai/docs/architecture/system-architecture.svg)
-- Evidence Calculus Decision Flow: [`docs/architecture/evidence-calculus-decision-flow.svg`](file:///Users/sunny/Projects/proofcausality-ai/docs/architecture/evidence-calculus-decision-flow.svg)
-- ReCapture Closed-Loop: [`docs/architecture/recapture-closed-loop.svg`](file:///Users/sunny/Projects/proofcausality-ai/docs/architecture/recapture-closed-loop.svg)
-- Integration Boundaries: [`docs/architecture/integration-boundaries.svg`](file:///Users/sunny/Projects/proofcausality-ai/docs/architecture/integration-boundaries.svg)
+- System Architecture: [`docs/architecture/system-architecture.svg`](../../docs/architecture/system-architecture.svg)
+- Evidence Calculus Decision Flow: [`docs/architecture/evidence-calculus-decision-flow.svg`](../../docs/architecture/evidence-calculus-decision-flow.svg)
+- ReCapture Closed-Loop: [`docs/architecture/recapture-closed-loop.svg`](../../docs/architecture/recapture-closed-loop.svg)
+- Integration Boundaries: [`docs/architecture/integration-boundaries.svg`](../../docs/architecture/integration-boundaries.svg)
 
 ### Live Browser UI Screenshots
-- Main Studio & Diagnostics: [`docs/screenshots/landing_page.png`](file:///Users/sunny/Projects/proofcausality-ai/docs/screenshots/landing_page.png)
-- ActionProof Verification: [`docs/screenshots/actionproof_workflow.png`](file:///Users/sunny/Projects/proofcausality-ai/docs/screenshots/actionproof_workflow.png)
-- Evidence Calculus Predicates & Debt: [`docs/screenshots/evidence_calculus_tab.png`](file:///Users/sunny/Projects/proofcausality-ai/docs/screenshots/evidence_calculus_tab.png)
-- ReCapture Recovery Guidance: [`docs/screenshots/recapture_tab.png`](file:///Users/sunny/Projects/proofcausality-ai/docs/screenshots/recapture_tab.png)
-- Benchmarking & Latency Profiles: [`docs/screenshots/benchmarks_tab.png`](file:///Users/sunny/Projects/proofcausality-ai/docs/screenshots/benchmarks_tab.png)
+- Main Studio & Diagnostics: [`docs/screenshots/landing_page.png`](../../docs/screenshots/landing_page.png)
+- ActionProof Verification: [`docs/screenshots/actionproof_workflow.png`](../../docs/screenshots/actionproof_workflow.png)
+- Evidence Calculus Predicates & Debt: [`docs/screenshots/evidence_calculus_tab.png`](../../docs/screenshots/evidence_calculus_tab.png)
+- ReCapture Recovery Guidance: [`docs/screenshots/recapture_tab.png`](../../docs/screenshots/recapture_tab.png)
+- Benchmarking & Latency Profiles: [`docs/screenshots/benchmarks_tab.png`](../../docs/screenshots/benchmarks_tab.png)
 
 ---
 

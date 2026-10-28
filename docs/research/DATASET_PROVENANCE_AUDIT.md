@@ -9,7 +9,7 @@
 ## 1. Tabletop Manipulation Dataset (12 Cases)
 
 ### Forensic Provenance Audit
-- **Source**: Tabletop Robotics Manipulation Evaluation Suite ([`evaluation/cases/real_dataset.py`](file:///Users/sunny/Projects/proofcausality-ai/evaluation/cases/real_dataset.py)).
+- **Source**: Tabletop Robotics Manipulation Evaluation Suite ([`evaluation/cases/real_dataset.py`](../../evaluation/cases/real_dataset.py)).
 - **License**: Creative Commons Attribution 4.0 International ([CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/)).
 - **Exact Nature of Repository Assets**:
   - The 12 cases are **programmatically documented geometric coordinate and defect metadata specifications**.

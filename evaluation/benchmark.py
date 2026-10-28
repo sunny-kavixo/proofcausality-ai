@@ -1,6 +1,9 @@
+from __future__ import annotations
+import os, sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 """Scientific evaluation harness computing False-Success Rate and Re-Capture Resolution Rate."""
 
-from __future__ import annotations
 import numpy as np
 
 import csv

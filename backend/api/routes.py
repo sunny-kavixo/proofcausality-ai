@@ -99,7 +99,7 @@ def health() -> dict[str, Any]:
     acc_info = get_accelerator_info()
     return {
         "status": "ok",
-        "version": "0.2.3",
+        "version": "0.2.4",
         "project": "ProofCausality AI",
         "tagline": "Prove what happened. Detect what is missing. Capture the evidence that changes the decision.",
         "engines": [
@@ -170,6 +170,7 @@ def audit_annotation(payload: AuditRequest) -> dict[str, Any]:
     image_gray = None
     overlay_data_uri = None
     input_sha256 = None
+    provenance_dict = None
 
     if payload.image_base64:
         raw_b64 = payload.image_base64
@@ -177,30 +178,55 @@ def audit_annotation(payload: AuditRequest) -> dict[str, Any]:
             raw_b64 = raw_b64.split(",", 1)[1]
         try:
             raw_bytes = base64.b64decode(raw_b64)
-            rgb_arr, sha256_hash, iw, ih = validate_and_decode_image(raw_bytes)
-            input_sha256 = sha256_hash
-            image_gray = 0.299 * rgb_arr[:, :, 0] + 0.587 * rgb_arr[:, :, 1] + 0.114 * rgb_arr[:, :, 2]
-            # Human ground-truth mask
-            human_mask = bbox_to_mask(payload.human_annotation.bbox, ih, iw)
-            overlay = create_disagreement_visual_overlay(rgb_arr, human_mask, candidate_mask)
-            overlay_data_uri = encode_image_to_base64_png(overlay)
-        except Exception:
-            pass
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=f"Malformed base64 image data: {e}")
 
-    if image_gray is None:
+        try:
+            rgb_arr, sha256_hash, iw, ih = validate_and_decode_image(raw_bytes)
+        except ImageValidationError as e:
+            raise HTTPException(status_code=400, detail=str(e))
+        except Exception as e:
+            raise HTTPException(status_code=422, detail=f"Image decoding failed: {e}")
+
+        if (ih, iw) != (h, w):
+            raise HTTPException(
+                status_code=422,
+                detail=f"Dimension mismatch: uploaded image is {iw}x{ih}, but candidate coordinate frame is {w}x{h}."
+            )
+
+        input_sha256 = sha256_hash
+        image_gray = 0.299 * rgb_arr[:, :, 0] + 0.587 * rgb_arr[:, :, 1] + 0.114 * rgb_arr[:, :, 2]
+        human_mask = bbox_to_mask(payload.human_annotation.bbox, ih, iw)
+        overlay = create_disagreement_visual_overlay(rgb_arr, human_mask, candidate_mask)
+        overlay_data_uri = encode_image_to_base64_png(overlay)
+        provenance_dict = {
+            "category": "REAL_PHOTOGRAPH",
+            "source_id": input_sha256,
+            "verification_method": "DECODED_RGB_PIXELS",
+            "dimensions": [iw, ih],
+        }
+    else:
         image_gray = np.full((h, w), 128, dtype=np.uint8)
         if not payload.is_blurry:
             image_gray[::4, ::4] = 240
             image_gray[1::4, 1::4] = 10
+        provenance_dict = {
+            "category": "SYNTHETIC_FIXTURE",
+            "source_id": "SYNTHETIC_CANVAS",
+            "verification_method": "SYNTHETIC_UNIFORM_PATTERN",
+            "dimensions": [w, h],
+        }
+
+    extra_meas = {"source_image_sha256": input_sha256} if input_sha256 else {}
 
     result, receipt = auditor.audit_annotation(
         human_annotation=payload.human_annotation,
         candidate_mask=candidate_mask,
         image_gray=image_gray,
         independent_class_candidate=payload.class_candidate,
+        extra_measurements=extra_meas,
+        provenance=provenance_dict,
     )
-    if input_sha256:
-        receipt.measurements["source_image_sha256"] = input_sha256
 
     _receipt_store[receipt.report_id] = receipt
 
@@ -230,6 +256,7 @@ def verify_action(payload: VerifyActionPayload) -> dict[str, Any]:
 
     input_sha256 = None
     image_gray = None
+    provenance_dict = None
 
     if payload.after_image_base64:
         raw_b64 = payload.after_image_base64
@@ -237,17 +264,43 @@ def verify_action(payload: VerifyActionPayload) -> dict[str, Any]:
             raw_b64 = raw_b64.split(",", 1)[1]
         try:
             raw_bytes = base64.b64decode(raw_b64)
-            rgb_arr, sha256_hash, _, _ = validate_and_decode_image(raw_bytes)
-            input_sha256 = sha256_hash
-            image_gray = 0.299 * rgb_arr[:, :, 0] + 0.587 * rgb_arr[:, :, 1] + 0.114 * rgb_arr[:, :, 2]
-        except Exception:
-            pass
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=f"Malformed base64 image data: {e}")
 
-    if image_gray is None:
+        try:
+            rgb_arr, sha256_hash, iw, ih = validate_and_decode_image(raw_bytes)
+        except ImageValidationError as e:
+            raise HTTPException(status_code=400, detail=str(e))
+        except Exception as e:
+            raise HTTPException(status_code=422, detail=f"Image decoding failed: {e}")
+
+        if (ih, iw) != (h, w):
+            raise HTTPException(
+                status_code=422,
+                detail=f"Dimension mismatch: after-frame image is {iw}x{ih}, but coordinate frame is {w}x{h}."
+            )
+
+        input_sha256 = sha256_hash
+        image_gray = 0.299 * rgb_arr[:, :, 0] + 0.587 * rgb_arr[:, :, 1] + 0.114 * rgb_arr[:, :, 2]
+        provenance_dict = {
+            "category": "REAL_PHOTOGRAPH",
+            "source_id": input_sha256,
+            "verification_method": "DECODED_RGB_PIXELS",
+            "dimensions": [iw, ih],
+        }
+    else:
         image_gray = np.full((h, w), 128, dtype=np.uint8)
         if not payload.is_blurry:
             image_gray[::4, ::4] = 240
             image_gray[1::4, 1::4] = 10
+        provenance_dict = {
+            "category": "SYNTHETIC_FIXTURE",
+            "source_id": "SYNTHETIC_CANVAS",
+            "verification_method": "SYNTHETIC_UNIFORM_PATTERN",
+            "dimensions": [w, h],
+        }
+
+    extra_meas = {"after_image_sha256": input_sha256} if input_sha256 else {}
 
     result, receipt = verifier.verify_action(
         request=payload.request,
@@ -255,9 +308,9 @@ def verify_action(payload: VerifyActionPayload) -> dict[str, Any]:
         after_mask=after_mask,
         after_image_gray=image_gray,
         has_final_state=payload.has_final_state,
+        extra_measurements=extra_meas,
+        provenance=provenance_dict,
     )
-    if input_sha256:
-        receipt.measurements["after_image_sha256"] = input_sha256
 
     _receipt_store[receipt.report_id] = receipt
 
@@ -285,6 +338,8 @@ class ReCaptureFollowupRequest(BaseModel):
     followup_has_final_state: bool = True
     instruction_followed: bool = True
     effort_seconds: float = 5.0
+    followup_image_base64: Optional[str] = None
+    original_image_base64: Optional[str] = None
 
 
 @router.post("/recapture/evaluate-followup")
@@ -298,13 +353,58 @@ def evaluate_recapture_followup(req: ReCaptureFollowupRequest) -> dict[str, Any]
         target_region=req.target_region,
     )
 
+    followup_sha256 = None
+    followup_var = req.followup_laplacian_variance
+
+    if req.followup_image_base64:
+        raw_b64 = req.followup_image_base64
+        if "," in raw_b64:
+            raw_b64 = raw_b64.split(",", 1)[1]
+        try:
+            raw_bytes = base64.b64decode(raw_b64)
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=f"Malformed followup base64: {e}")
+
+        try:
+            rgb_arr, sha256_hash, iw, ih = validate_and_decode_image(raw_bytes)
+        except ImageValidationError as e:
+            raise HTTPException(status_code=400, detail=str(e))
+        except Exception as e:
+            raise HTTPException(status_code=422, detail=f"Followup image decoding failed: {e}")
+
+        if (ih, iw) != (req.canvas_height, req.canvas_width):
+            raise HTTPException(
+                status_code=422,
+                detail=f"Dimension mismatch: followup image is {iw}x{ih}, but canvas is {req.canvas_width}x{req.canvas_height}."
+            )
+
+        followup_sha256 = sha256_hash
+        gray_arr = 0.299 * rgb_arr[:, :, 0] + 0.587 * rgb_arr[:, :, 1] + 0.114 * rgb_arr[:, :, 2]
+        followup_var = float(compute_laplacian_variance_fast(gray_arr))
+        provenance_mode = "VERIFIED_IMAGE_FOLLOWUP"
+        provenance_dict = {
+            "category": "REAL_PHOTOGRAPH",
+            "source_id": followup_sha256,
+            "verification_method": "DECODED_PIXELS_FAST_LAPLACIAN",
+            "dimensions": [iw, ih],
+            "measured_laplacian_variance": round(followup_var, 2),
+        }
+    else:
+        provenance_mode = "METADATA_ONLY"
+        provenance_dict = {
+            "category": "USER_SUPPLIED_METADATA",
+            "source_id": f"METADATA_{req.task_id}",
+            "verification_method": "CLIENT_DECLARED_NUMERICAL_INPUTS",
+            "note": "METADATA_ONLY: No follow-up media provided. Transition based on client metadata, not independently verified observation."
+        }
+
     new_verdict, debt_report, updated_spec = engine.evaluate_task(
         spec=spec,
         before_bbox=req.original_before_bbox,
         after_bbox=req.followup_bbox,
         canvas_width=req.canvas_width,
         canvas_height=req.canvas_height,
-        laplacian_variance=req.followup_laplacian_variance,
+        laplacian_variance=followup_var,
         area_drop_ratio=req.followup_area_drop_ratio,
         has_final_state=req.followup_has_final_state,
     )
@@ -316,11 +416,11 @@ def evaluate_recapture_followup(req: ReCaptureFollowupRequest) -> dict[str, Any]
 
     # Cryptographic Evidence Receipt for the ReCapture Transition
     report_id = f"RC-{uuid.uuid4().hex[:12].upper()}"
-    inputs_hash = calculate_sha256(f"{req.task_id}_{transition}_{req.effort_seconds:.1f}")
+    inputs_hash = calculate_sha256(f"{req.task_id}_{transition}_{req.effort_seconds:.1f}_{followup_sha256 or "NOMEDIA"}")
     receipt = generate_receipt(
         report_id=report_id,
         engine_name="ReCapture Closed-Loop Recovery Engine",
-        software_version="0.2.3",
+        software_version="0.2.4",
         inputs_hash=inputs_hash,
         measurements={
             "task_id": req.task_id,
@@ -332,12 +432,16 @@ def evaluate_recapture_followup(req: ReCaptureFollowupRequest) -> dict[str, Any]
             "directive_issued": req.directive_issued,
             "instruction_followed": req.instruction_followed,
             "effort_seconds": req.effort_seconds,
-            "followup_laplacian_variance": req.followup_laplacian_variance,
+            "followup_laplacian_variance": round(followup_var, 2),
             "followup_area_drop_ratio": req.followup_area_drop_ratio,
+            "provenance_mode": provenance_mode,
+            "is_independently_verified_media": bool(followup_sha256 is not None),
+            "followup_image_sha256": followup_sha256,
         },
         signals=[],
         verdict=new_verdict.value,
         recapture_directive=req.directive_issued,
+        provenance=provenance_dict,
     )
     _receipt_store[report_id] = receipt
 
@@ -350,10 +454,12 @@ def evaluate_recapture_followup(req: ReCaptureFollowupRequest) -> dict[str, Any]
         "resolved": is_resolved,
         "instruction_followed": req.instruction_followed,
         "effort_seconds": req.effort_seconds,
+        "provenance_mode": provenance_mode,
         "debt_report": debt_report.model_dump(),
         "structured_finding": updated_spec.structured_finding,
         "evidence_receipt_id": report_id,
         "evidence_receipt": receipt.model_dump(),
+        "receipt_valid": verify_receipt_integrity(receipt),
     }
 
 
@@ -404,19 +510,38 @@ def get_benchmark_summary(dataset: str = Query("all")) -> dict[str, Any]:
         from evaluation.benchmark_real import run_real_benchmarks
         real_data = run_real_benchmarks()
 
+    coco_file = Path(__file__).resolve().parent.parent.parent / "evaluation" / "experiments" / "LABELCOURT_REAL_BENCHMARK_RESULTS.json"
+    coco_data = None
+    if coco_file.exists():
+        with open(coco_file, "r") as f:
+            coco_data = json.load(f)
+
     if dataset == "synthetic":
         return syn_data or {}
     if dataset == "real":
         return real_data or {}
+    if dataset == "coco":
+        return coco_data or {}
 
     return {
         "synthetic_baseline": syn_data,
         "real_world_evaluation": real_data,
+        "coco_photographic_benchmark": coco_data,
         "metadata": {
             "disclaimer": "Synthetic baseline establishes mathematical rule consistency; real evaluation tests physical tabletop pairs.",
             "metrics_reporting_standard": "All percentages accompanied by numerators, denominators, and 95% Wilson score confidence intervals.",
         },
     }
+
+
+@router.get("/benchmark/coco-real")
+def get_coco_real_benchmark() -> dict[str, Any]:
+    """Return authentic photographic COCO 2017 validation benchmark results."""
+    coco_file = Path(__file__).resolve().parent.parent.parent / "evaluation" / "experiments" / "LABELCOURT_REAL_BENCHMARK_RESULTS.json"
+    if coco_file.exists():
+        with open(coco_file, "r") as f:
+            return json.load(f)
+    return {"status": "benchmark_not_run"}
 
 
 @router.get("/benchmark/latency")

@@ -1,67 +1,95 @@
 {
-  "benchmark_name": "ProofCausality AI: Micro-Kernel and End-to-End Latency Profile",
-  "timestamp_utc": "2026-10-28T15:56:44Z",
-  "environment": {
+  "benchmark_name": "ProofCausality AI: NumPy vs Rust Native Acceleration Benchmark",
+  "timestamp_utc": "2026-10-28T17:31:54Z",
+  "hardware": {
     "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
     "machine": "arm64",
     "processor": "arm",
-    "python_version": "3.14.5",
-    "fastapi_version": "0.115.0"
+    "python_version": "3.14.5"
   },
-  "micro_kernels": {
-    "batch_mask_iou_100x256x256": {
-      "numpy_p50_us": 2348.46,
-      "numpy_p95_us": 2434.75,
-      "rust_p50_us": 203.04,
-      "rust_p95_us": 217.38,
-      "speedup": 11.57
-    },
-    "laplacian_variance_1024x1024": {
-      "numpy_p50_us": 2115.85,
-      "numpy_p95_us": 2384.16,
-      "rust_p50_us": 600.38,
-      "rust_p95_us": 619.93,
-      "speedup": 3.52
-    }
-  },
-  "end_to_end_fastapi": {
-    "api_actionproof_verify_us": {
-      "p50_us": 974.12,
-      "mean_us": 995.95,
-      "p95_us": 1134.98,
-      "p50_ms": 0.974
-    },
-    "api_calculus_evaluate_us": {
-      "p50_us": 730.21,
-      "mean_us": 755.26,
-      "p95_us": 815.47,
-      "p50_ms": 0.73
-    }
-  },
+  "sample_size_per_kernel": 200,
   "kernels": {
+    "mask_iou_256x256": {
+      "dimensions": "256x256",
+      "numpy": {
+        "p50_us": 8.06,
+        "mean_us": 8.38,
+        "p95_us": 8.62,
+        "min_us": 7.83,
+        "max_us": 37.71
+      },
+      "rust": {
+        "p50_us": 2.42,
+        "mean_us": 2.44,
+        "p95_us": 2.5,
+        "min_us": 2.17,
+        "max_us": 3.29
+      },
+      "speedup_ratio": 3.34
+    },
+    "mask_iou_1024x1024": {
+      "dimensions": "1024x1024",
+      "numpy": {
+        "p50_us": 106.62,
+        "mean_us": 112.46,
+        "p95_us": 134.83,
+        "min_us": 103.46,
+        "max_us": 303.0
+      },
+      "rust": {
+        "p50_us": 33.29,
+        "mean_us": 34.44,
+        "p95_us": 36.54,
+        "min_us": 33.17,
+        "max_us": 72.46
+      },
+      "speedup_ratio": 3.2
+    },
+    "mask_iou_2048x2048": {
+      "dimensions": "2048x2048",
+      "numpy": {
+        "p50_us": 423.25,
+        "mean_us": 455.45,
+        "p95_us": 466.85,
+        "min_us": 398.96,
+        "max_us": 3156.5
+      },
+      "rust": {
+        "p50_us": 133.25,
+        "mean_us": 136.09,
+        "p95_us": 149.86,
+        "min_us": 122.79,
+        "max_us": 184.54
+      },
+      "speedup_ratio": 3.18
+    },
     "batch_mask_iou_100x256x256": {
-      "numpy_p50_us": 2348.46,
-      "numpy_p95_us": 2434.75,
-      "rust_p50_us": 203.04,
-      "rust_p95_us": 217.38,
-      "speedup": 11.57
+      "dimensions": "100x256x256",
+      "numpy": {
+        "p50_us": 2437.5,
+        "mean_us": 2486.24,
+        "p95_us": 2783.13
+      },
+      "rust": {
+        "p50_us": 213.08,
+        "mean_us": 220.59,
+        "p95_us": 256.88
+      },
+      "speedup_ratio": 11.44
     },
     "laplacian_variance_1024x1024": {
-      "numpy_p50_us": 2115.85,
-      "numpy_p95_us": 2384.16,
-      "rust_p50_us": 600.38,
-      "rust_p95_us": 619.93,
-      "speedup": 3.52
+      "dimensions": "1024x1024",
+      "numpy": {
+        "p50_us": 2164.12,
+        "mean_us": 2247.4,
+        "p95_us": 2675.19
+      },
+      "rust": {
+        "p50_us": 642.69,
+        "mean_us": 647.92,
+        "p95_us": 686.19
+      },
+      "speedup_ratio": 3.37
     }
-  },
-  "python_rust_call_overhead_us": {
-    "description": "ctypes FFI boundary traversal overhead per native kernel invocation",
-    "p50_us": 1.29,
-    "p95_us": 1.5
-  },
-  "image_preprocessing_640x480_us": {
-    "description": "Standard 640x480 RGB to grayscale luminance conversion (ITU-R BT.601)",
-    "p50_us": 410.65,
-    "p95_us": 425.21
   }
 }

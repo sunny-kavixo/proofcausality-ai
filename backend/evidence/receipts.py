@@ -31,6 +31,7 @@ def generate_receipt(
     signals: List[UncertaintySignal],
     verdict: str,
     recapture_directive: Optional[str] = None,
+    provenance: Optional[dict[str, Any]] = None,
 ) -> EvidenceReceipt:
     """Generate a tamper-evident cryptographic Evidence Receipt."""
     timestamp = datetime.now(timezone.utc).isoformat()
@@ -46,6 +47,7 @@ def generate_receipt(
         "uncertainty_signals": signals_dict,
         "verdict": verdict,
         "recapture_directive": recapture_directive,
+        "provenance": provenance,
     }
 
     serialized = canonical_json_dump(payload_for_hashing)
@@ -61,6 +63,7 @@ def generate_receipt(
         uncertainty_signals=signals_dict,
         verdict=verdict,
         recapture_directive=recapture_directive,
+        provenance=provenance,
         receipt_sha256=receipt_sha256,
     )
 
@@ -77,6 +80,7 @@ def verify_receipt_integrity(receipt: EvidenceReceipt) -> bool:
         "uncertainty_signals": receipt.uncertainty_signals,
         "verdict": receipt.verdict,
         "recapture_directive": receipt.recapture_directive,
+        "provenance": receipt.provenance,
     }
     recalculated_hash = calculate_sha256(canonical_json_dump(payload_for_hashing))
     return recalculated_hash == receipt.receipt_sha256

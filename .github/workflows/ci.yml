@@ -35,7 +35,7 @@ jobs:
         pip install -r requirements.txt
         pip install pytest pytest-cov
 
-    - name: Run Pytest Suite (61 tests)
+    - name: Run Pytest Regression Suite
       run: |
         python -m pytest tests/ -v --cov=backend --cov-report=term-missing
 
@@ -46,6 +46,10 @@ jobs:
     - name: Run Real-World Tabletop Benchmark Verification
       run: |
         python -m evaluation.benchmark_real
+
+    - name: Run Authentic Photographic COCO Benchmark Verification
+      run: |
+        python -m evaluation.benchmarks.labelcourt_real_benchmark
 
     - name: Run Comparative Latency Profiling
       run: |
