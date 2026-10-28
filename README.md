@@ -45,22 +45,30 @@ Release **`v0.2.5`** finalizes model compatibility analysis, isolated installati
    - **Mathematical Invariance Proof**: We experimentally verified that modifying `swin.layernorm.weight` and `bias` to arbitrary extreme values produces **0.0 maximum absolute difference** in both `class_queries_logits` and `masks_queries_logits`. Outputs are 100% deterministic, bit-for-bit identical, and reproducible.
 2. **Clean-Install Verified from Main**:
    - Complete isolated source installation tested from a clean checkout into a fresh Python 3.12 virtual environment and release Rust build.
-   - All 8 application endpoints verified: Frontend root (`/`), Health probe (`/api/health`), Model diagnostics (`/api/model-info`), Evidence Calculus DAG and evaluate (`/api/calculus/evaluate`), LabelCourt audit (`/api/labelcourt/audit`), ActionProof verification (`/api/actionproof/verify`), ReCapture planner (`/api/recapture/plan`), and Cryptographic Receipt verification (`/api/receipts/{report_id}`).
+   - All 8 application endpoints verified: Frontend root (`/`), Health probe (`/api/health`), Model diagnostics (`/api/model-info`), Evidence Calculus DAG and evaluate (`/api/calculus/evaluate`), LabelCourt audit (`/api/labelcourt/audit`), ActionProof verification (`/api/actionproof/verify`), ReCapture planner (`/api/recapture/plan`), and Evidence Receipt verification (`/api/receipts/{report_id}`).
 3. **Reproduced Genuine Inference Benchmarks (Bit-for-Bit Parity)**:
    - Executed genuine, unprompted Mask2Former inference on Apple Silicon MPS across the 20 preserved MS COCO 2017 validation photographs (215 evaluable annotations).
    - Class-aware annotation recall at IoU ≥ 0.5: **43.26%** (Image-grouped 95% bootstrap CI: `[33.33%, 54.29%]`).
    - Class-agnostic annotation recall at IoU ≥ 0.5: **55.81%** (Image-grouped 95% bootstrap CI: `[44.95%, 68.26%]`).
    - Class-aware mean best-mask IoU: **0.3929** (CI: `[0.3205, 0.4738]`).
    - Class-agnostic mean best-mask IoU: **0.5002** (CI: `[0.4260, 0.5849]`).
-4. **End-to-End Latency Decomposition**:
-   - Decomposed latency profile from raw bytes to completed API response:
-     - Image decoding (`PIL.Image.open` / RGB decode): p50 = **1.23 ms** (p95 = 1.37 ms)
-     - Model input preprocessing (AutoImageProcessor + tensor copy to MPS): p50 = **1.42 ms** (p95 = 1.87 ms)
-     - Genuine Mask2Former inference (forward pass on Apple MPS): p50 = **137.97 ms** (p95 = 145.66 ms)
-     - Python mask IoU operations: p50 = **0.029 ms** (p95 = 0.040 ms)
-     - Rust SIMD native kernel (`rust_mask_iou`): p50 = **0.0092 ms** (p95 = 0.0135 ms, **3.17x kernel speedup**)
-     - Complete API response roundtrip: p50 = **99.36 ms** (p95 = 117.71 ms)
-   - *Scientific Note*: While the Rust SIMD kernel accelerates mask comparison by 3.17x, kernel compute accounts for `<0.01%` of end-to-end API time. Model neural inference dominates request latency.
+4. **Disaggregated Latency Profiling (Separated Workloads)**:
+   - Latency measurements are rigorously partitioned into distinct, isolated operational paths to prevent conflating offline neural inference with deterministic HTTP API execution:
+     - **Workload A: Isolated Neural Perception Pipeline (Mask2Former on Apple MPS)**:
+       - Image decoding (`PIL.Image.open` / RGB decode): p50 = **1.21 ms** (p95 = 1.49 ms)
+       - Model input preprocessing (`AutoImageProcessor` + MPS transfer): p50 = **1.58 ms** (p95 = 2.05 ms)
+       - Neural forward pass (PyTorch Mask2Former on MPS): p50 = **140.33 ms** (p95 = 148.74 ms)
+       - Mask postprocessing (Query thresholding to instances): p50 = **70.70 ms** (p95 = 127.42 ms)
+       - Total sequential perception pipeline: ~**213.82 ms** p50
+     - **Workload B: In-Memory Verification & SIMD Native Kernels**:
+       - Evidence Calculus graph evaluation (`evaluate_task`): p50 = **0.0177 ms** (17.7 μs)
+       - Pure Python / NumPy mask IoU: p50 = **0.0284 ms** (28.4 μs)
+       - Rust SIMD native kernel (`rust_mask_iou`): p50 = **0.0091 ms** (9.1 μs, **3.12x kernel speedup**)
+     - **Workload C: Deterministic Evidence-Processing API Endpoint (`POST /api/labelcourt/audit`)**:
+       - Complete HTTP request/response cycle: p50 = **95.19 ms** (p95 = 96.10 ms)
+       - *Crucial Disclosure*: This API endpoint executes deterministic geometric, spatial, and boundary debt evaluation with visual overlay generation and SHA-256 receipt issuance. **It does NOT invoke the neural Mask2Former forward pass.**
+     - **Workload D: Monolithic Image-to-Neural-Inference-to-Verdict HTTP Route**:
+       - **Status: NOT IMPLEMENTED / NOT MEASURED**. The application operates neural perception offline in batch evaluation pipelines (`evaluation/benchmarks/genuine_model_benchmark.py`). Combining Workload A and Workload C into a hypothetical single-request number is avoided to preserve empirical measurement integrity.
 5. **Real Browser E2E Acceptance (Google Chrome on Apple Silicon)**:
    - Automated via Playwright driving system Google Chrome: verified landing page, engine badge (`Engine v0.2.5`), Rust native SIMD badge, LabelCourt interactive audit, ActionProof verification, interactive SVG Evidence Calculus DAG, Scientific Benchmarks table, and 375px mobile responsive layout with **0 console errors**.
 6. **Defect Repairs**:
@@ -78,7 +86,7 @@ To prevent cross-task confusion or inflated claims, ProofCausality AI categorize
 | **A. Controlled Annotation Corruption** | Synthetic shifts, erasures, dilations, and class swaps applied to real COCO annotations | **0.9825 F1** (97.5% precision, 99.0% recall on held-out test split) | **MEASURED & REPRODUCED** |
 | **B. Genuine Model Segmentation** | Unprompted Mask2Former inference on raw photographic pixels; evaluated post-hoc against COCO GT | **43.26% Recall@0.5** (class-aware), **55.81% Recall@0.5** (class-agnostic) | **MEASURED & REPRODUCED** |
 | **C. Annotation-Error Detection** | LabelCourt rule-based spatial & boundary auditor vs naive bounding-box baseline | Detects 100% of class swaps and 95.8% of area drops (vs 4.2% and 24.4% for naive bbox) | **MEASURED & REPRODUCED** |
-| **D. Physical-Action Verification** | ActionProof before-and-after spatial state transitions, displacement, and border checks | **0.0% False-Success Rate** at matched coverage (eliminates 100% of false successes) | **MEASURED & REPRODUCED** |
+| **D. Physical-Action Verification (Constructed Benchmark)** | ActionProof before-and-after spatial state transitions on 37 constructed coordinate metadata cases (12 tabletop + 25 synthetic) | **0 / 22 observed false-successes** at 75.68% coverage (`[0.00%, 14.87%]` 95% Wilson CI; selective risk: 0.1429) | **MEASURED ON CONSTRUCTED CASES**<br>*(Real temporal video: **NOT MEASURED**)* |
 | **E. Human Re-Capture Experiments** | Value-of-Information (VOI) recovery action planning | **95.0% resolution rate** in simulated defective scenarios; human study not yet run | **SIMULATED ONLY** |
 | **F. Hosted Meta Inference** | Cloud-hosted Meta SAM 2 / Llama 3.2 Vision APIs | Integration surface implemented; live API calls blocked due to credentials | **OFFLINE / BLOCKED** |
 
@@ -87,7 +95,7 @@ To prevent cross-task confusion or inflated claims, ProofCausality AI categorize
 In Phase 2, ProofCausality AI introduces the **Evidence Calculus Engine** (`backend/evidence/calculus/`), transforming visual verification from a single uncalibrated confidence score into an explicit, testable system of observable physical conditions:
 
 1. **Tri-State Predicate Logic**: Evaluates physical tasks across three distinct truth states: `SUPPORTED` (unambiguous visual proof), `CONTRADICTED` (physical falsification), and `UNOBSERVABLE` (perceptual deficit, blur, occlusion).
-2. **Physics-Constrained Evidence Debt ($D(E,T)$)**: Formal debt metric penalizing unobservable conditions ($w=1.0$) and physical impossibilities ($w=2.0$ non-teleportation velocity bounds), reducing False-Success Rate to **0.0%**.
+2. **Physics-Constrained Evidence Debt ($D(E,T)$)**: Formal debt metric penalizing unobservable conditions ($w=1.0$) and physical impossibilities ($w=2.0$ non-teleportation velocity bounds), reducing observed false-successes from 10/22 (naive heuristic) and 3/22 (matched score threshold) to **0/22** on 37 constructed evaluation cases at 75.7% coverage (`[0.00%, 14.87%]` 95% Wilson CI).
 3. **Directed Evidence Dependency Graph (H02)**: 6-stage DAG connecting raw frames $	o$ detections $	o$ segmentation masks $	o$ spatial measurements $	o$ predicates $	o$ decisions with **100.0% mathematical parity** on incremental recomputation.
 4. **Cost-Aware Evidence Budget Planner (H03)**: Value-of-Information (VOI) optimization selecting the next observation that maximizes expected risk reduction minus physical human effort, achieving **95.0% resolution rate** (vs 30.0% for generic advice).
 5. **Detector-Independence Audit (H04)**: Computes pairwise error correlation matrices under distribution shifts and applies dependence-aware discounting to prevent false consensus among collinear vision models.
@@ -116,7 +124,7 @@ In robotic manipulation, logistics inspection, and dataset quality auditing, **a
 | **EvidenceCore** | `backend.evidence` | Measurement & Uncertainty Engine | 2D Laplacian blur variance & border margin clipping detection. |
 | **Rust SIMD Core** | `native.proofcausality_core` | Zero-allocation native acceleration | **11.35x batch IoU speedup**, **3.52x blur kernel speedup**; pure Python fallback. |
 | **ReCapture** | `backend.recapture` | Actionable recovery directive generator | Issues targeted physical instructions (e.g. pan camera, hold steady). |
-| **ReceiptStore** | `backend.evidence.receipts` | Tamper-evident cryptographic receipt store | Issues canonical SHA-256 Evidence Receipts with Provenance Hashes. |
+| **ReceiptStore** | `backend.evidence.receipts` | Tamper-evident evidence receipt store | Issues canonical SHA-256 Evidence Receipts with Provenance Hashes for post-hoc tamper-detection. |
 
 ---
 
@@ -159,7 +167,10 @@ LabelCourt was evaluated against a simple bounding-box agreement baseline on 20 
 | **M4. Evidence Debt (Unit Weights)** | **40.54%** (15/37) | 0 / 22 | **0.00%** | `[0.00%, 14.87%]` | **0.0000** | Severely over-abstains on minor deficits |
 | **M5. Evidence Calculus (Full Engine)** | **75.68%** (28/37) | **0 / 22** | **0.00%** | **`[0.00%, 14.87%]`** | **0.1429** | **0 false-successes across all defect types** |
 
-> **Scientific Finding on Decision Coverage:** Evidence Calculus achieves a 0.0% false-success rate specifically by abstaining on 9 defective cases (`UNOBSERVABLE`). Comparing a 75.7% coverage system to a 100% coverage system without matched coverage is invalid; at exact matched coverage (28/37 cases decided), Evidence Calculus reduces false-successes from 3 to 0 (100% elimination).
+> **Scientific Finding on Decision Coverage & Realistic Scope:**
+> 1. **Observed False-Successes**: On 37 constructed evaluation cases (12 curated tabletop metadata pairs + 25 synthetic cases), Evidence Calculus observed **0 false-successes out of 22 ground-truth negative cases** (95% Wilson CI: `[0.00%, 14.87%]`).
+> 2. **Abstention Cost**: This is achieved specifically by abstaining on 9 defective cases (`UNOBSERVABLE`), corresponding to a 24.32% abstention rate and 75.68% coverage (28/37). Selective risk among decided cases is 0.1429 (4 classification mismatches among 28 decided cases).
+> 3. **Real-World Limitation**: This benchmark evaluates static coordinate metadata bounding boxes and simulated perceptual defect flags. **`REAL_PHYSICAL_ACTION_VALIDATION: NOT MEASURED`** — Continuous, uncurated in-the-wild physical action video recordings have not yet been evaluated. Observed zero false-successes on 22 constructed cases must not be extrapolated to claim validated zero real-world risk.
 ### Experiment H02: Evidence Dependency Graph (100 Iterations)
 - **Mathematical Parity**: **100.0% (100/100 matches)** between incremental recomputation and full recomputation.
 - **Node Evaluation**: Incremental pass evaluated an average of 10.0 nodes and skipped 4.0 nodes.
