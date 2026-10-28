@@ -4,7 +4,7 @@
     "dataset": "MS COCO 2017 Validation Subset (20 authentic photographs)",
     "engine_version": "v0.2.4",
     "random_seed": 42,
-    "date": "2026-10-28 17:31:30Z"
+    "date": "2026-10-28 17:36:13Z"
   },
   "development_split": {
     "total_annotations_evaluated": 96,
@@ -25,29 +25,29 @@
         0.9968
       ],
       "f1_score": 0.9825,
-      "mean_latency_ms": 15.279,
-      "p50_latency_ms": 16.952,
-      "p95_latency_ms": 20.897
+      "mean_latency_ms": 15.458,
+      "p50_latency_ms": 16.92,
+      "p95_latency_ms": 21.276
     },
     "naive_bbox_baseline": {
-      "TP": 248,
+      "TP": 251,
       "FP": 4,
       "TN": 92,
-      "FN": 232,
-      "precision": 0.9841,
+      "FN": 229,
+      "precision": 0.9843,
       "precision_wilson_ci95": [
-        0.9599,
-        0.9938
+        0.9604,
+        0.9939
       ],
-      "recall": 0.5167,
+      "recall": 0.5229,
       "recall_wilson_ci95": [
-        0.472,
-        0.5611
+        0.4782,
+        0.5672
       ],
-      "f1_score": 0.6776,
-      "mean_latency_ms": 0.439,
-      "p50_latency_ms": 0.494,
-      "p95_latency_ms": 0.569
+      "f1_score": 0.683,
+      "mean_latency_ms": 0.444,
+      "p50_latency_ms": 0.49,
+      "p95_latency_ms": 0.598
     },
     "breakdown_by_corruption": {
       "CLEAN": {
@@ -63,7 +63,7 @@
       "REDUCED_MASK": {
         "total": 96,
         "lc_detected": 92,
-        "naive_detected": 35
+        "naive_detected": 38
       },
       "ENLARGED_MASK": {
         "total": 96,
@@ -106,44 +106,44 @@
     "total_annotations_evaluated": 119,
     "total_scenarios_run": 714,
     "labelcourt": {
-      "TP": 590,
+      "TP": 589,
       "FP": 15,
       "TN": 104,
-      "FN": 5,
+      "FN": 6,
       "precision": 0.9752,
       "precision_wilson_ci95": [
-        0.9595,
+        0.9594,
         0.9849
       ],
-      "recall": 0.9916,
+      "recall": 0.9899,
       "recall_wilson_ci95": [
-        0.9805,
-        0.9964
+        0.9782,
+        0.9954
       ],
-      "f1_score": 0.9833,
-      "mean_latency_ms": 19.56,
-      "p50_latency_ms": 19.193,
-      "p95_latency_ms": 24.914
+      "f1_score": 0.9825,
+      "mean_latency_ms": 18.541,
+      "p50_latency_ms": 18.377,
+      "p95_latency_ms": 23.048
     },
     "naive_bbox_baseline": {
-      "TP": 293,
+      "TP": 300,
       "FP": 5,
       "TN": 114,
-      "FN": 302,
-      "precision": 0.9832,
+      "FN": 295,
+      "precision": 0.9836,
       "precision_wilson_ci95": [
-        0.9613,
-        0.9928
+        0.9622,
+        0.993
       ],
-      "recall": 0.4924,
+      "recall": 0.5042,
       "recall_wilson_ci95": [
-        0.4524,
-        0.5325
+        0.4641,
+        0.5442
       ],
-      "f1_score": 0.6562,
-      "mean_latency_ms": 0.546,
-      "p50_latency_ms": 0.56,
-      "p95_latency_ms": 0.629
+      "f1_score": 0.6667,
+      "mean_latency_ms": 0.527,
+      "p50_latency_ms": 0.545,
+      "p95_latency_ms": 0.605
     },
     "breakdown_by_corruption": {
       "CLEAN": {
@@ -158,8 +158,8 @@
       },
       "REDUCED_MASK": {
         "total": 119,
-        "lc_detected": 114,
-        "naive_detected": 29
+        "lc_detected": 113,
+        "naive_detected": 36
       },
       "ENLARGED_MASK": {
         "total": 119,
@@ -179,8 +179,8 @@
     },
     "breakdown_by_scale": {
       "small": {
-        "TP": 320,
-        "FN": 0,
+        "TP": 319,
+        "FN": 1,
         "TN": 62,
         "FP": 2
       },

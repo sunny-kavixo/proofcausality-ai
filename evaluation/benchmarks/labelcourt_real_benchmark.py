@@ -18,7 +18,6 @@ import random
 from typing import Any, Dict, List
 import numpy as np
 from PIL import Image
-from scipy.ndimage import binary_erosion, binary_dilation
 
 from backend.labelcourt.auditor import LabelCourtAuditor
 from backend.evidence.schemas import AnnotationItem, BoundingBox, AuditVerdict
@@ -53,14 +52,32 @@ def shift_mask(mask: np.ndarray, dx: int, dy: int) -> np.ndarray:
 
 
 def erode_mask(mask: np.ndarray, iterations: int = 3) -> np.ndarray:
-    eroded = binary_erosion(mask, iterations=iterations)
-    if not np.any(eroded):
-        return binary_erosion(mask, iterations=max(1, iterations // 2))
+    eroded = mask.copy()
+    for _ in range(iterations):
+        step = (
+            eroded
+            & np.pad(eroded[1:, :], ((0, 1), (0, 0)), constant_values=False)
+            & np.pad(eroded[:-1, :], ((1, 0), (0, 0)), constant_values=False)
+            & np.pad(eroded[:, 1:], ((0, 0), (0, 1)), constant_values=False)
+            & np.pad(eroded[:, :-1], ((0, 0), (1, 0)), constant_values=False)
+        )
+        if not np.any(step):
+            break
+        eroded = step
     return eroded
 
 
 def dilate_mask(mask: np.ndarray, iterations: int = 4) -> np.ndarray:
-    return binary_dilation(mask, iterations=iterations)
+    dilated = mask.copy()
+    for _ in range(iterations):
+        dilated = (
+            dilated
+            | np.pad(dilated[1:, :], ((0, 1), (0, 0)), constant_values=False)
+            | np.pad(dilated[:-1, :], ((1, 0), (0, 0)), constant_values=False)
+            | np.pad(dilated[:, 1:], ((0, 0), (0, 1)), constant_values=False)
+            | np.pad(dilated[:, :-1], ((0, 0), (1, 0)), constant_values=False)
+        )
+    return dilated
 
 
 def run_benchmark():
