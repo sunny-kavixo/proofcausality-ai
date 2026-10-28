@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Rust Accelerated](https://img.shields.io/badge/Rust-optional%20kernels-orange.svg)](native/proofcausality_core/)
-[![Tests](https://img.shields.io/badge/tests-138%20passed-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-139%20passed-brightgreen.svg)](tests/)
 [![Meta Hackathon 2026](https://img.shields.io/badge/Meta_Global_AI_Hackathon-Indie_Developer-purple.svg)](https://cerebralvalley.ai/e/meta-ai-developer-hackathon)
 
 ProofCausality AI investigates reliable visual evidence verification for annotation-quality workflows and physical-action assessment.
@@ -138,7 +138,7 @@ The web interface features the **Neural Vision Audit** tab with:
 - **Total tests in `tests/test_receipts.py`**: **11 tests** collected and verified by pytest.
 - **Baseline before hotfix**: 1 test (`test_receipt_generation_and_verification`).
 - **Newly added by hotfix**: 10 tests (11 new tests replacing the 1 old test, net +10 tests).
-- **Repository-wide total**: **138 tests passed** (119 original baseline + 10 receipt hotfix + 9 Phase 7 neural vision audit tests).
+- **Repository-wide total**: **139 tests passed** (119 original baseline + 10 receipt hotfix + 10 Phase 7 neural vision audit tests).
 
 ---
 

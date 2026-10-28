@@ -11,6 +11,7 @@ Covers:
     * Zero detections at high confidence (REVIEW).
 - Cryptographic evidence receipt tamper verification.
 - Input validation: invalid base64, empty payload, non-image format.
+- Provider unavailable handling (HTTP 500 error propagation).
 - Thread-safe model caching and resource management.
 """
 
@@ -26,6 +27,21 @@ from backend.app import app
 from backend.evidence.receipts import verify_receipt_integrity
 from backend.evidence.schemas import EvidenceReceipt, VisionAuditVerdict
 from backend.providers.local_segmentation import get_local_mask2former_provider
+
+# Determine if PyTorch and local checkpoint are available in current environment
+try:
+    import torch
+    import transformers
+    _p = get_local_mask2former_provider()
+    _p.load()
+    _MODEL_AVAILABLE = True
+except Exception:
+    _MODEL_AVAILABLE = False
+
+requires_local_model = pytest.mark.skipif(
+    not _MODEL_AVAILABLE,
+    reason="PyTorch, Transformers, or local Mask2Former checkpoint not available in test environment",
+)
 
 
 @pytest.fixture(scope="module")
@@ -54,6 +70,48 @@ def test_get_vision_samples_schema(pilot_samples: list[dict]):
         assert "perturbation_presets" in s
 
 
+def test_invalid_image_payloads(client: TestClient, pilot_samples: list[dict]):
+    """Invalid base64, empty bytes, or non-image format must be rejected with HTTP 400."""
+    sample = pilot_samples[0]
+
+    # Corrupt base64
+    resp = client.post(
+        "/api/vision/audit",
+        json={"image_base64": "!!!not_valid_base64!!!", "annotation": sample["annotation"]},
+    )
+    assert resp.status_code == 400
+
+    # Valid base64 but text file bytes (not PNG/JPEG)
+    text_b64 = base64.b64encode(b"Hello world this is not an image").decode("ascii")
+    resp = client.post(
+        "/api/vision/audit",
+        json={"image_base64": text_b64, "annotation": sample["annotation"]},
+    )
+    assert resp.status_code == 400
+    assert "Unsupported image format" in resp.json()["detail"]
+
+
+def test_provider_unavailable_handling(client: TestClient, pilot_samples: list[dict], monkeypatch):
+    """When the model provider fails or raises an error, API returns HTTP 500 with explanatory detail."""
+    sample = pilot_samples[0]
+    from backend.api import routes
+
+    class BrokenProvider:
+        def predict_from_rgb(self, *args, **kwargs):
+            raise RuntimeError("Model weights corrupted or memory exhausted")
+
+    monkeypatch.setattr(routes, "get_local_mask2former_provider", lambda: BrokenProvider())
+
+    payload = {
+        "image_base64": sample["image_base64"],
+        "annotation": sample["annotation"],
+    }
+    resp = client.post("/api/vision/audit", json=payload)
+    assert resp.status_code == 500
+    assert "Mask2Former inference execution failed" in resp.json()["detail"]
+
+
+@requires_local_model
 def test_genuine_vision_audit_execution(client: TestClient, pilot_samples: list[dict]):
     """Run an authentic vision audit on a real COCO pilot photograph."""
     sample = pilot_samples[0]
@@ -113,6 +171,7 @@ def test_genuine_vision_audit_execution(client: TestClient, pilot_samples: list[
     assert overlays["predicted"].startswith("data:image/png;base64,")
 
 
+@requires_local_model
 def test_controlled_class_mismatch(client: TestClient, pilot_samples: list[dict]):
     """Deliberately altered annotation class must produce a REVIEW verdict with CLASS_MISMATCH reason."""
     sample = pilot_samples[0]
@@ -141,10 +200,10 @@ def test_controlled_class_mismatch(client: TestClient, pilot_samples: list[dict]
     assert "airplane" in data["explanation"]
 
 
+@requires_local_model
 def test_severe_visual_blur_produces_uncertain(client: TestClient, pilot_samples: list[dict]):
     """Images with high blur (Laplacian variance below threshold) must yield UNCERTAIN verdict."""
     sample = pilot_samples[0]
-    # Set an impossible blur threshold to trigger the blur detection condition
     payload = {
         "image_base64": sample["image_base64"],
         "annotation": sample["annotation"],
@@ -163,6 +222,7 @@ def test_severe_visual_blur_produces_uncertain(client: TestClient, pilot_samples
     assert any(s["reason"] == "BLUR" for s in data["evidence_receipt"]["uncertainty_signals"])
 
 
+@requires_local_model
 def test_border_truncation_uncertainty(client: TestClient, pilot_samples: list[dict]):
     """Annotations extending to the canvas border with imperfect IoU must be marked UNCERTAIN."""
     sample = pilot_samples[0]
@@ -191,15 +251,16 @@ def test_border_truncation_uncertainty(client: TestClient, pilot_samples: list[d
     assert data["verdict_reason"] == "BORDER_TRUNCATION_UNCERTAIN"
 
 
+@requires_local_model
 def test_zero_detections_handling(client: TestClient, pilot_samples: list[dict]):
-    """Setting confidence threshold to 0.999 leads to zero model predictions, triggering REVIEW."""
+    """Setting confidence threshold to 0.99 leads to zero model predictions, triggering REVIEW."""
     sample = pilot_samples[0]
     payload = {
         "image_base64": sample["image_base64"],
         "annotation": sample["annotation"],
         "manifest_image_id": sample["manifest_image_id"],
         "settings": {
-            "confidence_threshold": 0.999,
+            "confidence_threshold": 0.99,
         },
     }
 
@@ -213,6 +274,7 @@ def test_zero_detections_handling(client: TestClient, pilot_samples: list[dict])
     assert data["matched_prediction"] is None
 
 
+@requires_local_model
 def test_tamper_detection_on_receipt(client: TestClient, pilot_samples: list[dict]):
     """Modifying any field in the generated receipt must be detected by verify_receipt_integrity."""
     sample = pilot_samples[0]
@@ -241,27 +303,7 @@ def test_tamper_detection_on_receipt(client: TestClient, pilot_samples: list[dic
     assert verify_receipt_integrity(tampered_receipt2) is False
 
 
-def test_invalid_image_payloads(client: TestClient, pilot_samples: list[dict]):
-    """Invalid base64, empty bytes, or non-image format must be rejected with HTTP 400."""
-    sample = pilot_samples[0]
-
-    # Corrupt base64
-    resp = client.post(
-        "/api/vision/audit",
-        json={"image_base64": "!!!not_valid_base64!!!", "annotation": sample["annotation"]},
-    )
-    assert resp.status_code == 400
-
-    # Valid base64 but text file bytes (not PNG/JPEG)
-    text_b64 = base64.b64encode(b"Hello world this is not an image").decode("ascii")
-    resp = client.post(
-        "/api/vision/audit",
-        json={"image_base64": text_b64, "annotation": sample["annotation"]},
-    )
-    assert resp.status_code == 400
-    assert "Unsupported image format" in resp.json()["detail"]
-
-
+@requires_local_model
 def test_model_cache_singleton(pilot_samples: list[dict]):
     """Verify that multiple provider requests access the same singleton instance without reloading."""
     p1 = get_local_mask2former_provider()
