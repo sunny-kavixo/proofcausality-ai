@@ -53,5 +53,15 @@
       "rust_p95_us": 619.93,
       "speedup": 3.52
     }
+  },
+  "python_rust_call_overhead_us": {
+    "description": "ctypes FFI boundary traversal overhead per native kernel invocation",
+    "p50_us": 1.29,
+    "p95_us": 1.5
+  },
+  "image_preprocessing_640x480_us": {
+    "description": "Standard 640x480 RGB to grayscale luminance conversion (ITU-R BT.601)",
+    "p50_us": 410.65,
+    "p95_us": 425.21
   }
 }

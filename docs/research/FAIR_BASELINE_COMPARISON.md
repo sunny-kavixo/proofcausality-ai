@@ -1,7 +1,7 @@
 # Fair Baseline Comparison & Risk-Coverage Analysis
 
 **Project**: ProofCausality AI  
-**Release**: `v0.2.2`  
+**Release**: `v0.2.3`  
 **Date**: October 2026  
 
 ---

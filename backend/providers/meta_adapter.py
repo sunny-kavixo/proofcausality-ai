@@ -103,13 +103,25 @@ class MetaAdapter:
 
     def get_diagnostics(self) -> dict[str, Any]:
         """Return truthful provider configuration without leaking credentials."""
-        status_label = "READY" if (self.enabled and self.is_configured) else (
+        is_ready = bool(self.enabled and self.is_configured)
+        status_label = "READY" if is_ready else (
             "BLOCKED_NO_CREDENTIALS" if not self.api_key else "DISABLED_VIA_CONFIG"
         )
+        inference_status = "READY" if is_ready else "META_INFERENCE_BLOCKED"
+        if not self.api_key:
+            explanation = "Official remote Meta AI inference is blocked because remote API credentials (META_API_KEY) are not set. Deterministic geometric and rule-based fallbacks are active to ensure reproducible offline execution without unauthorized or billable API costs."
+        elif not self.enabled:
+            explanation = "Meta AI provider is disabled via configuration (META_PROVIDER_ENABLED=false)."
+        else:
+            explanation = "Meta API key is provided, but neither META_SAM_ENDPOINT nor META_LLAMA_VISION_ENDPOINT is configured."
+
         return {
             "provider": "Meta AI Adapter",
-            "active_mode": "Hosted Meta API" if (self.enabled and self.is_configured) else "EvidenceCore Deterministic Fallback",
+            "active_mode": "Hosted Meta API" if is_ready else "EvidenceCore Deterministic Fallback",
             "provider_status": status_label,
+            "meta_inference_status": inference_status,
+            "meta_inference_explanation": explanation,
+            "meta_inference_blocked": not is_ready,
             "enabled": self.enabled,
             "configured": self.is_configured,
             "api_key_status": redact_token(self.api_key),

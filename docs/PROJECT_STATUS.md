@@ -1,7 +1,7 @@
-# Project Status — ProofCausality AI (v0.2.2)
+# Project Status — ProofCausality AI (v0.2.3)
 
 **Project Name**: ProofCausality AI  
-**Release**: `v0.2.2` (Phase 2 Architecture)  
+**Release**: `v0.2.3` (Phase 2 Architecture)  
 **Historical Releases**: `v0.1.0` (Initial Prototype), `v0.1.1` (Rust SIMD Acceleration)  
 **Commit SHA**: Maintained on `feat/evidence-calculus-engine`  
 **License**: MIT License  

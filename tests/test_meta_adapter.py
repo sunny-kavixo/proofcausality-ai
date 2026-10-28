@@ -34,6 +34,8 @@ def test_meta_adapter_fallback_mode():
     assert diag["configured"] is False
     assert diag["active_mode"] == "EvidenceCore Deterministic Fallback"
     assert diag["provider_status"] == "BLOCKED_NO_CREDENTIALS"
+    assert diag["meta_inference_status"] == "META_INFERENCE_BLOCKED"
+    assert "META_API_KEY" in diag["meta_inference_explanation"]
 
     img = np.zeros((100, 100, 3), dtype=np.uint8)
     bbox = BoundingBox(x_min=10, y_min=10, x_max=40, y_max=40)

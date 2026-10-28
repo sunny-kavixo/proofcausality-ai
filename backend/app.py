@@ -16,7 +16,7 @@ STATIC_DIR = BASE_DIR / "frontend" / "static"
 app = FastAPI(
     title="ProofCausality AI",
     description="Prove what happened. Detect what is missing. Capture the evidence that changes the decision.",
-    version="0.2.2",
+    version="0.2.3",
 )
 
 app.include_router(api_router)

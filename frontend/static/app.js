@@ -42,6 +42,10 @@ async function initDiagnostics() {
     const healthData = await healthResp.json();
     document.getElementById('diag-api-status').innerText = 'Operational (v' + healthData.version + ')';
     document.getElementById('diag-api-status').className = 'diag-val text-success';
+    if (healthData.version) {
+      const eb = document.getElementById('engine-badge');
+      if (eb) eb.innerText = 'Engine v' + healthData.version;
+    }
     if (healthData.hardware_acceleration && healthData.hardware_acceleration.rust_native_active) {
       document.getElementById('rust-badge').innerText = 'Rust SIMD: Active';
       document.getElementById('rust-badge').className = 'badge badge-success';
@@ -60,7 +64,19 @@ async function initDiagnostics() {
     const infoResp = await fetch('/api/model-info');
     const infoData = await infoResp.json();
     document.getElementById('diag-provider-mode').innerText = infoData.active_mode || 'Deterministic Engine';
-    document.getElementById('provider-badge').innerText = infoData.configured ? 'Meta API: Active' : 'Meta: Fallback Mode';
+    const pb = document.getElementById('provider-badge');
+    if (pb) {
+      if (infoData.configured) {
+        pb.innerText = 'Meta API: Active';
+        pb.className = 'badge badge-success';
+      } else {
+        pb.innerText = infoData.meta_inference_blocked ? 'Meta: Blocked (Offline)' : 'Meta: Fallback Mode';
+        pb.className = 'badge badge-accent';
+        if (infoData.meta_inference_explanation) {
+          pb.title = infoData.meta_inference_explanation;
+        }
+      }
+    }
   } catch (e) {
     console.error('Failed to load model diagnostics', e);
   }

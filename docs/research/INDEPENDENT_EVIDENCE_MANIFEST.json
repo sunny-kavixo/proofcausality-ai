@@ -1,7 +1,7 @@
 {
   "manifest_version": "1.0.0",
   "evaluation_date": "2026-10-28",
-  "software_version": "0.2.2",
+  "software_version": "0.2.3",
   "license": "CC-BY-4.0",
   "provenance_disclosure": "Standardized physical tabletop scenario fixtures generated under controlled illumination and camera calibration. Not labeled as wild uncurated human video.",
   "canonical_situations": [

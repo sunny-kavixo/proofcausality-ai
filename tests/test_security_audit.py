@@ -41,7 +41,7 @@ def test_tamper_evident_receipt_verification():
     receipt = generate_receipt(
         report_id="TEST-RECEIPT-01",
         engine_name="LabelCourt",
-        software_version="0.2.2",
+        software_version="0.2.3",
         inputs_hash="abc123hash",
         measurements={"iou": 0.92},
         signals=[sig],

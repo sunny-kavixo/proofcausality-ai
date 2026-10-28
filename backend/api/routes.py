@@ -99,7 +99,7 @@ def health() -> dict[str, Any]:
     acc_info = get_accelerator_info()
     return {
         "status": "ok",
-        "version": "0.2.2",
+        "version": "0.2.3",
         "project": "ProofCausality AI",
         "tagline": "Prove what happened. Detect what is missing. Capture the evidence that changes the decision.",
         "engines": [
@@ -320,7 +320,7 @@ def evaluate_recapture_followup(req: ReCaptureFollowupRequest) -> dict[str, Any]
     receipt = generate_receipt(
         report_id=report_id,
         engine_name="ReCapture Closed-Loop Recovery Engine",
-        software_version="0.2.2",
+        software_version="0.2.3",
         inputs_hash=inputs_hash,
         measurements={
             "task_id": req.task_id,

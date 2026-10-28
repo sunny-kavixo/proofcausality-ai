@@ -3,11 +3,11 @@
 > **"Prove what happened. Detect what is missing. Capture the evidence that changes the decision."**
 
 [![CI](https://github.com/sunny-kavixo/proofcausality-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/sunny-kavixo/proofcausality-ai/actions)
-[![Release: v0.2.2](https://img.shields.io/badge/Release-v0.2.2-blue.svg)](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.2)
+[![Release: v0.2.3](https://img.shields.io/badge/Release-v0.2.3-blue.svg)](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.3)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Rust Accelerated](https://img.shields.io/badge/Rust_SIMD-11.5x_Speedup-orange.svg)](native/proofcausality_core/)
-[![Tests: 82 Passing](https://img.shields.io/badge/tests-101%20passing-brightgreen.svg)](tests/)
+[![Tests: 101 Passing](https://img.shields.io/badge/tests-101%20passing-brightgreen.svg)](tests/)
 [![Meta Hackathon 2026](https://img.shields.io/badge/Meta_Global_AI_Hackathon-Indie_Developer-purple.svg)](https://cerebralvalley.ai/e/meta-ai-developer-hackathon)
 
 ProofCausality AI is an evidence-aware visual causality and physical-action verification system engineered for high-consequence computer vision, robotic demonstration quality control, and visual dataset annotation auditing.
@@ -16,7 +16,7 @@ Built for the **Meta Global AI Developer Hackathon 2026** (Track: *Indie Develop
 
 ---
 
-## What's New in Phase 2: Evidence Calculus Engine (`v0.2.2`)
+## What's New in Phase 2: Evidence Calculus Engine (`v0.2.3`)
 
 In Phase 2, ProofCausality AI introduces the **Evidence Calculus Engine** (`backend/evidence/calculus/`), transforming visual verification from a single uncalibrated confidence score into an explicit, testable system of observable physical conditions:
 
@@ -136,7 +136,7 @@ cd ../..
 ```bash
 pytest
 ```
-*Runs all 82 unit, integration, and experiment tests.*
+*Runs all 101 unit, integration, and experiment tests.*
 
 ### 5. Start the Interactive Application
 ```bash
@@ -148,7 +148,7 @@ Open [http://localhost:8000](http://localhost:8000) in your browser to inspect t
 
 ## Meta Technologies & Hackathon Integration
 
-- **Meta SAM 2 / 2.1**: Zero-shot prompt-driven segmentation via `backend/evidence/meta_adapter.py`.
+- **Meta SAM 2 / 2.1**: Zero-shot prompt-driven segmentation via `backend/providers/meta_adapter.py`.
 - **Meta Llama 3.2 Vision**: Multimodal scene observation and structured reasoning.
 - **Zero-Cloud Fallback**: 100% offline deterministic verification via EvidenceCore and EvidenceCalculus.
 

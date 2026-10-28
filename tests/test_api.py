@@ -24,7 +24,7 @@ def test_health_endpoint():
     assert resp.status_code == 200
     data = resp.json()
     assert data["status"] == "ok"
-    assert data["version"] == "0.2.2"
+    assert data["version"] == "0.2.3"
     assert data["project"] == "ProofCausality AI"
     assert "hardware_acceleration" in data
     assert "LabelCourt" in data["engines"]
@@ -36,6 +36,8 @@ def test_model_info_endpoint():
     data = resp.json()
     assert "provider" in data
     assert "rust_accelerator" in data
+    assert data["meta_inference_status"] == "META_INFERENCE_BLOCKED"
+    assert "META_API_KEY" in data["meta_inference_explanation"]
 
 
 def test_upload_image_api():
