@@ -1,7 +1,7 @@
 {
   "evidence_category": "GENUINE_MODEL_PREDICTIONS",
-  "generated_at_utc": "2026-10-28T18:03:49Z",
-  "source_commit": "0a4eb4d3e5f8809c9da34849285c3eb2e09a826c",
+  "generated_at_utc": "2026-10-28T19:22:36Z",
+  "source_commit": "8e6c53f691332b0b95710d1af73edc09e8c72f41",
   "dataset": "MS COCO 2017 validation subset",
   "unique_images": 20,
   "annotations_evaluated": 215,
@@ -19,12 +19,12 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "a5c4d915157d12e4eed08167d79ad35a4451d2b1dca4f6ac3cbddb759d45bb21",
-    "latency_ms": 997.324,
+    "latency_ms": 3901.388,
     "execution_status": "SUCCEEDED",
     "runtime": {
-      "python": "3.14.5",
+      "python": "3.12.14",
       "torch": "2.15.0",
-      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      "platform": "macOS-27.0.1-arm64-arm-64bit"
     }
   },
   "license": {
@@ -56,8 +56,8 @@
   },
   "latency_ms": {
     "samples": 20,
-    "p50": 134.382,
-    "p95": 198.759
+    "p50": 135.823,
+    "p95": 328.209
   },
   "limitations": [
     "Only 20 independent source images; intervals are preliminary.",

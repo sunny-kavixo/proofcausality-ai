@@ -1,0 +1,70 @@
+{
+  "suite": "ProofCausality AI Real Browser E2E Acceptance Suite",
+  "browser": "Google Chrome (macOS arm64 Apple Silicon)",
+  "base_url": "http://127.0.0.1:8080",
+  "checks": [
+    {
+      "check": "landing_page_title",
+      "status": "PASS",
+      "value": "ProofCausality AI \u2014 Evidence-Aware Visual Verification"
+    },
+    {
+      "check": "engine_badge",
+      "status": "PASS",
+      "value": "ENGINE V0.2.4"
+    },
+    {
+      "check": "rust_badge",
+      "status": "PASS",
+      "value": "RUST SIMD: ACTIVE"
+    },
+    {
+      "check": "provider_badge",
+      "status": "PASS",
+      "value": "META: BLOCKED (OFFLINE)"
+    },
+    {
+      "check": "labelcourt_audit_run",
+      "status": "PASS",
+      "verdict": "ACCEPT",
+      "iou": "94.1%",
+      "receipt": "Receipt: LC-87EBF42A2628"
+    },
+    {
+      "check": "actionproof_verification_run",
+      "status": "PASS",
+      "verdict": "SUCCESS",
+      "displacement": "322.02 px",
+      "receipt": "Receipt: AP-FB5C279BAA14"
+    },
+    {
+      "check": "evidence_calculus_dag_and_eval",
+      "status": "PASS",
+      "svg_nodes": 14,
+      "verdict": "SUCCESS",
+      "debt": "0.00",
+      "predicates_count": 8
+    },
+    {
+      "check": "scientific_benchmarks_coco_view",
+      "status": "PASS",
+      "controlled_precision": "97.5%",
+      "genuine_recall_iou50": "43.26%",
+      "controlled_recall": "99.0%",
+      "genuine_mean_iou": "0.3929"
+    },
+    {
+      "check": "mobile_viewport_responsive",
+      "status": "PASS"
+    }
+  ],
+  "screenshots": {
+    "overview": "docs/screenshots/browser_01_overview.png",
+    "labelcourt": "docs/screenshots/browser_02_labelcourt.png",
+    "actionproof": "docs/screenshots/browser_03_actionproof.png",
+    "calculus": "docs/screenshots/browser_04_calculus.png",
+    "benchmarks": "docs/screenshots/browser_05_benchmarks.png",
+    "mobile_responsive": "docs/screenshots/browser_06_mobile_responsive.png"
+  },
+  "console_errors": []
+}

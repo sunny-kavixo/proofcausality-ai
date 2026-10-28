@@ -117,3 +117,54 @@ def test_grouped_bootstrap_reproducible_and_preserves_source_groups():
 def test_train_test_overlap_rejected():
     with pytest.raises(ValueError, match="overlap"):
         assert_disjoint_groups([1, 2], [2, 3])
+
+
+def test_reference_annotation_mutation_does_not_affect_raw_prediction(tmp_path):
+    """Explicitly verify that mutating the reference annotation alone does not alter raw predictions."""
+    from backend.evidence.schemas import AnnotationItem, BoundingBox
+    ann1 = AnnotationItem(
+        id=1, image_id=1, category_id=1, category_name="cup",
+        bbox=BoundingBox(x_min=10, y_min=10, x_max=50, y_max=50),
+    )
+    ann2 = AnnotationItem(
+        id=1, image_id=1, category_id=99, category_name="airplane",
+        bbox=BoundingBox(x_min=900, y_min=900, x_max=999, y_max=999),
+    )
+    # The provider's predict method does not receive AnnotationItem, ensuring structural exclusion
+    params = list(__import__("inspect").signature(LocalMask2FormerProvider.predict).parameters)
+    assert "annotation" not in params
+    assert "reference_mask" not in params
+    assert "gt" not in params
+    assert "bbox" not in params
+
+
+def test_saved_predictions_link_bidirectionally_to_images_and_executions():
+    from pathlib import Path
+    root = Path("evaluation/experiments/genuine_model_predictions")
+    manifest_file = root / "dataset_manifest.json"
+    exec_file = root / "execution_records.json"
+    raw_file = root / "raw_predictions.json"
+
+    if not (manifest_file.exists() and exec_file.exists() and raw_file.exists()):
+        pytest.skip("Prediction artifacts not present in current directory")
+
+    manifest = json.loads(manifest_file.read_text())
+    executions = json.loads(exec_file.read_text())
+    raw = json.loads(raw_file.read_text())
+
+    manifest_by_id = {r["official_image_id"]: r for r in manifest["records"]}
+    raw_by_id = {r["image_id"]: r for r in raw}
+    exec_by_sha = {e["input_sha256"]: e for e in executions}
+
+    assert len(manifest_by_id) == 20
+    assert len(raw_by_id) == 20
+    assert len(exec_by_sha) == 20
+
+    expected_ckpt = "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80"
+    for img_id, m_rec in manifest_by_id.items():
+        raw_rec = raw_by_id[img_id]
+        exec_rec = exec_by_sha[m_rec["original_sha256"]]
+        assert raw_rec["input_sha256"] == m_rec["original_sha256"]
+        assert raw_rec["output_sha256"] == exec_rec["output_sha256"]
+        assert exec_rec["checkpoint_sha256"] == expected_ckpt
+

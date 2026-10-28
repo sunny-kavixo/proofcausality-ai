@@ -5,7 +5,7 @@
     "dataset": "MS COCO 2017 Validation Subset (20 authentic photographs)",
     "engine_version": "v0.2.4",
     "random_seed": 42,
-    "date": "2026-10-28 18:02:15Z"
+    "date": "2026-10-28 19:21:38Z"
   },
   "development_split": {
     "evidence_category": "CONTROLLED_CORRUPTION_ON_REAL_PHOTOS",
@@ -28,9 +28,9 @@
         0.9968
       ],
       "f1_score": 0.9825,
-      "mean_latency_ms": 15.646,
-      "p50_latency_ms": 17.31,
-      "p95_latency_ms": 21.316,
+      "mean_latency_ms": 15.033,
+      "p50_latency_ms": 16.753,
+      "p95_latency_ms": 20.674,
       "precision_image_grouped_bootstrap_ci95": [
         0.9629,
         0.9851
@@ -60,9 +60,9 @@
         0.5672
       ],
       "f1_score": 0.683,
-      "mean_latency_ms": 0.446,
-      "p50_latency_ms": 0.498,
-      "p95_latency_ms": 0.599
+      "mean_latency_ms": 0.426,
+      "p50_latency_ms": 0.473,
+      "p95_latency_ms": 0.561
     },
     "breakdown_by_corruption": {
       "CLEAN": {
@@ -138,9 +138,9 @@
         0.9954
       ],
       "f1_score": 0.9825,
-      "mean_latency_ms": 18.493,
-      "p50_latency_ms": 18.29,
-      "p95_latency_ms": 22.783,
+      "mean_latency_ms": 18.232,
+      "p50_latency_ms": 18.077,
+      "p95_latency_ms": 22.633,
       "precision_image_grouped_bootstrap_ci95": [
         0.9627,
         0.988
@@ -170,9 +170,9 @@
         0.5442
       ],
       "f1_score": 0.6667,
-      "mean_latency_ms": 0.523,
-      "p50_latency_ms": 0.546,
-      "p95_latency_ms": 0.597
+      "mean_latency_ms": 0.509,
+      "p50_latency_ms": 0.521,
+      "p95_latency_ms": 0.587
     },
     "breakdown_by_corruption": {
       "CLEAN": {

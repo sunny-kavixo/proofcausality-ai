@@ -28,7 +28,7 @@ function initTabs() {
 
   if (window.location.hash) {
     const targetTabId = window.location.hash.replace('#', '');
-    const hashBtn = document.querySelector();
+    const hashBtn = document.querySelector(`.nav-tab[data-tab="${targetTabId}"]`);
     if (hashBtn) {
       hashBtn.click();
     }
