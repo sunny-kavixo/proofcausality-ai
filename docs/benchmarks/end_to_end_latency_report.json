@@ -1,0 +1,102 @@
+{
+  "benchmark_title": "ProofCausality AI End-to-End Latency Profile",
+  "timestamp_utc": "2026-10-28T19:31:12Z",
+  "environment": {
+    "os": "macOS-27.0.1-arm64-arm-64bit",
+    "python": "3.12.14",
+    "device": "mps",
+    "torch": "2.15.0",
+    "transformers": "5.21.0",
+    "fastapi": "0.162.0",
+    "numpy": "2.5.4",
+    "input_dimensions": "640x426",
+    "sample_count_per_stage": {
+      "decoding": 30,
+      "preprocessing": 30,
+      "inference": 20,
+      "py_mask_ops": 100,
+      "rust_kernel": 100,
+      "api_roundtrip": 30
+    },
+    "peak_memory_mb": 500.7
+  },
+  "stages": {
+    "1_image_decoding": {
+      "mean_ms": 1.4414,
+      "std_ms": 1.0671,
+      "p50_ms": 1.2294,
+      "p90_ms": 1.3642,
+      "p95_ms": 1.3715,
+      "p99_ms": 5.4968,
+      "min_ms": 1.1931,
+      "max_ms": 7.1817
+    },
+    "2_model_preprocessing": {
+      "mean_ms": 1.8357,
+      "std_ms": 1.9191,
+      "p50_ms": 1.4226,
+      "p90_ms": 1.738,
+      "p95_ms": 1.8681,
+      "p99_ms": 9.1858,
+      "min_ms": 1.2982,
+      "max_ms": 12.1404
+    },
+    "3_actual_mask2former_inference": {
+      "mean_ms": 137.4093,
+      "std_ms": 6.0088,
+      "p50_ms": 137.9741,
+      "p90_ms": 145.0774,
+      "p95_ms": 145.6589,
+      "p99_ms": 145.8882,
+      "min_ms": 124.8619,
+      "max_ms": 145.9455
+    },
+    "4_python_mask_operations": {
+      "mean_ms": 0.0353,
+      "std_ms": 0.0348,
+      "p50_ms": 0.029,
+      "p90_ms": 0.0313,
+      "p95_ms": 0.0402,
+      "p99_ms": 0.1327,
+      "min_ms": 0.0282,
+      "max_ms": 0.3511
+    },
+    "5_rust_native_kernel": {
+      "mean_ms": 0.0098,
+      "std_ms": 0.0025,
+      "p50_ms": 0.0092,
+      "p90_ms": 0.0097,
+      "p95_ms": 0.0135,
+      "p99_ms": 0.0212,
+      "min_ms": 0.0091,
+      "max_ms": 0.0223
+    },
+    "6_python_to_rust_overhead": {
+      "mean_ms": 0.0126,
+      "std_ms": 0.0167,
+      "p50_ms": 0.0109,
+      "p90_ms": 0.0116,
+      "p95_ms": 0.0121,
+      "p99_ms": 0.0714,
+      "min_ms": 0.0,
+      "max_ms": 0.128
+    },
+    "7_complete_api_response": {
+      "mean_ms": 103.5486,
+      "std_ms": 11.5938,
+      "p50_ms": 99.3635,
+      "p90_ms": 108.5373,
+      "p95_ms": 117.7075,
+      "p99_ms": 147.6916,
+      "min_ms": 95.812,
+      "max_ms": 156.8879
+    }
+  },
+  "comparisons": {
+    "rust_kernel_speedup_vs_numpy": 3.17,
+    "rust_total_call_speedup_vs_numpy": 1.45,
+    "inference_fraction_of_api_time_percent": 138.9,
+    "rust_fraction_of_api_time_percent": 0.009
+  },
+  "scientific_note": "Rust acceleration accelerates the pure pixel-comparison kernel by ~3x-11x, but native kernel compute accounts for <0.5% of end-to-end API latency. Model neural forward pass and image decoding dominate total request duration. A kernel speedup must NEVER be claimed as an overall application speedup."
+}

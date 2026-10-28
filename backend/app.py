@@ -5,7 +5,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 from fastapi import FastAPI
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 
 from backend.api.routes import router as api_router
@@ -16,13 +16,18 @@ STATIC_DIR = BASE_DIR / "frontend" / "static"
 app = FastAPI(
     title="ProofCausality AI",
     description="Prove what happened. Detect what is missing. Capture the evidence that changes the decision.",
-    version="0.2.4",
+    version="0.2.5",
 )
 
 app.include_router(api_router)
 
 if STATIC_DIR.exists():
     app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon() -> Response:
+    return Response(status_code=204)
 
 
 @app.get("/", include_in_schema=False)

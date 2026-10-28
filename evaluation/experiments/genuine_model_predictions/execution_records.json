@@ -12,12 +12,12 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "a5c4d915157d12e4eed08167d79ad35a4451d2b1dca4f6ac3cbddb759d45bb21",
-    "latency_ms": 997.324,
+    "latency_ms": 3901.388,
     "execution_status": "SUCCEEDED",
     "runtime": {
-      "python": "3.14.5",
+      "python": "3.12.14",
       "torch": "2.15.0",
-      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      "platform": "macOS-27.0.1-arm64-arm-64bit"
     }
   },
   {
@@ -33,12 +33,12 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "4826e89303f85417b2a6d532fabfc46457c0a9f3dfc13709082b6d0765c60e0e",
-    "latency_ms": 148.051,
+    "latency_ms": 135.416,
     "execution_status": "SUCCEEDED",
     "runtime": {
-      "python": "3.14.5",
+      "python": "3.12.14",
       "torch": "2.15.0",
-      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      "platform": "macOS-27.0.1-arm64-arm-64bit"
     }
   },
   {
@@ -54,12 +54,12 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "99269c06a67aa3c1b4e83a387d27d881d0989184de806f301106434d469f306d",
-    "latency_ms": 131.712,
+    "latency_ms": 133.036,
     "execution_status": "SUCCEEDED",
     "runtime": {
-      "python": "3.14.5",
+      "python": "3.12.14",
       "torch": "2.15.0",
-      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      "platform": "macOS-27.0.1-arm64-arm-64bit"
     }
   },
   {
@@ -75,12 +75,12 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "e4bc30c4924095f2453bb6530920742283a71bcdd8fb9d5505721df0aae59664",
-    "latency_ms": 135.451,
+    "latency_ms": 140.147,
     "execution_status": "SUCCEEDED",
     "runtime": {
-      "python": "3.14.5",
+      "python": "3.12.14",
       "torch": "2.15.0",
-      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      "platform": "macOS-27.0.1-arm64-arm-64bit"
     }
   },
   {
@@ -96,12 +96,12 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "84ac0d8586fe587e75c5a0d205f038e62f05c21549fe165e9e61f6e987b864e2",
-    "latency_ms": 156.729,
+    "latency_ms": 132.669,
     "execution_status": "SUCCEEDED",
     "runtime": {
-      "python": "3.14.5",
+      "python": "3.12.14",
       "torch": "2.15.0",
-      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      "platform": "macOS-27.0.1-arm64-arm-64bit"
     }
   },
   {
@@ -117,12 +117,12 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "6ddb844068b38e137b825c8f98189a618dc14ab05c6efe72ea704b13771347cc",
-    "latency_ms": 132.478,
+    "latency_ms": 133.999,
     "execution_status": "SUCCEEDED",
     "runtime": {
-      "python": "3.14.5",
+      "python": "3.12.14",
       "torch": "2.15.0",
-      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      "platform": "macOS-27.0.1-arm64-arm-64bit"
     }
   },
   {
@@ -138,12 +138,12 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "79d1550b08d76b27999b14030ed1b4113798f43598a7d4bbe6de70a3125254d0",
-    "latency_ms": 129.557,
+    "latency_ms": 121.987,
     "execution_status": "SUCCEEDED",
     "runtime": {
-      "python": "3.14.5",
+      "python": "3.12.14",
       "torch": "2.15.0",
-      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      "platform": "macOS-27.0.1-arm64-arm-64bit"
     }
   },
   {
@@ -159,12 +159,12 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "4f684bf14ab01ae928d57a97873a009a2854f5588ba54e7c23e4dcf4166e285a",
-    "latency_ms": 128.863,
+    "latency_ms": 138.064,
     "execution_status": "SUCCEEDED",
     "runtime": {
-      "python": "3.14.5",
+      "python": "3.12.14",
       "torch": "2.15.0",
-      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      "platform": "macOS-27.0.1-arm64-arm-64bit"
     }
   },
   {
@@ -180,12 +180,12 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "c03f860f00d5a403e4f8fda5809ccb2ffbe2264e55e0aaa98d941096b57f3425",
-    "latency_ms": 143.116,
+    "latency_ms": 139.759,
     "execution_status": "SUCCEEDED",
     "runtime": {
-      "python": "3.14.5",
+      "python": "3.12.14",
       "torch": "2.15.0",
-      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      "platform": "macOS-27.0.1-arm64-arm-64bit"
     }
   },
   {
@@ -201,12 +201,12 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "2f418fa68ae4d53dcf46fc8facfbeae282c939151ca318260796eb3e8c92f4c5",
-    "latency_ms": 124.948,
+    "latency_ms": 136.906,
     "execution_status": "SUCCEEDED",
     "runtime": {
-      "python": "3.14.5",
+      "python": "3.12.14",
       "torch": "2.15.0",
-      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      "platform": "macOS-27.0.1-arm64-arm-64bit"
     }
   },
   {
@@ -222,12 +222,12 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "d01082cfb6fe127a4d48b25694f58e99cd3266f1d19a82e30b0cf1a73abedb58",
-    "latency_ms": 127.672,
+    "latency_ms": 136.152,
     "execution_status": "SUCCEEDED",
     "runtime": {
-      "python": "3.14.5",
+      "python": "3.12.14",
       "torch": "2.15.0",
-      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      "platform": "macOS-27.0.1-arm64-arm-64bit"
     }
   },
   {
@@ -243,12 +243,12 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "ad8c9fd0d386c81cf3ed94d9f75b7e39774c1af74db337b719fe7828b3bba422",
-    "latency_ms": 140.371,
+    "latency_ms": 134.127,
     "execution_status": "SUCCEEDED",
     "runtime": {
-      "python": "3.14.5",
+      "python": "3.12.14",
       "torch": "2.15.0",
-      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      "platform": "macOS-27.0.1-arm64-arm-64bit"
     }
   },
   {
@@ -264,12 +264,12 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "b4b6b2a7e40c605f6878b953f4ddacf05f0e1553d9c39c17dd945f1c02a5cb97",
-    "latency_ms": 139.297,
+    "latency_ms": 135.215,
     "execution_status": "SUCCEEDED",
     "runtime": {
-      "python": "3.14.5",
+      "python": "3.12.14",
       "torch": "2.15.0",
-      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      "platform": "macOS-27.0.1-arm64-arm-64bit"
     }
   },
   {
@@ -285,12 +285,12 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "9ab503c1f3e92472385950801ab717ccf08ebb676868f29353b304bd582d52db",
-    "latency_ms": 121.456,
+    "latency_ms": 132.791,
     "execution_status": "SUCCEEDED",
     "runtime": {
-      "python": "3.14.5",
+      "python": "3.12.14",
       "torch": "2.15.0",
-      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      "platform": "macOS-27.0.1-arm64-arm-64bit"
     }
   },
   {
@@ -306,12 +306,12 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "f98dcedc86df05a56729a12197d5b59f300bf9234d85106041791745b64d9380",
-    "latency_ms": 126.759,
+    "latency_ms": 135.789,
     "execution_status": "SUCCEEDED",
     "runtime": {
-      "python": "3.14.5",
+      "python": "3.12.14",
       "torch": "2.15.0",
-      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      "platform": "macOS-27.0.1-arm64-arm-64bit"
     }
   },
   {
@@ -327,12 +327,12 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "bf9ca4eec8d33d25a5266ce4f52e52d52743c014a49854ee46e55323920966e8",
-    "latency_ms": 129.165,
+    "latency_ms": 139.18,
     "execution_status": "SUCCEEDED",
     "runtime": {
-      "python": "3.14.5",
+      "python": "3.12.14",
       "torch": "2.15.0",
-      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      "platform": "macOS-27.0.1-arm64-arm-64bit"
     }
   },
   {
@@ -348,12 +348,12 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "2aaaead3dcb7c9ccb3724d615b870cb33951b0cd0f659b7e206ce3c86c78a8d0",
-    "latency_ms": 133.312,
+    "latency_ms": 129.72,
     "execution_status": "SUCCEEDED",
     "runtime": {
-      "python": "3.14.5",
+      "python": "3.12.14",
       "torch": "2.15.0",
-      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      "platform": "macOS-27.0.1-arm64-arm-64bit"
     }
   },
   {
@@ -369,12 +369,12 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "c6a5fb6cf33dcbca669bd38a82d8cccd7f8b82d4d5f2649755e99305fc3b81e2",
-    "latency_ms": 135.866,
+    "latency_ms": 135.857,
     "execution_status": "SUCCEEDED",
     "runtime": {
-      "python": "3.14.5",
+      "python": "3.12.14",
       "torch": "2.15.0",
-      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      "platform": "macOS-27.0.1-arm64-arm-64bit"
     }
   },
   {
@@ -390,12 +390,12 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "9ecd94eb79e557d27651c737d094a202943f0867cd33d96338ea1aff62c4e7f2",
-    "latency_ms": 139.374,
+    "latency_ms": 135.896,
     "execution_status": "SUCCEEDED",
     "runtime": {
-      "python": "3.14.5",
+      "python": "3.12.14",
       "torch": "2.15.0",
-      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      "platform": "macOS-27.0.1-arm64-arm-64bit"
     }
   },
   {
@@ -411,12 +411,12 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "c473b3b023dc5db9e3152f9027788fee9b1a198246fe17cb8c35e81d0d107d29",
-    "latency_ms": 139.67,
+    "latency_ms": 138.466,
     "execution_status": "SUCCEEDED",
     "runtime": {
-      "python": "3.14.5",
+      "python": "3.12.14",
       "torch": "2.15.0",
-      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+      "platform": "macOS-27.0.1-arm64-arm-64bit"
     }
   }
 ]
