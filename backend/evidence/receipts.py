@@ -1,4 +1,11 @@
-"""Deterministic JSON evidence receipts with cryptographic SHA-256 integrity verification."""
+"""Deterministic JSON evidence receipts with reproducible SHA-256 payload integrity verification.
+
+Scientific Disclosure:
+- Evidence Receipts provide a reproducible SHA-256 integrity checksum over a canonicalized JSON payload.
+- This mechanism enables any party to detect post-hoc tampering of recorded measurements, verdicts, signals, or provenance.
+- This is NOT an HMAC (no shared secret key), NOT a digital signature (no private key), and NOT a Merkle tree.
+- A publicly recomputable hash guarantees internal payload consistency; it does not prove physical truth or authentic author identity.
+"""
 
 from __future__ import annotations
 
@@ -11,12 +18,12 @@ from backend.evidence.schemas import EvidenceReceipt, UncertaintySignal
 
 
 def canonical_json_dump(obj: Any) -> str:
-    """Deterministic canonical JSON serialization for cryptographic hashing."""
+    """Deterministic canonical JSON serialization for SHA-256 payload hashing."""
     return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
 
 
 def calculate_sha256(data: bytes | str) -> str:
-    """Compute SHA-256 hex digest of string or raw bytes."""
+    """Compute standard unkeyed SHA-256 hex digest of string or raw bytes."""
     if isinstance(data, str):
         data = data.encode("utf-8")
     return hashlib.sha256(data).hexdigest()
@@ -33,7 +40,7 @@ def generate_receipt(
     recapture_directive: Optional[str] = None,
     provenance: Optional[dict[str, Any]] = None,
 ) -> EvidenceReceipt:
-    """Generate a tamper-evident cryptographic Evidence Receipt."""
+    """Generate a tamper-evident Evidence Receipt with a canonical SHA-256 integrity checksum."""
     timestamp = datetime.now(timezone.utc).isoformat()
     signals_dict = [s.model_dump() for s in signals]
 
