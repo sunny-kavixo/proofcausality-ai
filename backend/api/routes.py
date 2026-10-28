@@ -1,6 +1,16 @@
+from __future__ import annotations
+from backend.evidence.calculus.engine import EvidenceCalculusEngine
+from backend.evidence.calculus.graph import build_canonical_task_graph
+from backend.evidence.calculus.budget_planner import EvidenceBudgetPlanner
+from backend.evidence.calculus.schemas import (
+    EvidenceDebtReport,
+    ObservablePredicate,
+    RecoveryAction,
+    TaskSpecification,
+)
+
 """FastAPI application routes for ProofCausality AI."""
 
-from __future__ import annotations
 
 import base64
 import json
@@ -86,7 +96,7 @@ def health() -> dict[str, Any]:
     acc_info = get_accelerator_info()
     return {
         "status": "ok",
-        "version": "0.1.1",
+        "version": "0.2.0",
         "project": "ProofCausality AI",
         "tagline": "Prove what happened. Detect what is missing. Capture the evidence that changes the decision.",
         "engines": [
@@ -327,3 +337,96 @@ def get_latency_benchmark() -> dict[str, Any]:
 
     with open(bench_file, "r") as f:
         return json.load(f)
+
+
+# ==============================================================================
+# EVIDENCE CALCULUS ENGINE ENDPOINTS (Phase 2 Architecture)
+# ==============================================================================
+
+class CalculusEvaluateRequest(BaseModel):
+    task_id: str = "TASK_RELOCATE_001"
+    primary_object: str = "cup"
+    before_bbox: BoundingBox
+    after_bbox: Optional[BoundingBox] = None
+    target_region: Optional[BoundingBox] = None
+    initial_region: Optional[BoundingBox] = None
+    canvas_width: int = 640
+    canvas_height: int = 480
+    laplacian_variance: float = 250.0
+    area_drop_ratio: float = 0.0
+    has_final_state: bool = True
+
+
+@router.post("/calculus/evaluate")
+def evaluate_evidence_calculus(req: CalculusEvaluateRequest) -> dict[str, Any]:
+    """Evaluates task predicates, Evidence Debt D(E,T), and grounded tri-state verdict."""
+    engine = EvidenceCalculusEngine()
+    target = req.target_region or BoundingBox(x_min=300, y_min=100, x_max=400, y_max=200)
+    init_reg = req.initial_region or req.before_bbox
+
+    spec = engine.build_standard_relocation_spec(
+        task_id=req.task_id,
+        primary_object=req.primary_object,
+        initial_region=init_reg,
+        target_region=target,
+    )
+
+    verdict, debt_report, updated_spec = engine.evaluate_task(
+        spec=spec,
+        before_bbox=req.before_bbox,
+        after_bbox=req.after_bbox,
+        canvas_width=req.canvas_width,
+        canvas_height=req.canvas_height,
+        laplacian_variance=req.laplacian_variance,
+        area_drop_ratio=req.area_drop_ratio,
+        has_final_state=req.has_final_state,
+    )
+
+    # Optional auto-plan if debt exists
+    planner = EvidenceBudgetPlanner()
+    recommended_action = planner.plan_recovery_action(debt_report, updated_spec.predicates)
+
+    return {
+        "verdict": verdict.value,
+        "debt_report": debt_report.model_dump(),
+        "task_specification": updated_spec.model_dump(),
+        "predicates": [p.model_dump() for p in updated_spec.predicates],
+        "recommended_action": recommended_action.model_dump() if recommended_action else None,
+    }
+
+
+@router.get("/calculus/graph")
+def get_canonical_evidence_graph() -> dict[str, Any]:
+    """Returns canonical 6-stage Evidence Dependency Graph nodes and edges for visualization."""
+    g = build_canonical_task_graph()
+    return g.export_graph()
+
+
+class PlanRecoveryRequest(BaseModel):
+    predicates: List[ObservablePredicate]
+    debt_report: EvidenceDebtReport
+    budget_limit_sec: Optional[float] = None
+
+
+@router.post("/calculus/plan-recovery")
+def plan_evidence_recovery(req: PlanRecoveryRequest) -> dict[str, Any]:
+    """Ranks and selects recovery actions maximizing Value of Information (VOI)."""
+    planner = EvidenceBudgetPlanner()
+    all_candidates = planner.generate_all_candidate_actions(req.predicates)
+    best_action = planner.plan_recovery_action(req.debt_report, req.predicates, req.budget_limit_sec)
+
+    return {
+        "best_action": best_action.model_dump() if best_action else None,
+        "all_candidate_actions": [a.model_dump() for a in all_candidates],
+        "candidate_count": len(all_candidates),
+    }
+
+
+@router.get("/calculus/experiments")
+def get_calculus_experiments_summary() -> dict[str, Any]:
+    """Returns empirical research experiment results across H01, H02, H03, and H04."""
+    exp_file = Path(__file__).resolve().parent.parent.parent / "evaluation" / "experiments" / "EXPERIMENT_RESULTS.json"
+    if exp_file.exists():
+        with open(exp_file, "r") as f:
+            return json.load(f)
+    return {"status": "Experiments file pending execution"}

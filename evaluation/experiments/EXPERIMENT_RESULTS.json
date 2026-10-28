@@ -1,0 +1,93 @@
+{
+  "h01_evidence_debt": {
+    "experiment": "H01_EVIDENCE_DEBT",
+    "sample_size": 37,
+    "true_negatives_count": 22,
+    "results": {
+      "method_a_confidence_only": {
+        "false_successes": 22,
+        "false_success_rate": 1.0,
+        "coverage": 1.0,
+        "selective_risk": 0.5946,
+        "over_abstention_count": 0,
+        "mean_latency_ms": 0.0
+      },
+      "method_b_fixed_rules": {
+        "false_successes": 1,
+        "false_success_rate": 0.0455,
+        "coverage": 0.7568,
+        "selective_risk": 0.1429,
+        "over_abstention_count": 0,
+        "mean_latency_ms": 0.001
+      },
+      "method_c_evidence_debt_only": {
+        "false_successes": 0,
+        "false_success_rate": 0.0,
+        "coverage": 0.4054,
+        "selective_risk": 0.0,
+        "over_abstention_count": 0,
+        "mean_latency_ms": 0.032
+      },
+      "method_d_evidence_debt_plus_contradiction": {
+        "false_successes": 0,
+        "false_success_rate": 0.0,
+        "coverage": 0.7568,
+        "selective_risk": 0.1429,
+        "over_abstention_count": 0,
+        "mean_latency_ms": 0.026
+      }
+    }
+  },
+  "h02_dependency_graph": {
+    "experiment": "H02_DEPENDENCY_GRAPH",
+    "iterations": 100,
+    "mathematical_parity_rate": 1.0,
+    "results": {
+      "method_a_full_recomputation": {
+        "mean_latency_ms": 0.042,
+        "mean_recomputed_nodes": 12.0,
+        "mean_skipped_nodes": 0.0
+      },
+      "method_c_incremental_recomputation": {
+        "mean_latency_ms": 0.053,
+        "mean_recomputed_nodes": 10.0,
+        "mean_skipped_nodes": 4.0,
+        "speedup_factor": 0.8
+      }
+    }
+  },
+  "h03_budget_planner": {
+    "experiment": "H03_BUDGET_PLANNER",
+    "total_evaluated_cases": 20,
+    "results": {
+      "method_a_generic_advice": {
+        "resolution_rate": 0.3,
+        "mean_effort_seconds": 15.0
+      },
+      "method_b_fixed_template": {
+        "resolution_rate": 0.85,
+        "mean_effort_seconds": 6.0
+      },
+      "method_c_random_selection": {
+        "resolution_rate": 0.35,
+        "mean_effort_seconds": 7.0
+      },
+      "method_d_voi_budget_planner": {
+        "resolution_rate": 0.95,
+        "mean_effort_seconds": 8.2
+      }
+    }
+  },
+  "h04_detector_independence": {
+    "experiment": "H04_DETECTOR_INDEPENDENCE",
+    "sample_size": 50,
+    "distribution_shift_scenario": "Shared shadow artifact inducing correlated false positive in Det A & B",
+    "results": {
+      "single_model_false_success_rate": 1.0,
+      "majority_vote_false_success_rate": 1.0,
+      "confidence_weighted_false_success_rate": 1.0,
+      "dependence_aware_false_success_rate": 0.0,
+      "risk_reduction_over_majority": 1.0
+    }
+  }
+}

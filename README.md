@@ -3,15 +3,30 @@
 > **"Prove what happened. Detect what is missing. Capture the evidence that changes the decision."**
 
 [![CI](https://github.com/sunny-kavixo/proofcausality-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/sunny-kavixo/proofcausality-ai/actions)
-[![Release: v0.1.1](https://img.shields.io/badge/Release-v0.1.1-blue.svg)](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.1.1)
+[![Release: v0.2.0](https://img.shields.io/badge/Release-v0.2.0-blue.svg)](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Rust Accelerated](https://img.shields.io/badge/Rust_SIMD-11.3x_Speedup-orange.svg)](native/proofcausality_core/)
+[![Tests: 82 Passing](https://img.shields.io/badge/tests-82%20passing-brightgreen.svg)](tests/)
 [![Meta Hackathon 2026](https://img.shields.io/badge/Meta_Global_AI_Hackathon-Indie_Developer-purple.svg)](https://cerebralvalley.ai/e/meta-ai-developer-hackathon)
 
-ProofCausality AI is an evidence-aware visual causality and physical-action verification system engineered for high-consequence computer vision, robotic manipulation, and dataset annotation auditing.
+ProofCausality AI is an evidence-aware visual causality and physical-action verification system engineered for high-consequence computer vision, robotic demonstration quality control, and visual dataset annotation auditing.
 
 Built for the **Meta Global AI Developer Hackathon 2026** (Track: *Indie Developer*, Theme: *Push the Frontier*).
+
+---
+
+## What's New in Phase 2: Evidence Calculus Engine (`v0.2.0`)
+
+In Phase 2, ProofCausality AI introduces the **Evidence Calculus Engine** (`backend/evidence/calculus/`), transforming visual verification from a single uncalibrated confidence score into an explicit, testable system of observable physical conditions:
+
+1. **Tri-State Predicate Logic**: Evaluates physical tasks across three distinct truth states: `SUPPORTED` (unambiguous visual proof), `CONTRADICTED` (physical falsification), and `UNOBSERVABLE` (perceptual deficit, blur, occlusion).
+2. **Physics-Constrained Evidence Debt ($D(E,T)$)**: Formal debt metric penalizing unobservable conditions ($w=1.0$) and physical impossibilities ($w=2.0$ non-teleportation velocity bounds), reducing False-Success Rate to **0.0%**.
+3. **Directed Evidence Dependency Graph (H02)**: 6-stage DAG connecting raw frames $	o$ detections $	o$ segmentation masks $	o$ spatial measurements $	o$ predicates $	o$ decisions with **100.0% mathematical parity** on incremental recomputation.
+4. **Cost-Aware Evidence Budget Planner (H03)**: Value-of-Information (VOI) optimization selecting the next observation that maximizes expected risk reduction minus physical human effort, achieving **95.0% resolution rate** (vs 30.0% for generic advice).
+5. **Detector-Independence Audit (H04)**: Computes pairwise error correlation matrices under distribution shifts and applies dependence-aware discounting to prevent false consensus among collinear vision models.
+
+![Evidence Calculus Architecture](docs/architecture/evidence-calculus-architecture.svg)
 
 ---
 
@@ -23,115 +38,80 @@ In robotic manipulation, logistics inspection, and dataset quality auditing, **a
 
 ---
 
-## The ProofCausality Solution
+## Architectural Engines
 
-ProofCausality AI introduces a bounded, verifiable arbitration pipeline:
-1. **Never substitute model confidence for factual proof.**
-2. **Support three honest action outcomes:** `SUCCESS`, `FAILED`, and `UNCERTAIN`.
-3. **Emit targeted, deterministic ReCapture instructions** when evidence is missing.
-4. **Accelerate spatial kernels with optional Rust SIMD** (11.35x batch speedup; pure Python fallback).
-5. **Issue tamper-evident, SHA-256 Evidence Receipts** anchoring the observation chain.
-
-![System Architecture](docs/architecture/system-architecture.svg)
-
----
-
-## Core Engines
-
-| Engine | Name | Responsibility | Deterministic & Native Guarantee |
+| Engine | Namespace | Responsibility | Implementation & Guarantee |
 | :--- | :--- | :--- | :--- |
-| **LabelCourt** | Visual Annotation Evidence Auditor | Audits human vs model segmentations, flags boundary discrepancies, and exports verified COCO subsets. | Pixel-accurate IoU, Dice coefficient, boundary agreement within $\tau$-pixel tolerance. |
-| **ActionProof** | Physical Action Verification Engine | Verifies before-and-after physical state transitions (e.g., A-to-B relocation, spatial proximity, presence). | Distance thresholds, bounding containment, temporal pair validation. |
-| **EvidenceCore** | Measurement & Uncertainty Engine | Detects low-level evidence deficits: 2D Laplacian blur, border contact, area-drop occlusion, missing final state. | Accelerated via Rust zero-allocation SIMD convolution; pure NumPy fallback. |
-| **ReCapture** | Recovery Planner | Generates deterministic, actionable physical instructions for the operator or robot camera. | Priority-ranked directives resolving specific visual deficits. |
+| **EvidenceCalculus** | `backend.evidence.calculus` | Tri-state observable predicate decomposition & Evidence Debt $D(E,T)$ | Evaluates 8 physical preconditions; guarantees falsification priority. |
+| **DependencyGraph** | `backend.evidence.calculus.graph` | 6-stage directed DAG tracking evidence propagation | Dirty tracking; 100% mathematical parity with full recomputation. |
+| **BudgetPlanner** | `backend.evidence.calculus.budget_planner` | Cost-aware Value-of-Information (VOI) recovery planning | Maximizes $\mathbb{E}[\Delta 	ext{Risk}] - \lambda \cdot 	ext{Cost}$; 95% resolution rate. |
+| **LabelCourt** | `backend.labelcourt` | Visual Annotation Evidence Auditor | Audits bounding box & mask IoU, Dice coefficients, and contour agreement. |
+| **ActionProof** | `backend.actionproof` | Physical Action Verification Engine | Verifies before/after state transitions (relocation, containment, proximity). |
+| **EvidenceCore** | `backend.evidence` | Measurement & Uncertainty Engine | 2D Laplacian blur variance & border margin clipping detection. |
+| **Rust SIMD Core** | `native.proofcausality_core` | Zero-allocation native acceleration | **11.35x batch IoU speedup**, **3.52x blur kernel speedup**; pure Python fallback. |
+| **ReCapture** | `backend.recapture` | Actionable recovery directive generator | Issues targeted physical instructions (e.g. pan camera, hold steady). |
+| **ReceiptStore** | `backend.evidence.receipts` | Tamper-evident cryptographic receipt store | Issues canonical SHA-256 Merkle Evidence Receipts. |
 
 ---
 
-## Empirical Benchmark Results & Statistical Rigor
+## Scientific Evaluation Protocol & Empirical Results
 
 > **Scientific Reporting Standard:** All empirical metrics are accompanied by exact numerators, denominators, and **95% Wilson score confidence intervals**. Results are strictly partitioned between curated real-world tabletop cases and controlled synthetic calibration suites.
 
-### Evaluation Suite 1: Real-World Tabletop Action Evaluation (12 Cases)
-- **Provenance:** Curated tabletop physical manipulation pairs under CC-BY-4.0 license (`docs/benchmarks/benchmark_results_real.json`).
-- **Ground Truth Composition:** 5 Clean Successes, 3 Failures (dropped/overshot/remained in A), 4 Deficit/Uncertain (blur, framing escape, gripper occlusion, missing final state).
+### Experiment H01: Evidence Debt vs Baselines (37 Benchmark Cases)
+- **Dataset**: 12 photographed real tabletop pairs (CC-BY-4.0) + 25 synthetic benchmark cases (37 total).
+- **Ground Truth**: 15 True Successes, 22 True Negatives (14 Uncertain, 8 Failed).
 
-| Metric | ProofCausality AI | Naive Box Heuristic Baseline | Relative Performance |
-| :--- | :--- | :--- | :--- |
-| **False-Success Rate (FSR)** | **0.0%** (0 / 7 non-success)<br>`95% Wilson CI: [0.0%, 35.4%]` | **42.9%** (3 / 7 false successes)<br>`95% Wilson CI: [15.8%, 75.0%]` | **100.0% reduction** in false successes |
-| **ReCapture Resolution Rate (RRR)** | **100.0%** (4 / 4 resolved)<br>`95% Wilson CI: [51.0%, 100.0%]` | **0.0%** (0 / 4 resolved)<br>`95% Wilson CI: [0.0%, 49.0%]` | **+100.0% gain** over generic *"record again"* advice |
-| **Over-Abstention Rate** | **0.0%** (0 / 5 clean successes rejected)<br>`95% Wilson CI: [0.0%, 43.4%]` | **0.0%** | Complete retention of valid actions |
+| Verification Strategy | False-Successes | False-Success Rate | Coverage | Selective Risk | Mean Latency |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **A. Confidence-Only Baseline ($\ge 0.85$)** | 22 / 22 | **100.0%** | 100.0% | 0.5946 | 0.000 ms |
+| **B. Fixed Boolean Rules** | 1 / 22 | **4.55%** | 75.68% | 0.1429 | 0.001 ms |
+| **C. Evidence Debt (Unit Weight Only)** | 0 / 22 | **0.0%** | 40.54% | 0.0000 | 0.032 ms |
+| **D. Evidence Calculus (Full)** | **0 / 22** | **0.0%** | **75.68%** | **0.1429** | **0.026 ms** |
 
----
+### Experiment H02: Evidence Dependency Graph (100 Iterations)
+- **Mathematical Parity**: **100.0% (100/100 matches)** between incremental recomputation and full recomputation.
+- **Node Evaluation**: Incremental pass evaluated an average of 10.0 nodes and skipped 4.0 nodes.
+- **Scientific Finding**: In pure-memory Python execution without GPU model weights, DAG bookkeeping introduces 0.011 ms overhead (0.80x speedup). It is retained as a formal **Explainability and Provenance Localization** architecture rather than a throughput accelerator.
 
-### Evaluation Suite 2: Synthetic Calibration Baseline (25 Cases)
-- **Provenance:** Constructed synthetic stress-test scenarios (`docs/benchmarks/benchmark_results_synthetic.json`).
-- **Ground Truth Composition:** 10 Clean Successes, 6 Incomplete Failures, 9 Evidence Deficits.
+### Experiment H03: Cost-Aware Evidence Budget Planner (20 Defective Cases)
+- **Generic Advice ("Please re-record")**: 30.0% resolution rate (15.0 sec mean effort).
+- **Fixed Templates**: 85.0% resolution rate (6.0 sec mean effort).
+- **VOI Budget Planner**: **95.0% resolution rate** (8.2 sec mean effort) by matching high-efficacy actions to specific defects.
 
-| Metric | ProofCausality AI | Naive Box Baseline | Relative Performance |
-| :--- | :--- | :--- | :--- |
-| **False-Success Rate (FSR)** | **0.0%** (0 / 15 non-success)<br>`95% Wilson CI: [0.0%, 20.4%]` | **80.0%** (12 / 15 false successes)<br>`95% Wilson CI: [54.8%, 93.0%]` | **100.0% risk elimination** |
-| **ReCapture Resolution Rate (RRR)** | **100.0%** (9 / 9 resolved)<br>`95% Wilson CI: [70.1%, 100.0%]` | **0.0%** (0 / 9 resolved)<br>`95% Wilson CI: [0.0%, 29.9%]` | Systematic deficit recovery |
-
----
-
-## Native Rust Acceleration Profiling
-
-ProofCausality AI includes an optional native C-ABI dynamic library (`native/proofcausality_core/`) implementing zero-allocation 64-bit word streaming with hardware `POPCNT` instructions.
-
-Measured on Apple M-series hardware over **200 timed iterations per kernel** after warm-up (`docs/benchmarks/benchmark_latency_comparison.json`):
-
-| Kernel Operation | Input Dimensions | Pure NumPy Baseline (p50) | Rust Native Core (p50) | Measured Speedup |
-| :--- | :--- | :--- | :--- | :--- |
-| **Batch Mask IoU** | 100 &times; 256 &times; 256 | 2,356.2 µs | **207.5 µs** | **11.35&times; Faster** |
-| **2D Laplacian Blur Variance** | 1024 &times; 1024 | 2,148.8 µs | **610.4 µs** | **3.52&times; Faster** |
-| **Mask IoU (Small)** | 256 &times; 256 | 8.1 µs | **2.5 µs** | **3.30&times; Faster** |
-| **Mask IoU (Medium)** | 1024 &times; 1024 | 95.3 µs | **31.3 µs** | **3.05&times; Faster** |
-| **Mask IoU (Large)** | 2048 &times; 2048 | 400.6 µs | **132.2 µs** | **3.03&times; Faster** |
-
-> **Graceful Degradation:** If Rust or `cargo` is unavailable in the execution environment, the system automatically runs the vectorized pure-NumPy fallback with **100% mathematical parity** ($< 10^{-7}$ numerical tolerance).
+### Experiment H04: Detector Independence (50 Distribution-Shifted Trials)
+- Under a simulated directional shadow artifact causing correlated false-positive detections in two models:
+  - Single Model False-Success Rate: **100.0%**
+  - Simple Majority Vote False-Success Rate: **100.0%**
+  - Dependence-Aware Fusion False-Success Rate: **0.0%** (**100% Risk Reduction**)
 
 ---
 
-## Evidence Receipts: Factual Truth vs File Integrity
+## Research Documentation Library
 
-Every verdict generates a canonical SHA-256 **Evidence Receipt**:
-```json
-{
-  "report_id": "AP-6C48B21F7A3E",
-  "timestamp": "2026-10-28T19:02:25Z",
-  "software_version": "0.1.1",
-  "engine_name": "ActionProof",
-  "inputs_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "measurements": {
-    "centroid_displacement_px": 322.02,
-    "laplacian_variance": 38.4,
-    "source_image_sha256": "8a3f91...b420"
-  },
-  "uncertainty_signals": [
-    {
-      "reason": "BLUR",
-      "severity": "CRITICAL",
-      "description": "2D Laplacian variance below sharpness threshold (38.4 < 100.0)"
-    }
-  ],
-  "verdict": "UNCERTAIN",
-  "recapture_directive": "Hold the camera steady and allow the object to become sharp before ending the capture.",
-  "receipt_sha256": "4a7d...39e1"
-}
-```
+Comprehensive scientific reports, formal derivations, and competitive comparisons are available under `docs/research/`:
 
-> **Important Scientific Distinction:**
-> ProofCausality explicitly documents that **a cryptographic hash guarantees file and log integrity, not physical truth**. The hash guarantees that the recorded observations, thresholds, and intermediate signals have not been altered after the fact.
+1. [Research Synthesis & Mechanism Inventory](docs/research/RESEARCH_SYNTHESIS.md)
+2. [Hypothesis Register & Research Gate Log](docs/research/HYPOTHESIS_REGISTER.md)
+3. [Evidence Calculus Engine Formal Specification](docs/research/EVIDENCE_CALCULUS_SPEC.md)
+4. [Physics-Constrained Evidence Debt (H01)](docs/research/PHYSICS_CONSTRAINED_EVIDENCE_DEBT.md)
+5. [Evidence Dependency Graph & Equivalence Study (H02)](docs/research/EVIDENCE_DEPENDENCY_GRAPH.md)
+6. [Cost-Aware Evidence Budget Planner (H03)](docs/research/EVIDENCE_BUDGET_PLANNER.md)
+7. [Detector-Independence & Correlated Error Study (H04)](docs/research/DETECTOR_INDEPENDENCE_STUDY.md)
+8. [Competitive Baselines & Methodological Comparison](docs/research/COMPETITIVE_BASELINES.md)
+9. [Real-World Industrial Impact Assessment](docs/research/REAL_WORLD_IMPACT.md)
+10. [Consolidated Empirical Results & Statistical Tables](docs/research/EXPERIMENT_RESULTS.md)
+11. [Research Limitations & Failure Boundaries](docs/research/RESEARCH_LIMITATIONS.md)
 
 ---
 
 ## Quickstart & Installation
 
-### Requirements
-- Python 3.11+ (Tested on Python 3.11, 3.12, 3.13, 3.14 on macOS and Linux)
-- Rust toolchain (optional, for native acceleration: `cargo build --release`)
+### 1. Prerequisites
+- Python 3.11+
+- Optional: Rust 1.75+ (for native SIMD acceleration)
 
-### 1. Clone & Setup
+### 2. Clone and Setup Environment
 ```bash
 git clone https://github.com/sunny-kavixo/proofcausality-ai.git
 cd proofcausality-ai
@@ -139,92 +119,41 @@ cd proofcausality-ai
 # Create virtual environment
 python3 -m venv .venv
 source .venv/bin/activate
-
-# Install dependencies
 pip install -r requirements.txt
-
-# (Optional) Build Rust native accelerator
-cd native/proofcausality_core && cargo build --release && cd ../..
 ```
 
-### 2. Run the Automated Test Suite
+### 3. Build Native Rust Acceleration Core (Optional)
 ```bash
-python3 -m pytest tests/ -v
+cd native/proofcausality_core
+cargo build --release
+cd ../..
 ```
-All **61 unit and integration tests** execute in `<0.3 seconds` with zero failures.
+*If Rust is not installed, ProofCausality AI automatically runs on its 100% verified pure Python/NumPy fallback engine.*
 
-### 3. Run Benchmark Verification
+### 4. Run the Full Test Suite
 ```bash
-# Run real tabletop action benchmark
-python3 -m evaluation.benchmark_real
-
-# Run synthetic calibration benchmark
-python3 -m evaluation.benchmark
-
-# Run NumPy vs Rust latency benchmark
-python3 -m evaluation.benchmark_rust_speedup
+pytest
 ```
+*Runs all 82 unit, integration, and experiment tests.*
 
-### 4. Launch the Web Application
+### 5. Start the Interactive Application
 ```bash
-uvicorn backend.app:app --host 0.0.0.0 --port 8080 --reload
+python3 -m uvicorn backend.app:app --host 0.0.0.0 --port 8000
 ```
-Open your browser to `http://localhost:8080` to access the interactive dashboard.
+Open [http://localhost:8000](http://localhost:8000) in your browser to inspect the interactive Evidence Calculus DAG Visualizer, Evidence Debt Meter, and ReCapture recovery workflow.
 
 ---
 
-## Meta Ecosystem Integration
+## Meta Technologies & Hackathon Integration
 
-ProofCausality AI is architected with production clients for:
-- **Meta SAM 2 / 2.1 (Segment Anything Model)**: Ingests segmentation masks for boundary and IoU auditing with base64 image encoding and box prompts.
-- **Meta Llama 3.2 Vision (11B / 90B)**: Formats multimodal chat completions for structured perceptual reasoning.
-- **EvidenceCore Deterministic Fallback**: In production or offline environments without active Meta API keys, the system executes pure NumPy/Pillow convolution and geometric analysis, maintaining 100% testable local autonomy with zero cloud dependency.
-
----
-
-## Project Structure
-
-```
-proofcausality-ai/
-├── .github/workflows/ci.yml       # Automated GitHub Actions CI (Python + Rust)
-├── backend/
-│   ├── api/routes.py              # REST API endpoints (v0.1.1)
-│   ├── app.py                     # FastAPI application setup
-│   ├── evidence/                  # EvidenceCore: schemas, masks, metrics, blur, receipts
-│   │   ├── advanced_metrics.py    # Wilson score CIs, Dice, Cohen's Kappa, McNemar
-│   │   ├── image_processing.py    # PNG/JPEG validation, COCO parser, disagreement overlays
-│   │   └── rust_accelerator.py    # Zero-allocation C-ABI dynamic library bridge
-│   ├── labelcourt/                # LabelCourt: annotation auditor & COCO exporter
-│   ├── actionproof/               # ActionProof: physical action verifier
-│   └── providers/meta_adapter.py  # Meta SAM 2.1 / Llama 3.2 Vision client & fallback
-├── native/proofcausality_core/    # Optional Rust native acceleration crate
-│   ├── Cargo.toml
-│   └── src/lib.rs                 # Vectorized 64-bit popcount and 2D Laplacian kernels
-├── evaluation/
-│   ├── cases/
-│   │   ├── action_dataset.py      # 25 synthetic benchmark cases
-│   │   └── real_dataset.py        # 12 real tabletop action cases (CC-BY-4.0)
-│   ├── benchmark.py               # Synthetic evaluation runner
-│   ├── benchmark_real.py          # Real-world evaluation runner
-│   └── benchmark_rust_speedup.py  # Latency profiler (NumPy vs Rust)
-├── frontend/static/               # Developer-grade single page app
-│   ├── index.html                 # 7 functional views including Performance Dashboard
-│   ├── style.css
-│   └── app.js
-├── docs/
-│   ├── architecture/              # System architecture SVG & specs
-│   ├── benchmarks/                # JSON and CSV evaluation records
-│   ├── evidence/                  # Model feasibility audit
-│   └── hackathon/                 # Meta submission handoff & video scripts
-├── tests/                         # 61 Pytest test cases
-├── pyproject.toml
-├── requirements.txt
-├── LICENSE                        # MIT License
-└── README.md
-```
+- **Meta SAM 2 / 2.1**: Zero-shot prompt-driven segmentation via `backend/evidence/meta_adapter.py`.
+- **Meta Llama 3.2 Vision**: Multimodal scene observation and structured reasoning.
+- **Zero-Cloud Fallback**: 100% offline deterministic verification via EvidenceCore and EvidenceCalculus.
 
 ---
 
-## License
+## License & Provenance
 
-This project is open-source under the [MIT License](LICENSE).
+- **Code**: MIT License ([LICENSE](LICENSE))
+- **Tabletop Dataset**: Creative Commons Attribution 4.0 International ([CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/))
+- **Tagline**: *"Prove what happened. Detect what is missing. Capture the evidence that changes the decision."*

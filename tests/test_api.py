@@ -24,7 +24,7 @@ def test_health_endpoint():
     assert resp.status_code == 200
     data = resp.json()
     assert data["status"] == "ok"
-    assert data["version"] == "0.1.1"
+    assert data["version"] == "0.2.0"
     assert data["project"] == "ProofCausality AI"
     assert "hardware_acceleration" in data
     assert "LabelCourt" in data["engines"]
@@ -117,3 +117,44 @@ def test_benchmark_endpoints():
     assert resp_lat.status_code == 200
     lat_data = resp_lat.json()
     assert "kernels" in lat_data
+
+
+def test_calculus_evaluate_api():
+    payload = {
+        "task_id": "TEST_CALC_001",
+        "primary_object": "cup",
+        "before_bbox": {"x_min": 100, "y_min": 100, "x_max": 200, "y_max": 200},
+        "after_bbox": {"x_min": 310, "y_min": 105, "x_max": 390, "y_max": 195},
+        "target_region": {"x_min": 300, "y_min": 100, "x_max": 400, "y_max": 200},
+        "canvas_width": 640,
+        "canvas_height": 480,
+        "laplacian_variance": 220.0,
+        "area_drop_ratio": 0.0,
+        "has_final_state": True,
+    }
+    resp = client.post("/api/calculus/evaluate", json=payload)
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["verdict"] == "SUCCESS"
+    assert "debt_report" in data
+    assert data["debt_report"]["total_debt"] == 0.0
+    assert len(data["predicates"]) == 8
+
+
+def test_calculus_graph_api():
+    resp = client.get("/api/calculus/graph")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "nodes" in data
+    assert "edges" in data
+    assert data["node_count"] > 0
+    assert data["edge_count"] > 0
+
+
+def test_calculus_experiments_api():
+    resp = client.get("/api/calculus/experiments")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "h01_evidence_debt" in data
+    assert "h02_dependency_graph" in data
+    assert "h03_budget_planner" in data
