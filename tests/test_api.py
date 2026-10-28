@@ -24,7 +24,7 @@ def test_health_endpoint():
     assert resp.status_code == 200
     data = resp.json()
     assert data["status"] == "ok"
-    assert data["version"] == "0.2.1"
+    assert data["version"] == "0.2.2"
     assert data["project"] == "ProofCausality AI"
     assert "hardware_acceleration" in data
     assert "LabelCourt" in data["engines"]
@@ -158,3 +158,33 @@ def test_calculus_experiments_api():
     assert "h01_evidence_debt" in data
     assert "h02_dependency_graph" in data
     assert "h03_budget_planner" in data
+
+
+def test_recapture_followup_api():
+    payload = {
+        "task_id": "RC_API_001",
+        "primary_object": "cup",
+        "initial_verdict": "UNCERTAIN",
+        "detected_defect": "BLUR",
+        "directive_issued": "Camera blur detected. Stabilize camera.",
+        "original_before_bbox": {"x_min": 50, "y_min": 50, "x_max": 150, "y_max": 150},
+        "followup_bbox": {"x_min": 310, "y_min": 105, "x_max": 390, "y_max": 195},
+        "target_region": {"x_min": 300, "y_min": 100, "x_max": 400, "y_max": 200},
+        "initial_region": {"x_min": 50, "y_min": 50, "x_max": 150, "y_max": 150},
+        "canvas_width": 640,
+        "canvas_height": 480,
+        "followup_laplacian_variance": 250.0,
+        "followup_area_drop_ratio": 0.0,
+        "followup_has_final_state": True,
+        "instruction_followed": True,
+        "effort_seconds": 4.2,
+    }
+    resp = client.post("/api/recapture/evaluate-followup", json=payload)
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["initial_verdict"] == "UNCERTAIN"
+    assert data["new_verdict"] == "SUCCESS"
+    assert data["verdict_transition"] == "UNCERTAIN -> SUCCESS"
+    assert data["resolved"] is True
+    assert data["effort_seconds"] == 4.2
+    assert "evidence_receipt_id" in data

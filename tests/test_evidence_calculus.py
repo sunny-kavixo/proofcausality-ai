@@ -274,3 +274,110 @@ def test_object_identity_qualification():
     assert p_ident.state == EvidenceState.SUPPORTED
     assert "Geometric localization observed" in p_ident.rationale
     assert "semantic object identity is assumed from proposal" in p_ident.rationale
+
+
+import pytest
+
+
+def test_nonfinite_threshold_rejection():
+    engine = EvidenceCalculusEngine()
+    initial_box = BoundingBox(x_min=100, y_min=100, x_max=200, y_max=200)
+    target_box = BoundingBox(x_min=300, y_min=100, x_max=400, y_max=200)
+
+    # NaN displacement threshold
+    with pytest.raises(ValueError, match="displacement threshold"):
+        engine.build_standard_relocation_spec("T_NAN", "cup", initial_box, target_box, distance_threshold_px=float("nan"))
+
+    # Positive Infinity displacement threshold
+    with pytest.raises(ValueError, match="displacement threshold"):
+        engine.build_standard_relocation_spec("T_INF", "cup", initial_box, target_box, distance_threshold_px=float("inf"))
+
+    # Negative Infinity displacement threshold
+    with pytest.raises(ValueError, match="displacement threshold"):
+        engine.build_standard_relocation_spec("T_NEGINF", "cup", initial_box, target_box, distance_threshold_px=float("-inf"))
+
+    # Zero displacement threshold
+    with pytest.raises(ValueError, match="displacement threshold"):
+        engine.build_standard_relocation_spec("T_ZERO", "cup", initial_box, target_box, distance_threshold_px=0.0)
+
+    # Negative displacement threshold
+    with pytest.raises(ValueError, match="displacement threshold"):
+        engine.build_standard_relocation_spec("T_NEG", "cup", initial_box, target_box, distance_threshold_px=-15.0)
+
+    # Nonfinite engine parameters
+    with pytest.raises(ValueError, match="blur_threshold"):
+        EvidenceCalculusEngine(blur_threshold=float("nan"))
+
+    with pytest.raises(ValueError, match="max_physical_speed"):
+        EvidenceCalculusEngine(max_physical_speed_px_per_frame=float("inf"))
+
+    with pytest.raises(ValueError, match="boundary_margin"):
+        EvidenceCalculusEngine(boundary_margin_px=-1)
+
+    with pytest.raises(ValueError, match="occlusion_area_drop"):
+        EvidenceCalculusEngine(occlusion_area_drop_threshold=1.5)
+
+    with pytest.raises(ValueError, match="occlusion_area_drop"):
+        EvidenceCalculusEngine(occlusion_area_drop_threshold=float("nan"))
+
+
+def test_nonfinite_evaluate_task_inputs():
+    engine = EvidenceCalculusEngine()
+    box_a = BoundingBox(x_min=100, y_min=100, x_max=200, y_max=200)
+    box_b = BoundingBox(x_min=300, y_min=100, x_max=400, y_max=200)
+    spec = engine.build_standard_relocation_spec("T_INPUTS", "cube", box_a, box_b)
+
+    # NaN laplacian variance
+    with pytest.raises(ValueError, match="laplacian_variance"):
+        engine.evaluate_task(spec, box_a, box_b, canvas_width=640, canvas_height=480, laplacian_variance=float("nan"))
+
+    # Inf area drop ratio
+    with pytest.raises(ValueError, match="area_drop_ratio"):
+        engine.evaluate_task(spec, box_a, box_b, canvas_width=640, canvas_height=480, area_drop_ratio=float("inf"))
+
+    # Zero canvas width
+    with pytest.raises(ValueError, match="canvas_width"):
+        engine.evaluate_task(spec, box_a, box_b, canvas_width=0, canvas_height=480)
+
+
+def test_rest_evidence_distinction_and_categories():
+    engine = EvidenceCalculusEngine()
+    box_a = BoundingBox(x_min=50, y_min=50, x_max=150, y_max=150)
+    box_b = BoundingBox(x_min=300, y_min=100, x_max=400, y_max=200)
+    final_placed = BoundingBox(x_min=310, y_min=105, x_max=390, y_max=195)
+
+    # 1. Default mode (spatial relocation only): sharp final frame confirms position -> SUCCESS
+    spec_spatial = engine.build_standard_relocation_spec("T_SPATIAL", "cup", box_a, box_b, require_rest_proof=False)
+    v1, debt1, spec1 = engine.evaluate_task(spec_spatial, box_a, final_placed, canvas_width=640, canvas_height=480)
+    assert v1 == ActionVerdict.SUCCESS
+    assert spec1.structured_finding == "POSITION_VERIFIED"
+    assert spec1.evidence_categories["object_visible"] is True
+    assert spec1.evidence_categories["final_position_observed"] is True
+    assert spec1.evidence_categories["rest_condition"] == "UNOBSERVABLE"
+
+    # 2. Strict physical action mode (require_rest_proof=True) WITHOUT temporal evidence -> UNCERTAIN
+    spec_strict = engine.build_standard_relocation_spec("T_STRICT", "cup", box_a, box_b, require_rest_proof=True)
+    v2, debt2, spec2 = engine.evaluate_task(spec_strict, box_a, final_placed, canvas_width=640, canvas_height=480)
+    assert v2 == ActionVerdict.UNCERTAIN
+    assert debt2.total_debt > 0.0
+    assert spec2.structured_finding == "POSITION_VERIFIED"
+    p_final = [p for p in spec2.predicates if p.predicate_type == PredicateType.FINAL_STATE_OBSERVED][0]
+    assert p_final.state == EvidenceState.UNOBSERVABLE
+    assert "POSITION_VERIFIED" in p_final.rationale
+
+    # 3. Strict physical action mode WITH verified temporal rest evidence -> SUCCESS (ACTION_COMPLETED)
+    v3, debt3, spec3 = engine.evaluate_task(
+        spec_strict,
+        box_a,
+        final_placed,
+        canvas_width=640,
+        canvas_height=480,
+        motion_cessation_observed=True,
+        release_observed=True,
+    )
+    assert v3 == ActionVerdict.SUCCESS
+    assert debt3.total_debt == 0.0
+    assert spec3.structured_finding == "ACTION_COMPLETED"
+    assert spec3.evidence_categories["motion_cessation_observed"] is True
+    assert spec3.evidence_categories["release_observed"] is True
+    assert spec3.evidence_categories["rest_condition"] == "SUPPORTED"

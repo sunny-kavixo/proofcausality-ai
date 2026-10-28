@@ -1,6 +1,6 @@
 [package]
 name = "proofcausality_core"
-version = "0.2.1"
+version = "0.2.2"
 edition = "2021"
 authors = ["Sunny <sandeepkisan1432@gmail.com>"]
 description = "High-performance Rust acceleration kernels for ProofCausality AI"

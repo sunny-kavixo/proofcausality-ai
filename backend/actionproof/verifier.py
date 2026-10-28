@@ -139,7 +139,7 @@ class ActionProofVerifier:
         receipt = generate_receipt(
             report_id=report_id,
             engine_name="ActionProof Physical Action Verification Engine",
-            software_version="0.1.0",
+            software_version="0.2.2",
             inputs_hash=inputs_digest,
             measurements={
                 "task_type": request.task_type,

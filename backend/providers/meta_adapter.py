@@ -15,6 +15,7 @@ import base64
 import io
 import os
 import re
+import time
 from typing import Any, Optional
 import httpx
 import numpy as np
@@ -36,6 +37,11 @@ class MetaAuthError(MetaProviderError):
 
 class MetaRateLimitError(MetaProviderError):
     """Raised on 429 rate limit errors."""
+    pass
+
+
+class MetaNotFoundError(MetaProviderError):
+    """Raised on 404 endpoint or model not found errors."""
     pass
 
 
@@ -130,6 +136,8 @@ class MetaAdapter:
         """
         height, width = image_rgb.shape[:2]
 
+        t_start = time.perf_counter()
+
         # Remote execution path
         if self.enabled and self.is_configured and self.sam_endpoint:
             try:
@@ -159,6 +167,8 @@ class MetaAdapter:
 
                     if resp.status_code == 401 or resp.status_code == 403:
                         raise MetaAuthError("Meta API authentication failed. Verify credentials.")
+                    elif resp.status_code == 404:
+                        raise MetaNotFoundError("Meta model endpoint or model identifier not found (HTTP 404).")
                     elif resp.status_code == 429:
                         raise MetaRateLimitError("Meta API rate limit exceeded.")
                     elif resp.status_code != 200:
@@ -166,10 +176,12 @@ class MetaAdapter:
 
                     data = resp.json()
                     mask = self._decode_remote_mask(data, height, width)
+                    latency_ms = round((time.perf_counter() - t_start) * 1000.0, 2)
                     return mask, {
                         "source": "META_SAM_REMOTE",
                         "model": "facebook/sam-2.1-hiera-large",
                         "http_status": 200,
+                        "latency_ms": latency_ms,
                     }
 
             except (MetaAuthError, MetaRateLimitError, MetaProviderError, MetaShapeMismatchError):
@@ -179,8 +191,10 @@ class MetaAdapter:
                 sanitized_msg = sanitize_error_detail(str(e))
                 raise MetaProviderError(f"Remote Meta SAM request failed: {sanitized_msg}") from e
 
+        latency_ms = round((time.perf_counter() - t_start) * 1000.0, 2)
         # Truthful Deterministic Fallback: Bounding box geometric mask
         meta = {
+            "latency_ms": latency_ms,
             "source": "GEOMETRIC_FALLBACK",
             "model": "deterministic-bounding-box-v1",
             "note": "Geometric contour generated from coordinates; not independent AI recognition.",
@@ -221,3 +235,74 @@ class MetaAdapter:
                 return mask_arr
 
         raise MetaProviderError("Invalid response schema from SAM endpoint: missing 'mask' or 'rle' field.")
+
+    def audit_scene_context_with_llama(
+        self,
+        image_rgb: np.ndarray,
+        task_prompt: str = "Verify physical action completion and check for occlusion or motion blur.",
+    ) -> dict[str, Any]:
+        """Audits scene context using Meta Llama 3.2 Vision (11B/90B) with honest offline fallback."""
+        t_start = time.perf_counter()
+        height, width = image_rgb.shape[:2]
+
+        if self.enabled and self.is_configured and self.llama_endpoint:
+            try:
+                b64_image = encode_image_bytes_to_base64(image_rgb, format="JPEG")
+                headers = {
+                    "Authorization": f"Bearer {self.api_key}",
+                    "Content-Type": "application/json",
+                }
+                payload = {
+                    "model": "meta-llama/Llama-3.2-11B-Vision-Instruct",
+                    "messages": [
+                        {
+                            "role": "user",
+                            "content": [
+                                {"type": "text", "text": task_prompt},
+                                {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{b64_image}"}},
+                            ],
+                        }
+                    ],
+                    "max_tokens": 300,
+                    "temperature": 0.1,
+                }
+                client_kwargs: dict[str, Any] = {"timeout": 20.0}
+                if self.transport:
+                    client_kwargs["transport"] = self.transport
+
+                with httpx.Client(**client_kwargs) as client:
+                    resp = client.post(self.llama_endpoint, headers=headers, json=payload)
+                    if resp.status_code in (401, 403):
+                        raise MetaAuthError("Meta API authentication failed for Llama 3.2 Vision.")
+                    elif resp.status_code == 404:
+                        raise MetaNotFoundError("Llama 3.2 Vision endpoint not found (HTTP 404).")
+                    elif resp.status_code == 429:
+                        raise MetaRateLimitError("Llama 3.2 Vision rate limit exceeded (HTTP 429).")
+                    elif resp.status_code != 200:
+                        raise MetaProviderError(f"Llama 3.2 Vision returned HTTP {resp.status_code}: {sanitize_error_detail(resp.text)}")
+
+                    data = resp.json()
+                    content = data["choices"][0]["message"]["content"]
+                    latency = round((time.perf_counter() - t_start) * 1000.0, 2)
+                    return {
+                        "source": "META_LLAMA_VISION_REMOTE",
+                        "model": "meta-llama/Llama-3.2-11B-Vision-Instruct",
+                        "response_text": content,
+                        "latency_ms": latency,
+                        "status": "SUCCESS",
+                    }
+            except (MetaAuthError, MetaRateLimitError, MetaNotFoundError, MetaProviderError):
+                raise
+            except Exception as e:
+                sanitized_msg = sanitize_error_detail(str(e))
+                raise MetaProviderError(f"Remote Llama 3.2 Vision request failed: {sanitized_msg}") from e
+
+        # Honest Offline Fallback: Deterministic spatial description without external API
+        latency = round((time.perf_counter() - t_start) * 1000.0, 2)
+        return {
+            "source": "OFFLINE_DETERMINISTIC_FALLBACK",
+            "model": "rule-based-scene-auditor-v1",
+            "response_text": f"Offline scene audit for {width}x{height} frame: prompt evaluates observable predicates. External Meta Llama Vision inference is BLOCKED (no remote API credentials).",
+            "latency_ms": latency,
+            "status": "OFFLINE_FALLBACK",
+        }

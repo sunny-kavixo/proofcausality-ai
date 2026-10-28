@@ -25,6 +25,14 @@ function initTabs() {
       if (target) target.classList.add('active');
     });
   });
+
+  if (window.location.hash) {
+    const targetTabId = window.location.hash.replace('#', '');
+    const hashBtn = document.querySelector();
+    if (hashBtn) {
+      hashBtn.click();
+    }
+  }
 }
 
 // System Diagnostics & Health Probe

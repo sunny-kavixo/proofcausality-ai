@@ -136,7 +136,7 @@ class LabelCourtAuditor:
         receipt = generate_receipt(
             report_id=report_id,
             engine_name="LabelCourt Visual Annotation Evidence Auditor",
-            software_version="0.1.0",
+            software_version="0.2.2",
             inputs_hash=inputs_digest,
             measurements={
                 "iou": round(iou, 4),

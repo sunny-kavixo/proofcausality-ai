@@ -118,3 +118,30 @@ def test_meta_adapter_mock_shape_mismatch():
     img = np.zeros((50, 50, 3), dtype=np.uint8)
     with pytest.raises(MetaShapeMismatchError, match="does not match"):
         adapter.predict_mask(img)
+
+
+def test_meta_adapter_mock_not_found_404():
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(404, json={"error": "Model or endpoint not found"})
+
+    transport = httpx.MockTransport(handler)
+    adapter = MetaAdapter(
+        api_key="valid-key",
+        sam_endpoint="https://api.meta.mock/v1/sam",
+        enabled=True,
+        transport=transport,
+    )
+
+    img = np.zeros((50, 50, 3), dtype=np.uint8)
+    from backend.providers.meta_adapter import MetaNotFoundError
+    with pytest.raises(MetaNotFoundError, match="not found"):
+        adapter.predict_mask(img)
+
+
+def test_meta_adapter_llama_vision_offline_fallback():
+    adapter = MetaAdapter(enabled=False)
+    img = np.zeros((100, 100, 3), dtype=np.uint8)
+    res = adapter.audit_scene_context_with_llama(img)
+    assert res["status"] == "OFFLINE_FALLBACK"
+    assert "BLOCKED" in res["response_text"]
+    assert res["latency_ms"] >= 0.0

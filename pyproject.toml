@@ -1,6 +1,6 @@
 [project]
 name = "proofcausality-ai"
-version = "0.2.1"
+version = "0.2.2"
 description = "Prove what happened. Detect what is missing. Capture the evidence that changes the decision."
 readme = "README.md"
 requires-python = ">=3.12"

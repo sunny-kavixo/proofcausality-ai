@@ -3,11 +3,11 @@
 > **"Prove what happened. Detect what is missing. Capture the evidence that changes the decision."**
 
 [![CI](https://github.com/sunny-kavixo/proofcausality-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/sunny-kavixo/proofcausality-ai/actions)
-[![Release: v0.2.1](https://img.shields.io/badge/Release-v0.2.1-blue.svg)](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.1)
+[![Release: v0.2.2](https://img.shields.io/badge/Release-v0.2.2-blue.svg)](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.2)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![Rust Accelerated](https://img.shields.io/badge/Rust_SIMD-11.3x_Speedup-orange.svg)](native/proofcausality_core/)
-[![Tests: 82 Passing](https://img.shields.io/badge/tests-88%20passing-brightgreen.svg)](tests/)
+[![Rust Accelerated](https://img.shields.io/badge/Rust_SIMD-11.5x_Speedup-orange.svg)](native/proofcausality_core/)
+[![Tests: 82 Passing](https://img.shields.io/badge/tests-101%20passing-brightgreen.svg)](tests/)
 [![Meta Hackathon 2026](https://img.shields.io/badge/Meta_Global_AI_Hackathon-Indie_Developer-purple.svg)](https://cerebralvalley.ai/e/meta-ai-developer-hackathon)
 
 ProofCausality AI is an evidence-aware visual causality and physical-action verification system engineered for high-consequence computer vision, robotic demonstration quality control, and visual dataset annotation auditing.
@@ -16,7 +16,7 @@ Built for the **Meta Global AI Developer Hackathon 2026** (Track: *Indie Develop
 
 ---
 
-## What's New in Phase 2: Evidence Calculus Engine (`v0.2.1`)
+## What's New in Phase 2: Evidence Calculus Engine (`v0.2.2`)
 
 In Phase 2, ProofCausality AI introduces the **Evidence Calculus Engine** (`backend/evidence/calculus/`), transforming visual verification from a single uncalibrated confidence score into an explicit, testable system of observable physical conditions:
 
@@ -59,17 +59,18 @@ In robotic manipulation, logistics inspection, and dataset quality auditing, **a
 > **Scientific Reporting Standard:** All empirical metrics are accompanied by exact numerators, denominators, and **95% Wilson score confidence intervals**. Results are strictly partitioned between curated real-world tabletop cases and controlled synthetic calibration suites.
 
 ### Experiment H01: Evidence Debt vs Baselines (37 Benchmark Cases)
-- **Dataset**: 12 photographed real tabletop pairs (CC-BY-4.0) + 25 synthetic benchmark cases (37 total).
+- **Dataset**: 12 curated tabletop geometric metadata cases (CC-BY-4.0) + 25 synthetic benchmark cases (37 total).
 - **Ground Truth**: 15 True Successes, 22 True Negatives (14 Uncertain, 8 Failed).
 
-| Verification Strategy | Coverage | False-Successes | False-Success Rate | 95% Wilson Score CI | Selective Risk | Mean Latency |
+| Verification Strategy | Decision Coverage | False-Successes | False-Success Rate | 95% Wilson Score CI | Selective Risk | Failure Breakdown |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **B1. Naive Center-Distance Heuristic** | **100.0%** | 10 / 22 | **45.45%** | `[26.92%, 65.34%]` | 0.3514 | 0.001 ms |
-| **B2. Score-Thresholded Predictor** | **97.30%** | 9 / 22 | **40.91%** | `[23.26%, 61.27%]` | 0.3333 | 0.001 ms |
-| **B3. Fixed Cause-Specific Rules** | **75.68%** | 1 / 22 | **4.55%** | `[0.81%, 21.80%]` | 0.1429 | 0.000 ms |
-| **M4. Evidence Debt (Unit Weights)** | **40.54%** | 0 / 22 | **0.00%** | `[0.00%, 14.87%]` | **0.0000** | 0.037 ms |
-| **M5. Evidence Calculus (v0.2.1 Full)** | **75.68%** | **0 / 22** | **0.00%** | **`[0.00%, 14.87%]`** | **0.1429** | **0.028 ms** |
+| **B1. Naive Center-Distance** | **100.0%** (37/37) | 10 / 22 | **45.45%** | `[26.92%, 65.34%]` | 0.3514 | Blur (4), Occlusion (4), Clipping (1), Cutoff (1) |
+| **B2. Score-Thresholded (Matched)** | **75.68%** (28/37) | 3 / 22 | **13.64%** | `[4.75%, 33.33%]` | 0.1429 | Blur (1), Occlusion (1), Cutoff (1) |
+| **B3. Fixed Boolean Rules** | **75.68%** (28/37) | 1 / 22 | **4.55%** | `[0.81%, 21.80%]` | 0.1429 | Border clipping (1) |
+| **M4. Evidence Debt (Unit Weights)** | **40.54%** (15/37) | 0 / 22 | **0.00%** | `[0.00%, 14.87%]` | **0.0000** | Severely over-abstains on minor deficits |
+| **M5. Evidence Calculus (Full Engine)** | **75.68%** (28/37) | **0 / 22** | **0.00%** | **`[0.00%, 14.87%]`** | **0.1429** | **0 false-successes across all defect types** |
 
+> **Scientific Finding on Decision Coverage:** Evidence Calculus achieves a 0.0% false-success rate specifically by abstaining on 9 defective cases (`UNOBSERVABLE`). Comparing a 75.7% coverage system to a 100% coverage system without matched coverage is invalid; at exact matched coverage (28/37 cases decided), Evidence Calculus reduces false-successes from 3 to 0 (100% elimination).
 ### Experiment H02: Evidence Dependency Graph (100 Iterations)
 - **Mathematical Parity**: **100.0% (100/100 matches)** between incremental recomputation and full recomputation.
 - **Node Evaluation**: Incremental pass evaluated an average of 10.0 nodes and skipped 4.0 nodes.
@@ -158,3 +159,25 @@ Open [http://localhost:8000](http://localhost:8000) in your browser to inspect t
 - **Code**: MIT License ([LICENSE](LICENSE))
 - **Tabletop Dataset**: Creative Commons Attribution 4.0 International ([CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/))
 - **Tagline**: *"Prove what happened. Detect what is missing. Capture the evidence that changes the decision."*
+
+---
+
+## Application Visual Evidence & Architecture Diagrams
+
+### System Architecture & Decision Flow
+| System Architecture | Evidence Calculus Decision Flow |
+| :---: | :---: |
+| ![System Architecture](docs/architecture/system-architecture.svg) | ![Decision Flow](docs/architecture/evidence-calculus-decision-flow.svg) |
+
+| ReCapture Closed-Loop Flow | Component & Integration Boundaries |
+| :---: | :---: |
+| ![ReCapture Closed-Loop](docs/architecture/recapture-closed-loop.svg) | ![Integration Boundaries](docs/architecture/integration-boundaries.svg) |
+
+### Live Application Screenshots
+| Overview & Health Status | ActionProof Verification Studio |
+| :---: | :---: |
+| ![Landing Page](docs/screenshots/landing_page.png) | ![ActionProof Workflow](docs/screenshots/actionproof_workflow.png) |
+
+| Evidence Calculus Engine & Predicates | ReCapture Planner & Receipt Audit |
+| :---: | :---: |
+| ![Evidence Calculus](docs/screenshots/evidence_calculus_tab.png) | ![ReCapture Planner](docs/screenshots/recapture_tab.png) |

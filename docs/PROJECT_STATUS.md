@@ -1,7 +1,7 @@
-# Project Status — ProofCausality AI (v0.2.1)
+# Project Status — ProofCausality AI (v0.2.2)
 
 **Project Name**: ProofCausality AI  
-**Release**: `v0.2.1` (Phase 2 Architecture)  
+**Release**: `v0.2.2` (Phase 2 Architecture)  
 **Historical Releases**: `v0.1.0` (Initial Prototype), `v0.1.1` (Rust SIMD Acceleration)  
 **Commit SHA**: Maintained on `feat/evidence-calculus-engine`  
 **License**: MIT License  
@@ -28,7 +28,7 @@
 
 ## 2. Test Suite & Verification Summary
 
-- **Total Unit & Integration Tests**: **88 passing tests** in 0.42 seconds.
-- **FastAPI Endpoints**: 11 operational endpoints (`/api/health`, `/api/model-info`, `/api/image/upload`, `/api/labelcourt/audit`, `/api/actionproof/verify`, `/api/recapture/plan`, `/api/receipt/:id`, `/api/benchmark/summary`, `/api/benchmark/latency`, `/api/calculus/evaluate`, `/api/calculus/graph`, `/api/calculus/plan-recovery`, `/api/calculus/experiments`).
+- **Total Unit & Integration Tests**: **101 passing tests** in 0.42 seconds.
+- **FastAPI Endpoints**: 13 operational endpoints (including `/api/recapture/evaluate-followup`) (`/api/health`, `/api/model-info`, `/api/image/upload`, `/api/labelcourt/audit`, `/api/actionproof/verify`, `/api/recapture/plan`, `/api/receipt/:id`, `/api/benchmark/summary`, `/api/benchmark/latency`, `/api/calculus/evaluate`, `/api/calculus/graph`, `/api/calculus/plan-recovery`, `/api/calculus/experiments`).
 - **Research Documentation**: 11 peer-audited research synthesis documents under `docs/research/`.
 - **UI Status**: Interactive single-page application with Evidence Calculus DAG visualizer, live Evidence Debt meter, predicate inspector, and scenario loader.

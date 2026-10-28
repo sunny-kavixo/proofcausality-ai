@@ -62,8 +62,11 @@ class TaskSpecification(BaseModel):
     target_region: Optional[BoundingBox] = None
     initial_region: Optional[BoundingBox] = None
     distance_threshold_px: float = 60.0
+    require_rest_proof: bool = False
     predicates: List[ObservablePredicate] = Field(default_factory=list)
     max_tolerable_debt: float = 0.0
+    structured_finding: Optional[str] = None
+    evidence_categories: dict[str, Any] = Field(default_factory=dict)
 
 
 class EvidenceDebtReport(BaseModel):
@@ -75,6 +78,7 @@ class EvidenceDebtReport(BaseModel):
     is_acceptable: bool
     critical_unresolved_predicates: List[str] = Field(default_factory=list)
     contradictions: List[str] = Field(default_factory=list)
+    structured_finding: Optional[str] = None
     formula: str = "D(E,T) = sum_{c in critical} w_c * deficit(c)"
 
 

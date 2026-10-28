@@ -1,0 +1,49 @@
+{
+  "manifest_version": "1.0.0",
+  "evaluation_date": "2026-10-28",
+  "software_version": "0.2.2",
+  "license": "CC-BY-4.0",
+  "provenance_disclosure": "Standardized physical tabletop scenario fixtures generated under controlled illumination and camera calibration. Not labeled as wild uncurated human video.",
+  "canonical_situations": [
+    {
+      "case_id": "CANON-A-SUCCESS",
+      "situation": "A. Correctly completed physical action",
+      "task_description": "Move red mug from start region A into target assembly region B",
+      "input_media_t0": "tests/fixtures/images/canonical_action_success_t0.png",
+      "input_sha256_t0": "04871e4a7b9ebc5ad57b1426c239ebe65739f9f5ff69ca5ced689127899b546b",
+      "input_media_t1": "tests/fixtures/images/canonical_action_success_t1.png",
+      "input_sha256_t1": "ac30d6b4675ece538b4d0d6934cce8d6e8433f2eec46875bbdc3ef29f19b5649",
+      "ground_truth_outcome": "SUCCESS",
+      "ground_truth_adjudication": "Centroid displacement = 312.4px, target containment = True, Laplacian variance = 2650.2 > 100",
+      "limitations": "Two-frame spatial observation; confirms spatial placement in target region."
+    },
+    {
+      "case_id": "CANON-B-FAILED",
+      "situation": "B. Incorrectly completed physical action",
+      "task_description": "Move red mug from start region A into target assembly region B (dropped en route)",
+      "input_media_t0": "tests/fixtures/images/canonical_action_failed_t0.png",
+      "input_sha256_t0": "04871e4a7b9ebc5ad57b1426c239ebe65739f9f5ff69ca5ced689127899b546b",
+      "input_media_t1": "tests/fixtures/images/canonical_action_failed_t1.png",
+      "input_sha256_t1": "752c10315a32ee3fa7f906d72d30e82d624e8eef841e9f9e7574fba86829a6eb",
+      "ground_truth_outcome": "FAILED",
+      "ground_truth_adjudication": "Object placed at (240, 160), outside Region B bounds [350, 190, 470, 310]",
+      "limitations": "Falsification triggered by spatial region containment contradiction."
+    },
+    {
+      "case_id": "CANON-C-DEFICIT-BLUR",
+      "situation": "C. Missing/obscured final evidence with follow-up ReCapture",
+      "task_description": "Move red mug from start region A into target assembly region B with camera motion blur",
+      "input_media_t0": "tests/fixtures/images/canonical_action_deficit_blur_t0.png",
+      "input_sha256_t0": "04871e4a7b9ebc5ad57b1426c239ebe65739f9f5ff69ca5ced689127899b546b",
+      "input_media_t1": "tests/fixtures/images/canonical_action_deficit_blur_t1.png",
+      "input_sha256_t1": "012e307c624756628a95d41e71e4fed5c0fe04ffcb793953772f479610069690",
+      "ground_truth_outcome": "UNCERTAIN",
+      "ground_truth_adjudication": "Laplacian variance = 38.4 < 100.0 blur threshold; P_SHARP and P_FINAL unobservable",
+      "recapture_followup_media": "tests/fixtures/images/canonical_action_recaptured_t2.png",
+      "recapture_followup_sha256": "ac30d6b4675ece538b4d0d6934cce8d6e8433f2eec46875bbdc3ef29f19b5649",
+      "recapture_directive": "Camera blur detected. Rest hands against the table and record 2 steady seconds.",
+      "recapture_resolved_verdict": "SUCCESS",
+      "limitations": "Demonstrates closed-loop ReCapture transition from UNCERTAIN -> SUCCESS upon acquiring unblurred frame."
+    }
+  ]
+}

@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import uuid
 from backend.evidence.calculus.engine import EvidenceCalculusEngine
 from backend.evidence.calculus.graph import build_canonical_task_graph
 from backend.evidence.calculus.budget_planner import EvidenceBudgetPlanner
@@ -31,7 +33,7 @@ from backend.evidence.image_processing import (
     validate_and_decode_image,
 )
 from backend.evidence.masks import bbox_to_mask
-from backend.evidence.receipts import verify_receipt_integrity
+from backend.evidence.receipts import calculate_sha256, generate_receipt, verify_receipt_integrity
 from backend.evidence.rust_accelerator import (
     compute_laplacian_variance_fast,
     compute_mask_dice_fast,
@@ -40,6 +42,7 @@ from backend.evidence.rust_accelerator import (
     is_rust_accelerator_available,
 )
 from backend.evidence.schemas import (
+    ActionVerdict,
     ActionVerificationRequest,
     AnnotationItem,
     BoundingBox,
@@ -96,7 +99,7 @@ def health() -> dict[str, Any]:
     acc_info = get_accelerator_info()
     return {
         "status": "ok",
-        "version": "0.2.1",
+        "version": "0.2.2",
         "project": "ProofCausality AI",
         "tagline": "Prove what happened. Detect what is missing. Capture the evidence that changes the decision.",
         "engines": [
@@ -262,6 +265,95 @@ def verify_action(payload: VerifyActionPayload) -> dict[str, Any]:
         "verification_result": result.model_dump(),
         "evidence_receipt": receipt.model_dump(),
         "receipt_valid": verify_receipt_integrity(receipt),
+    }
+
+
+class ReCaptureFollowupRequest(BaseModel):
+    task_id: str
+    primary_object: str
+    initial_verdict: str  # e.g. "UNCERTAIN"
+    detected_defect: str  # e.g. "BLUR", "OCCLUSION", "BORDER_CLIPPING", "MISSING_REST_STATE"
+    directive_issued: str
+    original_before_bbox: BoundingBox
+    followup_bbox: Optional[BoundingBox] = None
+    target_region: BoundingBox
+    initial_region: BoundingBox
+    canvas_width: int = 640
+    canvas_height: int = 480
+    followup_laplacian_variance: float = 250.0
+    followup_area_drop_ratio: float = 0.0
+    followup_has_final_state: bool = True
+    instruction_followed: bool = True
+    effort_seconds: float = 5.0
+
+
+@router.post("/recapture/evaluate-followup")
+def evaluate_recapture_followup(req: ReCaptureFollowupRequest) -> dict[str, Any]:
+    """Evaluates a newly captured observation against previous uncertain verdict to measure decision transition."""
+    engine = EvidenceCalculusEngine()
+    spec = engine.build_standard_relocation_spec(
+        task_id=f"{req.task_id}_FOLLOWUP",
+        primary_object=req.primary_object,
+        initial_region=req.initial_region,
+        target_region=req.target_region,
+    )
+
+    new_verdict, debt_report, updated_spec = engine.evaluate_task(
+        spec=spec,
+        before_bbox=req.original_before_bbox,
+        after_bbox=req.followup_bbox,
+        canvas_width=req.canvas_width,
+        canvas_height=req.canvas_height,
+        laplacian_variance=req.followup_laplacian_variance,
+        area_drop_ratio=req.followup_area_drop_ratio,
+        has_final_state=req.followup_has_final_state,
+    )
+
+    is_resolved = (new_verdict == ActionVerdict.SUCCESS) or (
+        req.initial_verdict == "UNCERTAIN" and new_verdict != ActionVerdict.UNCERTAIN
+    )
+    transition = f"{req.initial_verdict} -> {new_verdict.value}"
+
+    # Cryptographic Evidence Receipt for the ReCapture Transition
+    report_id = f"RC-{uuid.uuid4().hex[:12].upper()}"
+    inputs_hash = calculate_sha256(f"{req.task_id}_{transition}_{req.effort_seconds:.1f}")
+    receipt = generate_receipt(
+        report_id=report_id,
+        engine_name="ReCapture Closed-Loop Recovery Engine",
+        software_version="0.2.2",
+        inputs_hash=inputs_hash,
+        measurements={
+            "task_id": req.task_id,
+            "initial_verdict": req.initial_verdict,
+            "new_verdict": new_verdict.value,
+            "transition": transition,
+            "resolved": is_resolved,
+            "detected_defect": req.detected_defect,
+            "directive_issued": req.directive_issued,
+            "instruction_followed": req.instruction_followed,
+            "effort_seconds": req.effort_seconds,
+            "followup_laplacian_variance": req.followup_laplacian_variance,
+            "followup_area_drop_ratio": req.followup_area_drop_ratio,
+        },
+        signals=[],
+        verdict=new_verdict.value,
+        recapture_directive=req.directive_issued,
+    )
+    _receipt_store[report_id] = receipt
+
+    return {
+        "report_id": report_id,
+        "task_id": req.task_id,
+        "initial_verdict": req.initial_verdict,
+        "new_verdict": new_verdict.value,
+        "verdict_transition": transition,
+        "resolved": is_resolved,
+        "instruction_followed": req.instruction_followed,
+        "effort_seconds": req.effort_seconds,
+        "debt_report": debt_report.model_dump(),
+        "structured_finding": updated_spec.structured_finding,
+        "evidence_receipt_id": report_id,
+        "evidence_receipt": receipt.model_dump(),
     }
 
 
