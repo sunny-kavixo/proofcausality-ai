@@ -23,6 +23,7 @@ from backend.labelcourt.auditor import LabelCourtAuditor
 from backend.evidence.schemas import AnnotationItem, BoundingBox, AuditVerdict
 from backend.evidence.masks import polygon_to_mask, bbox_to_mask
 from backend.evidence.advanced_metrics import wilson_score_interval
+from evaluation.grouped_statistics import assert_disjoint_groups, grouped_bootstrap_interval
 
 DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "data", "coco_val2017_subset"))
 IMAGES_DIR = os.path.join(DATA_DIR, "images")
@@ -95,6 +96,7 @@ def run_benchmark():
     # Split: 10 Dev and 10 Held-Out Test
     dev_img_ids = set(img["id"] for img in images[:10])
     test_img_ids = set(img["id"] for img in images[10:])
+    assert_disjoint_groups(sorted(dev_img_ids), sorted(test_img_ids))
 
     auditor = LabelCourtAuditor(
         iou_accept_threshold=0.85,
@@ -108,7 +110,8 @@ def run_benchmark():
 
     results = {
         "metadata": {
-            "benchmark_name": "LabelCourt Real-World Photographic Evaluation",
+            "benchmark_name": "LabelCourt Controlled Annotation-Corruption Evaluation on Real Photographs",
+            "evidence_category": "CONTROLLED_CORRUPTION_ON_REAL_PHOTOS",
             "dataset": "MS COCO 2017 Validation Subset (20 authentic photographs)",
             "engine_version": "v0.2.4",
             "random_seed": 42,
@@ -135,6 +138,7 @@ def run_benchmark():
         }
 
         total_cases = 0
+        lc_case_rows: list[dict[str, Any]] = []
 
         for img_meta in split_images:
             img_id = img_meta["id"]
@@ -208,6 +212,7 @@ def run_benchmark():
                     lc_stats["latencies_ms"].append(lc_latency)
 
                     lc_flagged = (audit_res.verdict != AuditVerdict.ACCEPT)
+                    lc_case_rows.append({"image_id": img_id, "truth": int(has_defect), "flagged": int(lc_flagged)})
                     if lc_flagged:
                         by_corruption[corr_name]["lc_detected"] += 1
 
@@ -296,7 +301,22 @@ def run_benchmark():
                 "p95_latency_ms": round(float(np.percentile(lats, 95)), 3) if lats else 0.0,
             }
 
+        def grouped_metric(metric_name: str) -> list[float]:
+            def metric(rows):
+                tp = sum(r["truth"] and r["flagged"] for r in rows)
+                fp = sum((not r["truth"]) and r["flagged"] for r in rows)
+                fn = sum(r["truth"] and (not r["flagged"]) for r in rows)
+                precision = tp / (tp + fp) if tp + fp else 0.0
+                recall = tp / (tp + fn) if tp + fn else 0.0
+                if metric_name == "precision": return precision
+                if metric_name == "recall": return recall
+                return 2 * precision * recall / (precision + recall) if precision + recall else 0.0
+            low, high = grouped_bootstrap_interval(lc_case_rows, metric, iterations=2000, seed=20261028)
+            return [round(low, 4), round(high, 4)]
+
         split_summary = {
+            "evidence_category": "CONTROLLED_CORRUPTION_ON_REAL_PHOTOS",
+            "unique_source_images": len(split_images),
             "total_annotations_evaluated": total_cases,
             "total_scenarios_run": sum(c["total"] for c in by_corruption.values()),
             "labelcourt": calc_metrics(lc_stats),
@@ -304,6 +324,9 @@ def run_benchmark():
             "breakdown_by_corruption": by_corruption,
             "breakdown_by_scale": by_scale,
         }
+        split_summary["labelcourt"]["precision_image_grouped_bootstrap_ci95"] = grouped_metric("precision")
+        split_summary["labelcourt"]["recall_image_grouped_bootstrap_ci95"] = grouped_metric("recall")
+        split_summary["labelcourt"]["f1_image_grouped_bootstrap_ci95"] = grouped_metric("f1")
         results[split_name] = split_summary
         print("%s LabelCourt: Prec=%.4f, Rec=%.4f, F1=%.4f" % (
             split_name, split_summary["labelcourt"]["precision"],
@@ -328,11 +351,13 @@ def run_benchmark():
         test_lc = results["held_out_test_split"]["labelcourt"]
         test_naive = results["held_out_test_split"]["naive_bbox_baseline"]
 
-        f.write("# LabelCourt Real-World Photographic Benchmark Report\n\n")
+        f.write("# LabelCourt Controlled Annotation-Corruption Benchmark on Real Photographs\n\n")
+        f.write("> This benchmark uses authentic image pixels and COCO annotations, but candidate masks are derived from the reference masks. It does **not** measure independent AI perception or general segmentation accuracy.\n\n")
         f.write("**Dataset**: MS COCO 2017 Validation Set (20 authentic photographic images, 218 annotations)\n")
         f.write("**Evaluation Date**: %s\n" % results["metadata"]["date"])
         f.write("**Splits**: 10 Development Images (unseen during final test) | 10 Held-Out Test Images\n")
         f.write("**Injected Corruptions**: Controlled spatial shifts, erosion, dilation, missing objects, and class swaps\n\n")
+        f.write("**Uncertainty**: Image-grouped bootstrap intervals (2,000 resamples, seed 20261028) are authoritative; scenario-level Wilson intervals are retained only as historical descriptive statistics. With 10 held-out source images, results are preliminary.\n\n")
         f.write("## 1. Overall Performance Comparison\n\n")
         f.write("| Split | System | Precision (95% CI) | Recall (95% CI) | F1 Score | p50 Latency | p95 Latency |\n")
         f.write("|---|---|---|---|---|---|---|\n")

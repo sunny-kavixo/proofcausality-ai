@@ -1,17 +1,21 @@
-# LabelCourt Real-World Photographic Benchmark Report
+# LabelCourt Controlled Annotation-Corruption Benchmark on Real Photographs
+
+> This benchmark uses authentic image pixels and COCO annotations, but candidate masks are derived from the reference masks. It does **not** measure independent AI perception or general segmentation accuracy.
 
 **Dataset**: MS COCO 2017 Validation Set (20 authentic photographic images, 218 annotations)
-**Evaluation Date**: 2026-10-28 17:36:13Z
+**Evaluation Date**: 2026-10-28 18:02:15Z
 **Splits**: 10 Development Images (unseen during final test) | 10 Held-Out Test Images
 **Injected Corruptions**: Controlled spatial shifts, erosion, dilation, missing objects, and class swaps
+
+**Uncertainty**: Image-grouped bootstrap intervals (2,000 resamples, seed 20261028) are authoritative; scenario-level Wilson intervals are retained only as historical descriptive statistics. With 10 held-out source images, results are preliminary.
 
 ## 1. Overall Performance Comparison
 
 | Split | System | Precision (95% CI) | Recall (95% CI) | F1 Score | p50 Latency | p95 Latency |
 |---|---|---|---|---|---|---|
-| **Dev** | **LabelCourt (Ours)** | **97.3%** (95.5% - 98.4%) | **99.2%** (97.9% - 99.7%) | **0.9825** | 16.92 ms | 21.28 ms |
-| Dev | Naive BBox Baseline | 98.4% (96.0% - 99.4%) | 52.3% (47.8% - 56.7%) | 0.6830 | 0.49 ms | 0.60 ms |
-| **Held-Out Test** | **LabelCourt (Ours)** | **97.5%** (95.9% - 98.5%) | **99.0%** (97.8% - 99.5%) | **0.9825** | 18.38 ms | 23.05 ms |
+| **Dev** | **LabelCourt (Ours)** | **97.3%** (95.5% - 98.4%) | **99.2%** (97.9% - 99.7%) | **0.9825** | 17.31 ms | 21.32 ms |
+| Dev | Naive BBox Baseline | 98.4% (96.0% - 99.4%) | 52.3% (47.8% - 56.7%) | 0.6830 | 0.50 ms | 0.60 ms |
+| **Held-Out Test** | **LabelCourt (Ours)** | **97.5%** (95.9% - 98.5%) | **99.0%** (97.8% - 99.5%) | **0.9825** | 18.29 ms | 22.78 ms |
 | Held-Out Test | Naive BBox Baseline | 98.4% (96.2% - 99.3%) | 50.4% (46.4% - 54.4%) | 0.6667 | 0.55 ms | 0.60 ms |
 
 ## 2. Detection by Corruption Type (Held-Out Test Split)
