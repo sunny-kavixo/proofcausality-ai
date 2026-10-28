@@ -3,11 +3,11 @@
 > **"Prove what happened. Detect what is missing. Capture the evidence that changes the decision."**
 
 [![CI](https://github.com/sunny-kavixo/proofcausality-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/sunny-kavixo/proofcausality-ai/actions)
-[![Release: v0.2.0](https://img.shields.io/badge/Release-v0.2.0-blue.svg)](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.0)
+[![Release: v0.2.1](https://img.shields.io/badge/Release-v0.2.1-blue.svg)](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.1)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Rust Accelerated](https://img.shields.io/badge/Rust_SIMD-11.3x_Speedup-orange.svg)](native/proofcausality_core/)
-[![Tests: 82 Passing](https://img.shields.io/badge/tests-82%20passing-brightgreen.svg)](tests/)
+[![Tests: 82 Passing](https://img.shields.io/badge/tests-88%20passing-brightgreen.svg)](tests/)
 [![Meta Hackathon 2026](https://img.shields.io/badge/Meta_Global_AI_Hackathon-Indie_Developer-purple.svg)](https://cerebralvalley.ai/e/meta-ai-developer-hackathon)
 
 ProofCausality AI is an evidence-aware visual causality and physical-action verification system engineered for high-consequence computer vision, robotic demonstration quality control, and visual dataset annotation auditing.
@@ -16,7 +16,7 @@ Built for the **Meta Global AI Developer Hackathon 2026** (Track: *Indie Develop
 
 ---
 
-## What's New in Phase 2: Evidence Calculus Engine (`v0.2.0`)
+## What's New in Phase 2: Evidence Calculus Engine (`v0.2.1`)
 
 In Phase 2, ProofCausality AI introduces the **Evidence Calculus Engine** (`backend/evidence/calculus/`), transforming visual verification from a single uncalibrated confidence score into an explicit, testable system of observable physical conditions:
 
@@ -62,12 +62,13 @@ In robotic manipulation, logistics inspection, and dataset quality auditing, **a
 - **Dataset**: 12 photographed real tabletop pairs (CC-BY-4.0) + 25 synthetic benchmark cases (37 total).
 - **Ground Truth**: 15 True Successes, 22 True Negatives (14 Uncertain, 8 Failed).
 
-| Verification Strategy | False-Successes | False-Success Rate | Coverage | Selective Risk | Mean Latency |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **A. Confidence-Only Baseline ($\ge 0.85$)** | 22 / 22 | **100.0%** | 100.0% | 0.5946 | 0.000 ms |
-| **B. Fixed Boolean Rules** | 1 / 22 | **4.55%** | 75.68% | 0.1429 | 0.001 ms |
-| **C. Evidence Debt (Unit Weight Only)** | 0 / 22 | **0.0%** | 40.54% | 0.0000 | 0.032 ms |
-| **D. Evidence Calculus (Full)** | **0 / 22** | **0.0%** | **75.68%** | **0.1429** | **0.026 ms** |
+| Verification Strategy | Coverage | False-Successes | False-Success Rate | 95% Wilson Score CI | Selective Risk | Mean Latency |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **B1. Naive Center-Distance Heuristic** | **100.0%** | 10 / 22 | **45.45%** | `[26.92%, 65.34%]` | 0.3514 | 0.001 ms |
+| **B2. Score-Thresholded Predictor** | **97.30%** | 9 / 22 | **40.91%** | `[23.26%, 61.27%]` | 0.3333 | 0.001 ms |
+| **B3. Fixed Cause-Specific Rules** | **75.68%** | 1 / 22 | **4.55%** | `[0.81%, 21.80%]` | 0.1429 | 0.000 ms |
+| **M4. Evidence Debt (Unit Weights)** | **40.54%** | 0 / 22 | **0.00%** | `[0.00%, 14.87%]` | **0.0000** | 0.037 ms |
+| **M5. Evidence Calculus (v0.2.1 Full)** | **75.68%** | **0 / 22** | **0.00%** | **`[0.00%, 14.87%]`** | **0.1429** | **0.028 ms** |
 
 ### Experiment H02: Evidence Dependency Graph (100 Iterations)
 - **Mathematical Parity**: **100.0% (100/100 matches)** between incremental recomputation and full recomputation.

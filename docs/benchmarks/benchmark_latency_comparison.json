@@ -1,6 +1,6 @@
 {
   "benchmark_name": "ProofCausality AI: NumPy vs Rust Native Acceleration Benchmark",
-  "timestamp_utc": "2026-10-28T13:29:08Z",
+  "timestamp_utc": "2026-10-28T14:59:25Z",
   "hardware": {
     "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
     "machine": "arm64",
@@ -12,84 +12,84 @@
     "mask_iou_256x256": {
       "dimensions": "256x256",
       "numpy": {
-        "p50_us": 8.12,
-        "mean_us": 8.23,
-        "p95_us": 8.62,
-        "min_us": 7.92,
-        "max_us": 14.92
+        "p50_us": 7.17,
+        "mean_us": 7.24,
+        "p95_us": 7.5,
+        "min_us": 6.96,
+        "max_us": 8.75
       },
       "rust": {
-        "p50_us": 2.46,
-        "mean_us": 2.48,
-        "p95_us": 2.54,
-        "min_us": 2.42,
-        "max_us": 2.92
+        "p50_us": 2.17,
+        "mean_us": 2.23,
+        "p95_us": 2.25,
+        "min_us": 2.12,
+        "max_us": 13.12
       },
-      "speedup_ratio": 3.3
+      "speedup_ratio": 3.31
     },
     "mask_iou_1024x1024": {
       "dimensions": "1024x1024",
       "numpy": {
-        "p50_us": 95.29,
-        "mean_us": 99.07,
-        "p95_us": 107.65,
-        "min_us": 93.83,
-        "max_us": 190.96
+        "p50_us": 100.69,
+        "mean_us": 100.39,
+        "p95_us": 106.46,
+        "min_us": 94.08,
+        "max_us": 111.54
       },
       "rust": {
-        "p50_us": 31.29,
-        "mean_us": 32.04,
-        "p95_us": 35.28,
-        "min_us": 30.0,
-        "max_us": 69.5
+        "p50_us": 33.25,
+        "mean_us": 32.25,
+        "p95_us": 33.38,
+        "min_us": 30.08,
+        "max_us": 35.96
       },
-      "speedup_ratio": 3.05
+      "speedup_ratio": 3.03
     },
     "mask_iou_2048x2048": {
       "dimensions": "2048x2048",
       "numpy": {
-        "p50_us": 400.58,
-        "mean_us": 402.58,
-        "p95_us": 426.57,
-        "min_us": 374.12,
-        "max_us": 808.42
+        "p50_us": 402.75,
+        "mean_us": 402.69,
+        "p95_us": 410.06,
+        "min_us": 389.12,
+        "max_us": 425.12
       },
       "rust": {
-        "p50_us": 132.25,
-        "mean_us": 130.51,
-        "p95_us": 137.45,
-        "min_us": 120.83,
-        "max_us": 210.54
+        "p50_us": 131.98,
+        "mean_us": 129.62,
+        "p95_us": 134.8,
+        "min_us": 119.67,
+        "max_us": 143.0
       },
-      "speedup_ratio": 3.03
+      "speedup_ratio": 3.05
     },
     "batch_mask_iou_100x256x256": {
       "dimensions": "100x256x256",
       "numpy": {
-        "p50_us": 2356.25,
-        "mean_us": 2351.51,
-        "p95_us": 2474.34
+        "p50_us": 2323.1,
+        "mean_us": 2322.65,
+        "p95_us": 2345.5
       },
       "rust": {
-        "p50_us": 207.54,
-        "mean_us": 207.58,
-        "p95_us": 216.71
+        "p50_us": 204.54,
+        "mean_us": 202.88,
+        "p95_us": 208.59
       },
-      "speedup_ratio": 11.35
+      "speedup_ratio": 11.36
     },
     "laplacian_variance_1024x1024": {
       "dimensions": "1024x1024",
       "numpy": {
-        "p50_us": 2148.83,
-        "mean_us": 2267.27,
-        "p95_us": 2421.58
+        "p50_us": 2074.94,
+        "mean_us": 2155.22,
+        "p95_us": 2235.09
       },
       "rust": {
-        "p50_us": 610.35,
-        "mean_us": 610.34,
-        "p95_us": 643.95
+        "p50_us": 600.75,
+        "mean_us": 602.11,
+        "p95_us": 616.12
       },
-      "speedup_ratio": 3.52
+      "speedup_ratio": 3.45
     }
   }
 }

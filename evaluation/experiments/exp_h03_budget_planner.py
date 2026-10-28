@@ -1,12 +1,16 @@
-"""Experiment H03: Cost-Aware Evidence Budget Planner (H03).
+"""Experiment H03: Evidence Budget Planner vs Baselines (Controlled Simulation).
 
 Compares:
-A. Generic re-recording advice
-B. Fixed cause-specific templates
+A. Generic re-recording advice ("Please re-record")
+B. Fixed cause-specific templates (static rule map)
 C. Random instruction selection
-D. Evidence Budget Planner (VOI optimization)
+D. Evidence Budget Planner (VOI optimization: max E[Delta Risk] - lambda * Cost)
 
-Evaluates simulated human re-capture across uncertain cases.
+EVALUATION METHODOLOGY DISCLAIMER:
+- This experiment is a CONTROLLED SIMULATION across 20 synthetic/metadata defect cases.
+- It tests algorithmic directive selection and expected cost curves.
+- LIVE MULTI-SESSION HUMAN USER RE-CAPTURE RESOLUTION IS NOT MEASURED ON IN-THE-WILD HUMANS.
+- On the 4 curated paired tabletop recovery cases in real_dataset.py, targeted templates resolved 4/4 cases.
 """
 
 from __future__ import annotations
@@ -22,19 +26,17 @@ from backend.evidence.calculus.schemas import EvidenceDebtReport, EvidenceState,
 def run_experiment_h03() -> Dict[str, Any]:
     planner = EvidenceBudgetPlanner(cost_lambda=0.05)
 
-    # 20 diverse uncertain/defective cases
+    # 20 diverse defect scenarios
     cases = [
-        {"type": PredicateType.OBSERVATION_SHARPNESS, "desc": "Blurry camera motion"},
-        {"type": PredicateType.CANVAS_CONTAINMENT, "desc": "Object clipped by border"},
-        {"type": PredicateType.SURFACE_VISIBILITY, "desc": "Severe occlusion by hand"},
-        {"type": PredicateType.SPATIAL_RELATION, "desc": "Ambiguous depth separation"},
-        {"type": PredicateType.OBJECT_IDENTIFICATION, "desc": "Low contrast identification"},
+        {"type": PredicateType.OBSERVATION_SHARPNESS, "desc": "Motion blur detected in final frames"},
+        {"type": PredicateType.CANVAS_CONTAINMENT, "desc": "Object clipped by image boundary"},
+        {"type": PredicateType.SURFACE_VISIBILITY, "desc": "Gripper occluding object surface area"},
+        {"type": PredicateType.SPATIAL_RELATION, "desc": "Ambiguous depth separation in monocular view"},
+        {"type": PredicateType.OBJECT_IDENTIFICATION, "desc": "Low contrast bounding box proposal"},
     ] * 4
 
     total_cases = len(cases)
 
-    # Simulation parameters for user compliance and resolution
-    # Planner matches exact defect with highest net utility action
     resolved_generic = 0
     effort_generic = []
 
@@ -61,51 +63,53 @@ def run_experiment_h03() -> Dict[str, Any]:
             unreliability_debt=0.0, is_acceptable=False
         )
 
-        # Method A: Generic Advice ("Please re-record")
-        # Generic advice often does not guide user to fix specific defect (e.g. hold steady or pan)
-        eff_a = 15.0  # re-recording full clip
-        if random.random() < 0.35:
+        # Method A: Generic Advice (Simulated compliance: 30%, effort: 15s)
+        eff_a = 15.0
+        if random.random() < 0.30:
             resolved_generic += 1
         effort_generic.append(eff_a)
 
-        # Method B: Fixed Template (rule-based)
+        # Method B: Fixed Template (Simulated compliance: 85%, effort: 6s)
         eff_b = 6.0
-        if random.random() < 0.75:
+        if random.random() < 0.85:
             resolved_template += 1
         effort_template.append(eff_b)
 
-        # Method C: Random instruction
+        # Method C: Random instruction (Simulated compliance: 35%, effort: 7s)
         eff_c = 7.0
-        if random.random() < 0.25:
+        if random.random() < 0.35:
             resolved_random += 1
         effort_random.append(eff_c)
 
         # Method D: VOI Budget Planner
         action = planner.plan_recovery_action(debt, [pred])
         eff_d = action.estimated_human_effort_sec + action.estimated_camera_latency_sec
-        # Efficacy is high because action is tailored to defect
         if random.random() < action.expected_risk_reduction:
             resolved_planner += 1
         effort_planner.append(eff_d)
 
     return {
-        "experiment": "H03_BUDGET_PLANNER",
+        "experiment": "H03_BUDGET_PLANNER_CONTROLLED_SIMULATION",
+        "evaluation_type": "Controlled Monte Carlo Simulation (Assumed Compliance Distributions)",
         "total_evaluated_cases": total_cases,
-        "results": {
+        "live_human_trials_conducted": False,
+        "live_human_resolution_rate_status": "NOT MEASURED",
+        "curated_tabletop_paired_recovery_cases": "4 / 4 resolved (100.0% on static paired states)",
+        "simulation_results": {
             "method_a_generic_advice": {
-                "resolution_rate": round(resolved_generic / total_cases, 4),
+                "simulated_resolution_rate": round(resolved_generic / total_cases, 4),
                 "mean_effort_seconds": round(float(np.mean(effort_generic)), 1),
             },
             "method_b_fixed_template": {
-                "resolution_rate": round(resolved_template / total_cases, 4),
+                "simulated_resolution_rate": round(resolved_template / total_cases, 4),
                 "mean_effort_seconds": round(float(np.mean(effort_template)), 1),
             },
             "method_c_random_selection": {
-                "resolution_rate": round(resolved_random / total_cases, 4),
+                "simulated_resolution_rate": round(resolved_random / total_cases, 4),
                 "mean_effort_seconds": round(float(np.mean(effort_random)), 1),
             },
             "method_d_voi_budget_planner": {
-                "resolution_rate": round(resolved_planner / total_cases, 4),
+                "simulated_resolution_rate": round(resolved_planner / total_cases, 4),
                 "mean_effort_seconds": round(float(np.mean(effort_planner)), 1),
             },
         },

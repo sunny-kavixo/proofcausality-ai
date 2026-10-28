@@ -1,4 +1,4 @@
-"""Runner for all Phase 2 scientific research experiments."""
+"""Runner for all Phase 3 scientific research experiments."""
 
 import json
 from pathlib import Path
@@ -9,16 +9,16 @@ from evaluation.experiments.exp_h03_budget_planner import run_experiment_h03
 from evaluation.experiments.exp_h04_detector_independence import run_experiment_h04
 
 if __name__ == "__main__":
-    print("Running Experiment H01: Physics-Constrained Evidence Debt...")
+    print("Running Experiment H01: Evidence Debt Fair Baseline Comparison...")
     res_h01 = run_experiment_h01()
 
-    print("Running Experiment H02: Evidence Dependency Graph...")
+    print("Running Experiment H02: Evidence Dependency Graph Equivalence...")
     res_h02 = run_experiment_h02()
 
-    print("Running Experiment H03: Evidence Budget Planner...")
+    print("Running Experiment H03: Evidence Budget Planner Simulation...")
     res_h03 = run_experiment_h03()
 
-    print("Running Experiment H04: Detector Independence Audit...")
+    print("Running Experiment H04: Detector Independence Simulation...")
     res_h04 = run_experiment_h04()
 
     consolidated = {

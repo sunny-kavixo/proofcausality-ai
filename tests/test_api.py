@@ -24,7 +24,7 @@ def test_health_endpoint():
     assert resp.status_code == 200
     data = resp.json()
     assert data["status"] == "ok"
-    assert data["version"] == "0.2.0"
+    assert data["version"] == "0.2.1"
     assert data["project"] == "ProofCausality AI"
     assert "hardware_acceleration" in data
     assert "LabelCourt" in data["engines"]

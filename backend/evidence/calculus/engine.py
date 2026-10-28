@@ -4,8 +4,10 @@ Implements:
 - Explicit decomposition of physical tasks into observable predicates.
 - Physics-constrained Evidence Debt calculation: D(E, T).
 - Three-state condition evaluation: SUPPORTED, CONTRADICTED, UNOBSERVABLE.
-- Physical plausibility and non-teleportation constraints.
+- Pixel displacement anomaly heuristics (uncalibrated camera proxy).
 - Grounded tri-state decision arbitration (SUCCESS, FAILED, UNCERTAIN).
+- Qualified geometric localization vs verified semantic object identity.
+- Rest-state verification with motion blur disqualification.
 """
 
 from __future__ import annotations
@@ -50,6 +52,9 @@ class EvidenceCalculusEngine:
         distance_threshold_px: float = 60.0,
     ) -> TaskSpecification:
         """Create standard typed specification for object relocation tasks (moved A to B)."""
+        if not isinstance(distance_threshold_px, (int, float)) or distance_threshold_px <= 0.0 or math.isnan(distance_threshold_px):
+            raise ValueError(f"Invalid displacement threshold: {distance_threshold_px}px. Must be a positive finite number.")
+
         predicates = [
             ObservablePredicate(
                 predicate_id=f"{task_id}_P_IDENT",
@@ -57,6 +62,7 @@ class EvidenceCalculusEngine:
                 description=f"Primary object '{primary_object}' observed with valid coordinates",
                 is_critical=True,
                 weight=1.0,
+                evidence_source="DETECTOR_PROPOSAL",
             ),
             ObservablePredicate(
                 predicate_id=f"{task_id}_P_INIT",
@@ -64,20 +70,24 @@ class EvidenceCalculusEngine:
                 description=f"Initial state observed within start region A",
                 is_critical=True,
                 weight=1.0,
+                evidence_source="OBSERVED_PIXELS",
             ),
             ObservablePredicate(
                 predicate_id=f"{task_id}_P_FINAL",
                 predicate_type=PredicateType.FINAL_STATE_OBSERVED,
-                description=f"Final resting state observable after action conclusion",
+                description=f"Final static resting state observable after action conclusion",
                 is_critical=True,
                 weight=1.5,
+                evidence_source="OBSERVED_PIXELS",
             ),
             ObservablePredicate(
                 predicate_id=f"{task_id}_P_SPATIAL",
                 predicate_type=PredicateType.SPATIAL_RELATION,
-                description=f"Final state satisfies target region B containment and minimum displacement >= {distance_threshold_px}px",
+                description=f"Final state satisfies target region B containment and minimum displacement >= {distance_threshold_px:.1f}px",
                 is_critical=True,
                 weight=2.0,
+                threshold=float(distance_threshold_px),
+                evidence_source="SPATIAL_GEOMETRY",
             ),
             ObservablePredicate(
                 predicate_id=f"{task_id}_P_SHARP",
@@ -85,6 +95,8 @@ class EvidenceCalculusEngine:
                 description=f"Visual sharpness above blur threshold ({self.blur_threshold} var)",
                 is_critical=True,
                 weight=1.0,
+                threshold=float(self.blur_threshold),
+                evidence_source="LAPLACIAN_KERNEL",
             ),
             ObservablePredicate(
                 predicate_id=f"{task_id}_P_FRAME",
@@ -92,6 +104,8 @@ class EvidenceCalculusEngine:
                 description=f"Object maintains >= {self.boundary_margin_px}px margin from canvas borders",
                 is_critical=True,
                 weight=1.0,
+                threshold=float(self.boundary_margin_px),
+                evidence_source="CANVAS_GEOMETRY",
             ),
             ObservablePredicate(
                 predicate_id=f"{task_id}_P_OCCL",
@@ -99,13 +113,17 @@ class EvidenceCalculusEngine:
                 description=f"Surface area retention within unoccluded bounds (< {self.occlusion_drop_threshold:.0%} drop)",
                 is_critical=True,
                 weight=1.0,
+                threshold=float(self.occlusion_drop_threshold),
+                evidence_source="MASK_CONTOUR",
             ),
             ObservablePredicate(
                 predicate_id=f"{task_id}_P_PHYS",
                 predicate_type=PredicateType.PHYSICS_NO_CONTRADICTION,
-                description=f"Transition satisfies physical plausibility (no instantaneous teleportation)",
+                description=f"Pixel displacement anomaly heuristic (displacement <= {self.max_physical_speed:.1f}px under assumed framing)",
                 is_critical=True,
                 weight=2.0,
+                threshold=float(self.max_physical_speed),
+                evidence_source="2D_DISPLACEMENT_HEURISTIC",
             ),
         ]
 
@@ -115,6 +133,7 @@ class EvidenceCalculusEngine:
             primary_object=primary_object,
             initial_region=initial_region,
             target_region=target_region,
+            distance_threshold_px=float(distance_threshold_px),
             predicates=predicates,
             max_tolerable_debt=0.0,
         )
@@ -133,14 +152,17 @@ class EvidenceCalculusEngine:
         """Evaluate each observable predicate, compute Evidence Debt, and arbitrate verdict."""
         evaluated_predicates: List[ObservablePredicate] = []
 
-        # 1. P_IDENT: Object identification
+        # 1. P_IDENT: Object identification vs geometric localization (Issue C fix)
         p_ident = self._find_predicate(spec, PredicateType.OBJECT_IDENTIFICATION)
         if before_bbox is not None and after_bbox is not None:
             p_ident.state = EvidenceState.SUPPORTED
-            p_ident.rationale = "Coordinates successfully tracked in both temporal frames."
+            p_ident.rationale = (
+                "Spatial bounding coordinates observed in both frames. Note: Geometric localization observed; "
+                "semantic object identity is assumed from proposal rather than independently verified by embedding re-identification."
+            )
         else:
             p_ident.state = EvidenceState.UNOBSERVABLE
-            p_ident.rationale = "Object coordinates missing in one or both frames."
+            p_ident.rationale = "Object spatial coordinates missing or unobservable in one or both frames."
         evaluated_predicates.append(p_ident)
 
         # 2. P_INIT: Initial containment in Region A
@@ -154,31 +176,54 @@ class EvidenceCalculusEngine:
             p_init.rationale = "Initial region or bounding box unobservable."
         evaluated_predicates.append(p_init)
 
-        # 3. P_FINAL: Final rest state observation
+        # 3. P_FINAL: Final rest state observation with blur disqualification (Issue D fix)
         p_final = self._find_predicate(spec, PredicateType.FINAL_STATE_OBSERVED)
         if has_final_state and after_bbox is not None:
-            p_final.state = EvidenceState.SUPPORTED
-            p_final.rationale = "Final resting state observed."
+            if laplacian_variance < self.blur_threshold:
+                p_final.state = EvidenceState.UNOBSERVABLE
+                p_final.rationale = (
+                    f"Final bounding box visible, but frame exhibits motion blur "
+                    f"({laplacian_variance:.1f} < {self.blur_threshold}). Object may be in-flight or actively moving; "
+                    "static rest state unconfirmed."
+                )
+            else:
+                p_final.state = EvidenceState.SUPPORTED
+                p_final.rationale = "Static resting state confirmed in sharp final frame."
         else:
             p_final.state = EvidenceState.UNOBSERVABLE
-            p_final.rationale = "Recording terminated before final rest state was established."
+            p_final.rationale = "Recording terminated before final rest state or release could be established."
         evaluated_predicates.append(p_final)
 
-        # 4. P_SPATIAL: Target region containment and minimum displacement
+        # 4. P_SPATIAL: Target region containment and configurable displacement threshold (Issue A fix)
         p_spatial = self._find_predicate(spec, PredicateType.SPATIAL_RELATION)
+        configured_threshold = (
+            spec.distance_threshold_px
+            if hasattr(spec, "distance_threshold_px") and spec.distance_threshold_px is not None
+            else (p_spatial.threshold or 60.0)
+        )
+        if not isinstance(configured_threshold, (int, float)) or configured_threshold <= 0.0:
+            raise ValueError(f"Invalid displacement threshold: {configured_threshold}px. Threshold must be positive.")
+
+        p_spatial.threshold = round(float(configured_threshold), 2)
+
         if before_bbox and after_bbox and spec.target_region:
             dist = compute_centroid_distance(before_bbox, after_bbox)
             in_b = is_contained_in_region(after_bbox, spec.target_region)
             p_spatial.measured_value = round(dist, 2)
-            if in_b and dist >= 30.0:
-                p_spatial.state = EvidenceState.SUPPORTED
-                p_spatial.rationale = f"Contained in Region B with {dist:.1f}px displacement."
-            elif not in_b:
+
+            if dist >= configured_threshold:
+                if in_b:
+                    p_spatial.state = EvidenceState.SUPPORTED
+                    p_spatial.rationale = f"Contained in Region B with {dist:.1f}px displacement (meets configured threshold {configured_threshold:.1f}px)."
+                else:
+                    p_spatial.state = EvidenceState.CONTRADICTED
+                    p_spatial.rationale = f"Object placed outside Region B (displacement: {dist:.1f}px, threshold: {configured_threshold:.1f}px)."
+            elif dist == 0.0:
                 p_spatial.state = EvidenceState.CONTRADICTED
-                p_spatial.rationale = f"Object placed outside Region B (displacement: {dist:.1f}px)."
+                p_spatial.rationale = f"Zero displacement observed: object remained stationary (configured threshold: {configured_threshold:.1f}px)."
             else:
                 p_spatial.state = EvidenceState.CONTRADICTED
-                p_spatial.rationale = f"Displacement {dist:.1f}px insufficient for relocation."
+                p_spatial.rationale = f"Displacement {dist:.1f}px is below configured relocation threshold {configured_threshold:.1f}px."
         else:
             p_spatial.state = EvidenceState.UNOBSERVABLE
             p_spatial.rationale = "Target region or object bounds unobservable."
@@ -187,7 +232,7 @@ class EvidenceCalculusEngine:
         # 5. P_SHARP: Observation sharpness
         p_sharp = self._find_predicate(spec, PredicateType.OBSERVATION_SHARPNESS)
         p_sharp.measured_value = round(laplacian_variance, 2)
-        p_sharp.threshold = self.blur_threshold
+        p_sharp.threshold = round(self.blur_threshold, 2)
         if laplacian_variance >= self.blur_threshold:
             p_sharp.state = EvidenceState.SUPPORTED
             p_sharp.rationale = f"Laplacian variance {laplacian_variance:.1f} >= {self.blur_threshold} (sharp)."
@@ -198,6 +243,7 @@ class EvidenceCalculusEngine:
 
         # 6. P_FRAME: Canvas containment (not clipped by borders)
         p_frame = self._find_predicate(spec, PredicateType.CANVAS_CONTAINMENT)
+        p_frame.threshold = float(self.boundary_margin_px)
         if after_bbox:
             touches = (
                 after_bbox.x_min <= self.boundary_margin_px
@@ -219,7 +265,7 @@ class EvidenceCalculusEngine:
         # 7. P_OCCL: Surface visibility
         p_occl = self._find_predicate(spec, PredicateType.SURFACE_VISIBILITY)
         p_occl.measured_value = round(area_drop_ratio, 3)
-        p_occl.threshold = self.occlusion_drop_threshold
+        p_occl.threshold = round(self.occlusion_drop_threshold, 3)
         if area_drop_ratio >= self.occlusion_drop_threshold:
             p_occl.state = EvidenceState.UNOBSERVABLE
             p_occl.rationale = f"Severe occlusion: {area_drop_ratio:.0%} area drop exceeds {self.occlusion_drop_threshold:.0%} threshold."
@@ -228,19 +274,28 @@ class EvidenceCalculusEngine:
             p_occl.rationale = f"Surface area intact ({area_drop_ratio:.1%} occlusion drop)."
         evaluated_predicates.append(p_occl)
 
-        # 8. P_PHYS: Physics contradiction constraint
+        # 8. P_PHYS: Pixel displacement anomaly heuristic (Issue B fix)
         p_phys = self._find_predicate(spec, PredicateType.PHYSICS_NO_CONTRADICTION)
+        p_phys.threshold = round(self.max_physical_speed, 2)
         if before_bbox and after_bbox:
             dist = compute_centroid_distance(before_bbox, after_bbox)
+            p_phys.measured_value = round(dist, 2)
             if dist > self.max_physical_speed:
                 p_phys.state = EvidenceState.CONTRADICTED
-                p_phys.rationale = f"Physically impossible jump: {dist:.1f}px exceeds speed limit {self.max_physical_speed}px."
+                p_phys.rationale = (
+                    f"Pixel displacement anomaly detected: {dist:.1f}px jump exceeds 2D heuristic limit "
+                    f"({self.max_physical_speed}px/frame). Flagged as probable tracking loss or teleportation artifact, "
+                    f"not calibrated metric physics proof."
+                )
             else:
                 p_phys.state = EvidenceState.SUPPORTED
-                p_phys.rationale = f"Physical motion magnitude {dist:.1f}px is physically plausible."
+                p_phys.rationale = (
+                    f"Pixel displacement magnitude {dist:.1f}px within 2D plausible bounds "
+                    f"(<= {self.max_physical_speed}px heuristic limit)."
+                )
         else:
             p_phys.state = EvidenceState.UNOBSERVABLE
-            p_phys.rationale = "Temporal trajectory unobservable."
+            p_phys.rationale = "Temporal trajectory unobservable across frames."
         evaluated_predicates.append(p_phys)
 
         # Compute Evidence Debt: D(E, T)

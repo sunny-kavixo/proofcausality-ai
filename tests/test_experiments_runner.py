@@ -8,12 +8,14 @@ from evaluation.experiments.exp_h04_detector_independence import run_experiment_
 
 def test_experiment_h01_evidence_debt_execution():
     res = run_experiment_h01()
-    assert res["experiment"] == "H01_EVIDENCE_DEBT"
+    assert res["experiment"] == "H01_EVIDENCE_DEBT_FAIR_COMPARISON"
     assert res["sample_size"] == 37
-    # Method D must achieve 0.0 false-success rate
-    assert res["results"]["method_d_evidence_debt_plus_contradiction"]["false_success_rate"] == 0.0
-    # Method A confidence baseline must fail
-    assert res["results"]["method_a_confidence_only"]["false_success_rate"] == 1.0
+    # Method 5 (Evidence Calculus Full) must achieve 0.0 false-success rate
+    assert res["results"]["method_5_evidence_calculus_full"]["false_success_rate"] == 0.0
+    # Baseline 1 naive heuristic false success rate must be positive
+    assert res["results"]["baseline_1_naive_center_distance"]["false_success_rate"] > 0.30
+    # Must report 95% Wilson confidence intervals
+    assert len(res["results"]["method_5_evidence_calculus_full"]["false_success_rate_wilson_ci_95"]) == 2
 
 
 def test_experiment_h02_dependency_graph_parity():
@@ -26,13 +28,15 @@ def test_experiment_h02_dependency_graph_parity():
 
 def test_experiment_h03_budget_planner_voi():
     res = run_experiment_h03()
-    assert res["experiment"] == "H03_BUDGET_PLANNER"
-    # VOI planner must beat generic advice
-    assert res["results"]["method_d_voi_budget_planner"]["resolution_rate"] > res["results"]["method_a_generic_advice"]["resolution_rate"]
+    assert res["experiment"] == "H03_BUDGET_PLANNER_CONTROLLED_SIMULATION"
+    assert res["live_human_resolution_rate_status"] == "NOT MEASURED"
+    sim_res = res["simulation_results"]
+    assert sim_res["method_d_voi_budget_planner"]["simulated_resolution_rate"] > sim_res["method_a_generic_advice"]["simulated_resolution_rate"]
 
 
 def test_experiment_h04_detector_independence():
     res = run_experiment_h04()
-    assert res["experiment"] == "H04_DETECTOR_INDEPENDENCE"
-    # Dependence-aware fusion must reduce false-success rate over majority vote
-    assert res["results"]["dependence_aware_false_success_rate"] < res["results"]["majority_vote_false_success_rate"]
+    assert res["experiment"] == "H04_DETECTOR_INDEPENDENCE_SIMULATION"
+    assert res["empirical_real_world_validation_status"] == "NOT YET MEASURED ON LIVE MODELS"
+    sim_res = res["simulation_results"]
+    assert sim_res["dependence_aware_false_success_rate"] < sim_res["majority_vote_false_success_rate"]

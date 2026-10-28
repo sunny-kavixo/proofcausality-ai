@@ -61,6 +61,7 @@ class TaskSpecification(BaseModel):
     reference_object: Optional[str] = None
     target_region: Optional[BoundingBox] = None
     initial_region: Optional[BoundingBox] = None
+    distance_threshold_px: float = 60.0
     predicates: List[ObservablePredicate] = Field(default_factory=list)
     max_tolerable_debt: float = 0.0
 
