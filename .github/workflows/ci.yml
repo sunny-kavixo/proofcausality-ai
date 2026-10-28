@@ -29,6 +29,11 @@ jobs:
         cd native/proofcausality_core
         cargo build --release
 
+    - name: Run Rust Unit Tests
+      run: |
+        cd native/proofcausality_core
+        cargo test --verbose
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip

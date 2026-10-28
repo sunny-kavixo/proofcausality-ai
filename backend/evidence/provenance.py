@@ -14,6 +14,8 @@ from pydantic import BaseModel, Field
 
 
 class ProvenanceCategory(str, Enum):
+    DECODED_IMAGE = "DECODED_IMAGE"
+    VERIFIED_DATASET_IMAGE = "VERIFIED_DATASET_IMAGE"
     REAL_PHOTOGRAPH = "REAL_PHOTOGRAPH"
     PUBLIC_DATASET_ANNOTATION = "PUBLIC_DATASET_ANNOTATION"
     HUMAN_ANNOTATION = "HUMAN_ANNOTATION"
@@ -44,6 +46,11 @@ class EvidenceProvenance(BaseModel):
     is_independently_verified: bool = Field(False, description="True if evidence was independently audited")
     dimensions: Optional[tuple[int, int]] = Field(None, description="Image width, height if applicable")
     metadata: Dict[str, Any] = Field(default_factory=dict)
+    decoded_successfully: bool = False
+    authentic_source_record: bool = False
+    dataset_provenance_confirmed: bool = False
+    license_evidence_status: str = "UNKNOWN"
+    annotation_linkage_confirmed: bool = False
 
 
 class ProvenanceGate:
@@ -56,6 +63,9 @@ class ProvenanceGate:
         has_real_image_bytes: bool = False,
         has_temporal_sequence: bool = False,
         is_user_metadata_only: bool = False,
+        has_authentic_source_record: bool = False,
+        dataset_manifest_verified: bool = False,
+        model_execution_evidence: Optional[Dict[str, Any]] = None,
     ) -> bool:
         """Validates that an evidence item supports a specific claim or operational role."""
         if isinstance(provenance_or_category, EvidenceProvenance):
@@ -103,6 +113,30 @@ class ProvenanceGate:
                 raise ProvenanceViolationError(
                     "Violation: REAL_PHOTOGRAPH claimed but no valid image bytes were provided or decoded."
                 )
+
+            if cat in (ProvenanceCategory.REAL_PHOTOGRAPH, ProvenanceCategory.VERIFIED_DATASET_IMAGE):
+                if not has_authentic_source_record:
+                    raise ProvenanceViolationError(
+                        "Violation: decoded image bytes do not establish authentic photographic provenance."
+                    )
+                if cat == ProvenanceCategory.VERIFIED_DATASET_IMAGE and not dataset_manifest_verified:
+                    raise ProvenanceViolationError(
+                        "Violation: verified dataset provenance requires a validated source-manifest entry."
+                    )
+
+            if cat == ProvenanceCategory.MODEL_PREDICTION:
+                required = {
+                    "provider", "model_identifier", "inference_mode", "checkpoint_sha256",
+                    "input_sha256", "output_sha256", "execution_status",
+                }
+                if not model_execution_evidence or required - set(model_execution_evidence):
+                    raise ProvenanceViolationError(
+                        "Violation: MODEL_PREDICTION requires complete actual inference evidence."
+                    )
+                if model_execution_evidence["execution_status"] != "SUCCEEDED":
+                    raise ProvenanceViolationError(
+                        "Violation: unsuccessful inference cannot claim MODEL_PREDICTION provenance."
+                    )
 
             if cat == ProvenanceCategory.VERIFIED_TEMPORAL_OBSERVATION and not has_temporal_sequence:
                 raise ProvenanceViolationError(

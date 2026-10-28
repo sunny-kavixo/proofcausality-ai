@@ -57,3 +57,17 @@ scratch/
 target/
 *.dylib
 *.dll
+
+# Large model checkpoints — never commit weights
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.pkl
+
+# HuggingFace cache
+.cache/huggingface/
+
+# Local COCO images — never commit dataset images
+data/images/

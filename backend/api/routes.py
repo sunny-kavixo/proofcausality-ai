@@ -200,7 +200,7 @@ def audit_annotation(payload: AuditRequest) -> dict[str, Any]:
         overlay = create_disagreement_visual_overlay(rgb_arr, human_mask, candidate_mask)
         overlay_data_uri = encode_image_to_base64_png(overlay)
         provenance_dict = {
-            "category": "REAL_PHOTOGRAPH",
+            "category": "DECODED_IMAGE",
             "source_id": input_sha256,
             "verification_method": "DECODED_RGB_PIXELS",
             "dimensions": [iw, ih],
@@ -283,7 +283,7 @@ def verify_action(payload: VerifyActionPayload) -> dict[str, Any]:
         input_sha256 = sha256_hash
         image_gray = 0.299 * rgb_arr[:, :, 0] + 0.587 * rgb_arr[:, :, 1] + 0.114 * rgb_arr[:, :, 2]
         provenance_dict = {
-            "category": "REAL_PHOTOGRAPH",
+            "category": "DECODED_IMAGE",
             "source_id": input_sha256,
             "verification_method": "DECODED_RGB_PIXELS",
             "dimensions": [iw, ih],
@@ -383,7 +383,7 @@ def evaluate_recapture_followup(req: ReCaptureFollowupRequest) -> dict[str, Any]
         followup_var = float(compute_laplacian_variance_fast(gray_arr))
         provenance_mode = "VERIFIED_IMAGE_FOLLOWUP"
         provenance_dict = {
-            "category": "REAL_PHOTOGRAPH",
+            "category": "DECODED_IMAGE",
             "source_id": followup_sha256,
             "verification_method": "DECODED_PIXELS_FAST_LAPLACIAN",
             "dimensions": [iw, ih],
@@ -516,6 +516,11 @@ def get_benchmark_summary(dataset: str = Query("all")) -> dict[str, Any]:
     if coco_file.exists():
         with open(coco_file, "r") as f:
             coco_data = json.load(f)
+    genuine_file = Path(__file__).resolve().parent.parent.parent / "evaluation" / "experiments" / "genuine_model_predictions" / "summary.json"
+    genuine_data = None
+    if genuine_file.exists():
+        with open(genuine_file, "r") as f:
+            genuine_data = json.load(f)
 
     if dataset == "synthetic":
         return syn_data or {}
@@ -528,9 +533,10 @@ def get_benchmark_summary(dataset: str = Query("all")) -> dict[str, Any]:
         "synthetic_baseline": syn_data,
         "real_world_evaluation": real_data,
         "coco_photographic_benchmark": coco_data,
+        "genuine_model_predictions": genuine_data,
         "metadata": {
             "disclaimer": "Synthetic baseline establishes mathematical rule consistency; real evaluation tests physical tabletop pairs.",
-            "metrics_reporting_standard": "All percentages accompanied by numerators, denominators, and 95% Wilson score confidence intervals.",
+            "metrics_reporting_standard": "Controlled scenarios and genuine model predictions are separate; correlated cases use image-grouped bootstrap intervals.",
         },
     }
 

@@ -94,7 +94,7 @@ def test_api_receipt_no_post_hash_mutation():
     assert verify_receipt_integrity(receipt) is True
     assert "source_image_sha256" in receipt.measurements
     assert receipt.provenance is not None
-    assert receipt.provenance["category"] == "REAL_PHOTOGRAPH"
+    assert receipt.provenance["category"] == "DECODED_IMAGE"
 
 
 def test_defect_b_malformed_base64_rejection():
@@ -185,7 +185,7 @@ def test_defect_c_recapture_metadata_only_vs_verified():
     assert resp2.status_code == 200
     data2 = resp2.json()
     assert data2["provenance_mode"] == "VERIFIED_IMAGE_FOLLOWUP"
-    assert data2["evidence_receipt"]["provenance"]["category"] == "REAL_PHOTOGRAPH"
+    assert data2["evidence_receipt"]["provenance"]["category"] == "DECODED_IMAGE"
     assert data2["evidence_receipt"]["measurements"]["followup_image_sha256"] is not None
     assert verify_receipt_integrity(EvidenceReceipt(**data2["evidence_receipt"])) is True
 

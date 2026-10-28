@@ -361,6 +361,7 @@ async function loadBenchmarks() {
     const data = await resp.json();
     realBenchmarkData = data.real_world_evaluation;
     syntheticBenchmarkData = data.synthetic_baseline;
+    window.genuineModelBenchmarkData = data.genuine_model_predictions;
     renderBenchmarkView();
   } catch (e) {
     console.error('Failed to load benchmarks', e);
@@ -378,21 +379,26 @@ function switchBenchmarkDataset(dataset) {
 
 function renderBenchmarkView() {
   const cocoView = document.getElementById('coco-benchmark-view');
-  const tableContainer = document.querySelector('.table-container');
+  const tableContainer = document.getElementById('standard-benchmark-table');
 
   if (currentDataset === 'coco') {
     if (cocoView) cocoView.style.display = 'block';
     if (tableContainer) tableContainer.style.display = 'none';
     const titleElem = document.getElementById('bench-table-title');
-    if (titleElem) titleElem.innerText = 'COCO 2017 Real-World Photographic Benchmark Matrix (20 Authentic Photographs)';
+    if (titleElem) titleElem.innerText = 'COCO evidence: genuine predictions vs controlled annotation corruptions';
+    document.getElementById('bench-card-title-1').innerText = 'Controlled-corruption precision';
+    document.getElementById('bench-card-title-2').innerText = 'Genuine model class-aware recall@0.5';
+    document.getElementById('bench-card-title-3').innerText = 'Controlled-corruption recall';
+    document.getElementById('bench-card-title-4').innerText = 'Genuine model class-aware mean best IoU';
 
     document.getElementById('bench-fsr-proofcausality').innerText = '97.5%';
-    document.getElementById('bench-fsr-ci').innerText = 'Detection Precision (95% CI: [96.0%, 98.5%])';
-    document.getElementById('bench-fsr-naive').innerText = '49.2%';
-    document.getElementById('bench-fsr-naive-ci').innerText = 'Naive Baseline Recall (BBox-only fails on class/sub-pixel)';
-    document.getElementById('bench-rrr-proofcausality').innerText = '99.2%';
-    document.getElementById('bench-rrr-ci').innerText = 'Detection Recall (95% CI: [98.0%, 99.6%])';
-    document.getElementById('bench-rrr-generic').innerText = '0.9833';
+    document.getElementById('bench-fsr-ci').innerText = 'Controlled-corruption precision; image-grouped CI [96.27%, 98.80%]';
+    document.getElementById('bench-fsr-naive').innerText = '43.26%';
+    document.getElementById('bench-fsr-naive-ci').innerText = 'Genuine class-aware recall@0.5; image-grouped CI [33.33%, 54.29%]';
+    document.getElementById('bench-rrr-proofcausality').innerText = '99.0%';
+    document.getElementById('bench-rrr-ci').innerText = 'Controlled-corruption recall; image-grouped CI [98.02%, 99.66%]';
+    document.getElementById('bench-rrr-generic').innerText = '0.3929';
+    document.getElementById('bench-rrr-generic-ci').innerText = 'Genuine class-aware mean best IoU; image-grouped CI [0.3205, 0.4738]';
     return;
   }
 
@@ -401,6 +407,11 @@ function renderBenchmarkView() {
 
   const data = currentDataset === 'real' ? realBenchmarkData : syntheticBenchmarkData;
   if (!data) return;
+  document.getElementById('bench-card-title-1').innerText = 'False-Success Rate (ProofCausality)';
+  document.getElementById('bench-card-title-2').innerText = 'False-Success Rate (Naive Baseline)';
+  document.getElementById('bench-card-title-3').innerText = 'Re-Capture Resolution Rate';
+  document.getElementById('bench-card-title-4').innerText = 'Generic Guidance Resolution';
+  document.getElementById('bench-rrr-generic-ci').innerText = '95% Wilson CI: [0.0%, 49.0%]';
 
   const titleElem = document.getElementById('bench-table-title');
   if (titleElem) {

@@ -1,0 +1,68 @@
+{
+  "evidence_category": "GENUINE_MODEL_PREDICTIONS",
+  "generated_at_utc": "2026-10-28T18:03:49Z",
+  "source_commit": "0a4eb4d3e5f8809c9da34849285c3eb2e09a826c",
+  "dataset": "MS COCO 2017 validation subset",
+  "unique_images": 20,
+  "annotations_evaluated": 215,
+  "derived_scenarios": 0,
+  "model": {
+    "provider": "Hugging Face Transformers / local PyTorch",
+    "model_identifier": "facebook/mask2former-swin-tiny-coco-instance",
+    "model_revision": "22c4a2f15dc88149b8b8d9f4d42c54431fbd66f6",
+    "inference_mode": "UNPROMPTED_INSTANCE_SEGMENTATION",
+    "device": "mps",
+    "input_sha256": "09e1d25c75f7879bdaa69c327fece5cabacd53939c8c2ef9e87f1c97a2e478c4",
+    "input_width": 640,
+    "input_height": 427,
+    "prompt": null,
+    "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
+    "checkpoint_size_bytes": 189998168,
+    "output_sha256": "a5c4d915157d12e4eed08167d79ad35a4451d2b1dca4f6ac3cbddb759d45bb21",
+    "latency_ms": 997.324,
+    "execution_status": "SUCCEEDED",
+    "runtime": {
+      "python": "3.14.5",
+      "torch": "2.15.0",
+      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+    }
+  },
+  "license": {
+    "implementation": "Mostly MIT; Deformable-DETR portions Apache-2.0",
+    "weights": "CC BY-NC 4.0 per upstream Mask2Former model zoo",
+    "hugging_face_card_field": "other"
+  },
+  "metrics": {
+    "class_agnostic_mean_best_iou": 0.5002,
+    "class_agnostic_mean_best_iou_image_grouped_ci95": [
+      0.426,
+      0.5849
+    ],
+    "class_aware_mean_best_iou": 0.3929,
+    "class_aware_mean_best_iou_image_grouped_ci95": [
+      0.3205,
+      0.4738
+    ],
+    "class_agnostic_recall_iou50": 0.5581,
+    "class_agnostic_recall_iou50_image_grouped_ci95": [
+      0.4495,
+      0.6826
+    ],
+    "class_aware_recall_iou50": 0.4326,
+    "class_aware_recall_iou50_image_grouped_ci95": [
+      0.3333,
+      0.5429
+    ]
+  },
+  "latency_ms": {
+    "samples": 20,
+    "p50": 134.382,
+    "p95": 198.759
+  },
+  "limitations": [
+    "Only 20 independent source images; intervals are preliminary.",
+    "COCO ground truth is used only after inference for evaluation, never as model input.",
+    "Transformers 5.17 reported two newly initialized Swin layer-normalization parameters while loading this converted checkpoint.",
+    "This measures mask/object recall, not general photographic truth or physical action completion."
+  ]
+}

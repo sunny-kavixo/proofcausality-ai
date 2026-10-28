@@ -210,3 +210,198 @@ pub extern "C" fn rust_laplacian_variance(
         variance
     }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Unit tests
+// ─────────────────────────────────────────────────────────────────────────────
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // ── rust_mask_iou ─────────────────────────────────────────────────────────
+
+    #[test]
+    fn iou_identical_masks_returns_one() {
+        let a = vec![1u8; 100];
+        let b = a.clone();
+        let result = rust_mask_iou(a.as_ptr(), b.as_ptr(), a.len());
+        assert!((result - 1.0).abs() < 1e-9, "expected 1.0, got {result}");
+    }
+
+    #[test]
+    fn iou_disjoint_masks_returns_zero() {
+        let a = [1u8, 0, 0, 0];
+        let b = [0u8, 1, 0, 0];
+        let result = rust_mask_iou(a.as_ptr(), b.as_ptr(), a.len());
+        assert!((result - 0.0).abs() < 1e-9, "expected 0.0, got {result}");
+    }
+
+    #[test]
+    fn iou_empty_masks_returns_one() {
+        // Both masks all-zero → union = 0 → returns 1.0 (empty-equals-empty convention)
+        let a = vec![0u8; 64];
+        let b = vec![0u8; 64];
+        let result = rust_mask_iou(a.as_ptr(), b.as_ptr(), a.len());
+        assert!((result - 1.0).abs() < 1e-9, "expected 1.0 for empty masks, got {result}");
+    }
+
+    #[test]
+    fn iou_half_overlap_is_one_third() {
+        // A = [1,1,0,0], B = [0,1,1,0] → I=1, U=3 → IoU = 1/3
+        let a = [1u8, 1, 0, 0];
+        let b = [0u8, 1, 1, 0];
+        let result = rust_mask_iou(a.as_ptr(), b.as_ptr(), a.len());
+        let expected = 1.0 / 3.0;
+        assert!(
+            (result - expected).abs() < 1e-9,
+            "expected {expected}, got {result}"
+        );
+    }
+
+    #[test]
+    fn iou_null_ptr_a_returns_one() {
+        let b = vec![1u8; 4];
+        let result = rust_mask_iou(std::ptr::null(), b.as_ptr(), b.len());
+        assert!((result - 1.0).abs() < 1e-9, "expected 1.0 for null ptr, got {result}");
+    }
+
+    #[test]
+    fn iou_zero_length_returns_one() {
+        let a = vec![1u8; 4];
+        let b = vec![1u8; 4];
+        let result = rust_mask_iou(a.as_ptr(), b.as_ptr(), 0);
+        assert!((result - 1.0).abs() < 1e-9, "expected 1.0 for len=0, got {result}");
+    }
+
+    #[test]
+    fn iou_non_chunk_aligned_length() {
+        // Length 9 — not a multiple of 8 — exercises remainder path
+        let a: Vec<u8> = (0..9).map(|i| if i < 5 { 1 } else { 0 }).collect();
+        let b: Vec<u8> = (0..9).map(|i| if i < 3 { 1 } else { 0 }).collect();
+        // I=3, A=5, B=3, U=5 → IoU = 3/5
+        let result = rust_mask_iou(a.as_ptr(), b.as_ptr(), a.len());
+        assert!(
+            (result - 3.0 / 5.0).abs() < 1e-9,
+            "expected 0.6, got {result}"
+        );
+    }
+
+    // ── rust_mask_dice ────────────────────────────────────────────────────────
+
+    #[test]
+    fn dice_identical_masks_returns_one() {
+        let a = vec![1u8; 64];
+        let b = a.clone();
+        let result = rust_mask_dice(a.as_ptr(), b.as_ptr(), a.len());
+        assert!((result - 1.0).abs() < 1e-9, "expected 1.0, got {result}");
+    }
+
+    #[test]
+    fn dice_disjoint_masks_returns_zero() {
+        let a = [1u8, 0, 0, 0];
+        let b = [0u8, 0, 0, 1];
+        let result = rust_mask_dice(a.as_ptr(), b.as_ptr(), a.len());
+        assert!((result - 0.0).abs() < 1e-9, "expected 0.0, got {result}");
+    }
+
+    #[test]
+    fn dice_empty_masks_returns_one() {
+        let a = vec![0u8; 64];
+        let b = vec![0u8; 64];
+        let result = rust_mask_dice(a.as_ptr(), b.as_ptr(), a.len());
+        assert!((result - 1.0).abs() < 1e-9, "expected 1.0, got {result}");
+    }
+
+    #[test]
+    fn dice_half_overlap_correct() {
+        // A=[1,1,0,0], B=[0,1,1,0] → I=1, |A|=2, |B|=2 → Dice = 2*1/(2+2) = 0.5
+        let a = [1u8, 1, 0, 0];
+        let b = [0u8, 1, 1, 0];
+        let result = rust_mask_dice(a.as_ptr(), b.as_ptr(), a.len());
+        assert!((result - 0.5).abs() < 1e-9, "expected 0.5, got {result}");
+    }
+
+    // ── rust_batch_mask_iou ───────────────────────────────────────────────────
+
+    #[test]
+    fn batch_iou_single_identical_pair() {
+        let a = vec![1u8; 16];
+        let b = vec![1u8; 16];
+        let mut out = vec![0.0f64; 1];
+        let ret = rust_batch_mask_iou(a.as_ptr(), b.as_ptr(), 1, 16, out.as_mut_ptr());
+        assert_eq!(ret, 0, "expected 0 return code");
+        assert!((out[0] - 1.0).abs() < 1e-9, "expected 1.0, got {}", out[0]);
+    }
+
+    #[test]
+    fn batch_iou_multiple_pairs_correct() {
+        // Pair 0: identical → 1.0
+        // Pair 1: disjoint → 0.0
+        let mask_len = 4;
+        let a: Vec<u8> = [1u8, 1, 1, 1, 1, 0, 0, 0].to_vec();
+        let b: Vec<u8> = [1u8, 1, 1, 1, 0, 1, 1, 1].to_vec();
+        let mut out = vec![0.0f64; 2];
+        let ret = rust_batch_mask_iou(a.as_ptr(), b.as_ptr(), 2, mask_len, out.as_mut_ptr());
+        assert_eq!(ret, 0);
+        assert!((out[0] - 1.0).abs() < 1e-9, "pair0 expected 1.0, got {}", out[0]);
+        assert!((out[1] - 0.0).abs() < 1e-9, "pair1 expected 0.0, got {}", out[1]);
+    }
+
+    #[test]
+    fn batch_iou_null_ptr_returns_error() {
+        let b = vec![1u8; 4];
+        let mut out = vec![0.0f64; 1];
+        let ret = rust_batch_mask_iou(std::ptr::null(), b.as_ptr(), 1, 4, out.as_mut_ptr());
+        assert_eq!(ret, -1, "expected -1 for null ptr");
+    }
+
+    // ── rust_laplacian_variance ───────────────────────────────────────────────
+
+    #[test]
+    fn laplacian_constant_image_returns_zero() {
+        // Flat image → Laplacian = 0 everywhere → variance = 0
+        let img = vec![128.0f64; 9 * 9];
+        let result = rust_laplacian_variance(img.as_ptr(), 9, 9);
+        assert!(result.abs() < 1e-9, "expected 0.0, got {result}");
+    }
+
+    #[test]
+    fn laplacian_small_image_below_minimum_returns_zero() {
+        // width < 3 → skip computation, return 0.0
+        let img = vec![1.0f64; 4];
+        let result = rust_laplacian_variance(img.as_ptr(), 2, 2);
+        assert!((result - 0.0).abs() < 1e-9, "expected 0.0, got {result}");
+    }
+
+    #[test]
+    fn laplacian_checkerboard_returns_positive_variance() {
+        // Checkerboard 5×5 has high edge content → positive variance
+        let w = 5usize;
+        let h = 5usize;
+        let img: Vec<f64> = (0..h)
+            .flat_map(|y| (0..w).map(move |x| if (x + y) % 2 == 0 { 255.0 } else { 0.0 }))
+            .collect();
+        let result = rust_laplacian_variance(img.as_ptr(), w, h);
+        assert!(result > 0.0, "expected positive variance, got {result}");
+    }
+
+    #[test]
+    fn laplacian_null_ptr_returns_zero() {
+        let result = rust_laplacian_variance(std::ptr::null(), 5, 5);
+        assert!((result - 0.0).abs() < 1e-9, "expected 0.0 for null ptr, got {result}");
+    }
+
+    // ── Python parity: IoU matches Python numpy reference ─────────────────────
+
+    #[test]
+    fn iou_parity_with_manual_numpy_calculation() {
+        // For mask A = 8 ones followed by 8 zeros, mask B = 4 ones followed by 12 zeros
+        // I=4, U=8, IoU=0.5
+        let mut a = vec![0u8; 16];
+        let mut b = vec![0u8; 16];
+        for i in 0..8 { a[i] = 1; }
+        for i in 0..4 { b[i] = 1; }
+        let result = rust_mask_iou(a.as_ptr(), b.as_ptr(), a.len());
+        assert!((result - 0.5).abs() < 1e-9, "expected 0.5, got {result}");
+    }
+}
