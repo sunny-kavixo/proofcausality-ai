@@ -59,7 +59,50 @@ def run_browser_verification() -> dict:
         page.screenshot(path=str(overview_shot))
         results["screenshots"]["overview"] = str(overview_shot.relative_to(ROOT))
 
-        # 2. LabelCourt Auditor Tab
+        # 2. Neural Vision Audit Tab (Phase 7 Real Model Integration)
+        page.click("button[data-tab='tab-vision-audit']")
+        page.wait_for_selector("#tab-vision-audit.active", state="visible")
+        
+        # Wait for authentic COCO samples to load into select
+        page.wait_for_function("document.querySelectorAll('#va-sample-select option').length > 1")
+        selected_sample_text = page.locator("#va-sample-select option:checked").inner_text()
+        
+        # Execute genuine Neural Vision Audit (runs unprompted Mask2Former inference)
+        with page.expect_response("**/api/vision/audit", timeout=30000) as va_response_info:
+            page.click("#btn-run-vision-audit")
+        va_resp = va_response_info.value
+        assert va_resp.status == 200, f"Vision Audit API returned {va_resp.status}"
+        
+        page.wait_for_function("document.getElementById('va-verdict-badge').innerText !== 'IDLE'")
+        va_verdict = page.locator("#va-verdict-badge").inner_text()
+        va_reason = page.locator("#va-verdict-reason").inner_text()
+        va_iou = page.locator("#va-iou-val").inner_text()
+        va_latency = page.locator("#va-total-latency").inner_text()
+        va_receipt = page.locator("#va-receipt-id").inner_text()
+        
+        assert va_verdict in ["ACCEPT", "REVIEW", "UNCERTAIN"], f"Unexpected verdict: {va_verdict}"
+        assert va_receipt.startswith("VREC-"), f"Unexpected receipt ID format: {va_receipt}"
+
+        # Test view toggle to model predicted mask overlay
+        page.click("#va-view-toggles button[data-view='predicted']")
+        page.wait_for_timeout(200)
+
+        results["checks"].append({
+            "check": "neural_vision_audit_real_model_inference",
+            "status": "PASS",
+            "sample": selected_sample_text,
+            "verdict": va_verdict,
+            "reason": va_reason,
+            "iou": va_iou,
+            "latency": va_latency,
+            "receipt": va_receipt,
+        })
+
+        vision_audit_shot = SCREENSHOTS_DIR / "browser_07_vision_audit.png"
+        page.screenshot(path=str(vision_audit_shot))
+        results["screenshots"]["vision_audit"] = str(vision_audit_shot.relative_to(ROOT))
+
+        # 3. LabelCourt Auditor Tab
         page.click("button[data-tab='tab-labelcourt']")
         page.wait_for_selector("#tab-labelcourt.active", state="visible")
         
@@ -182,6 +225,42 @@ def run_browser_verification() -> dict:
     return results
 
 
+def ensure_server_running() -> subprocess.Popen | None:
+    """Ensure local server is running on port 8080; auto-start if needed."""
+    import socket
+    import subprocess
+    import urllib.request
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    is_open = s.connect_ex(("127.0.0.1", 8080)) == 0
+    s.close()
+    if is_open:
+        return None
+
+    proc = subprocess.Popen(
+        [".venv/bin/python3", "-m", "uvicorn", "backend.app:app", "--host", "127.0.0.1", "--port", "8080"],
+        cwd=str(ROOT),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    for _ in range(50):
+        try:
+            with urllib.request.urlopen("http://127.0.0.1:8080/api/health", timeout=1) as resp:
+                if resp.status == 200:
+                    break
+        except Exception:
+            time.sleep(0.2)
+    return proc
+
+
 if __name__ == "__main__":
-    res = run_browser_verification()
-    print(json.dumps(res, indent=2))
+    import subprocess
+    server_proc = ensure_server_running()
+    try:
+        res = run_browser_verification()
+        print(json.dumps(res, indent=2))
+    finally:
+        if server_proc:
+            server_proc.terminate()
+            server_proc.wait()
+

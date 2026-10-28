@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initBenchmarks();
   initPerformance();
   initCalculus();
+  initVisionAudit();
 });
 
 // Tab Switching
@@ -739,3 +740,398 @@ function updateGraphNodeColors(scenarioKey, data) {
     if (rPhys) rPhys.setAttribute('stroke', '#EF4444');
   }
 }
+
+// ==============================================================================
+// NEURAL VISION AUDIT MODULE (Real Mask2Former Inference & LabelCourt Grounding)
+// ==============================================================================
+
+let vaSamples = [];
+let currentVaSample = null;
+let currentVaImageBase64 = null;
+let vaOverlays = {
+  disagreement: null,
+  reference: null,
+  predicted: null,
+  original: null,
+};
+let currentVaView = 'disagreement';
+
+async function initVisionAudit() {
+  const sampleSelect = document.getElementById('va-sample-select');
+  const presetSelect = document.getElementById('va-preset-select');
+  const uploadInput = document.getElementById('va-upload-file');
+  const btnAudit = document.getElementById('btn-run-vision-audit');
+  const confSlider = document.getElementById('va-conf-thresh');
+  const viewToggles = document.getElementById('va-view-toggles');
+  const btnCopyReceipt = document.getElementById('btn-copy-receipt');
+  const btnDownloadReceipt = document.getElementById('btn-download-receipt');
+
+  if (!sampleSelect || !btnAudit) return;
+
+  // 1. Threshold slider value bindings
+  if (confSlider) {
+    confSlider.addEventListener('input', (e) => {
+      const valSpan = document.getElementById('va-conf-val');
+      if (valSpan) valSpan.innerText = parseFloat(e.target.value).toFixed(2);
+    });
+  }
+
+  // 2. View toggle buttons
+  if (viewToggles) {
+    viewToggles.querySelectorAll('button').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        viewToggles.querySelectorAll('button').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentVaView = btn.dataset.view;
+        updateMainImageView();
+      });
+    });
+  }
+
+  // 3. Copy & Download Receipt buttons
+  if (btnCopyReceipt) {
+    btnCopyReceipt.addEventListener('click', () => {
+      const text = document.getElementById('va-receipt-json').innerText;
+      if (text) {
+        navigator.clipboard.writeText(text);
+        btnCopyReceipt.innerText = 'Copied!';
+        setTimeout(() => (btnCopyReceipt.innerText = 'Copy JSON'), 2000);
+      }
+    });
+  }
+
+  if (btnDownloadReceipt) {
+    btnDownloadReceipt.addEventListener('click', () => {
+      const text = document.getElementById('va-receipt-json').innerText;
+      if (!text) return;
+      const reportId = document.getElementById('va-receipt-id').innerText || 'evidence_receipt';
+      const blob = new Blob([text], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${reportId}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  // 4. Sample selector event
+  sampleSelect.addEventListener('change', (e) => {
+    const idx = parseInt(e.target.value, 10);
+    if (!isNaN(idx) && vaSamples[idx]) {
+      loadVaSample(vaSamples[idx]);
+    }
+  });
+
+  // 5. Preset selector event
+  if (presetSelect) {
+    presetSelect.addEventListener('change', (e) => {
+      if (!currentVaSample) return;
+      const presetKey = e.target.value;
+      const presets = currentVaSample.perturbation_presets;
+      if (presets && presets[presetKey]) {
+        applyAnnotationPreset(presets[presetKey]);
+      }
+    });
+  }
+
+  // 6. User photograph upload
+  if (uploadInput) {
+    uploadInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (loadEvt) => {
+        currentVaImageBase64 = loadEvt.target.result;
+        currentVaSample = null;
+        vaOverlays = {
+          disagreement: null,
+          reference: null,
+          predicted: null,
+          original: currentVaImageBase64,
+        };
+        sampleSelect.value = '';
+        document.getElementById('va-sample-desc').innerText = `Custom upload: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+        document.getElementById('va-upload-info').innerText = `Loaded ${file.name}`;
+
+        const mainImg = document.getElementById('va-main-image');
+        const placeholder = document.getElementById('va-img-placeholder');
+        if (mainImg) {
+          mainImg.src = currentVaImageBase64;
+          mainImg.style.display = 'block';
+        }
+        if (placeholder) placeholder.style.display = 'none';
+
+        resetAuditDisplay();
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // 7. Audit execution button
+  btnAudit.addEventListener('click', runNeuralVisionAudit);
+
+  // 8. Fetch authentic COCO samples
+  try {
+    const resp = await fetch('/api/vision/samples');
+    if (resp.ok) {
+      vaSamples = await resp.json();
+      sampleSelect.innerHTML = '';
+      vaSamples.forEach((s, idx) => {
+        const opt = document.createElement('option');
+        opt.value = idx;
+        opt.innerText = `${s.file_name} — ${s.annotation.category_name} (${s.image_width}x${s.image_height})`;
+        sampleSelect.appendChild(opt);
+      });
+      if (vaSamples.length > 0) {
+        loadVaSample(vaSamples[0]);
+      }
+    }
+  } catch (err) {
+    console.error('Failed to load vision samples', err);
+    sampleSelect.innerHTML = '<option value="">Failed to load authentic pilot samples</option>';
+  }
+}
+
+function loadVaSample(sample) {
+  currentVaSample = sample;
+  currentVaImageBase64 = sample.image_base64;
+  vaOverlays = {
+    disagreement: null,
+    reference: null,
+    predicted: null,
+    original: sample.image_base64,
+  };
+
+  document.getElementById('va-sample-desc').innerText = sample.description;
+  const presetSelect = document.getElementById('va-preset-select');
+  if (presetSelect) presetSelect.value = 'authentic';
+
+  applyAnnotationPreset(sample.annotation);
+
+  const mainImg = document.getElementById('va-main-image');
+  const placeholder = document.getElementById('va-img-placeholder');
+  if (mainImg) {
+    mainImg.src = sample.image_base64;
+    mainImg.style.display = 'block';
+  }
+  if (placeholder) placeholder.style.display = 'none';
+
+  resetAuditDisplay();
+}
+
+function applyAnnotationPreset(ann) {
+  const catInput = document.getElementById('va-ann-category');
+  if (catInput) catInput.value = ann.category_name || '';
+
+  const bbox = ann.bbox || {};
+  const xmin = document.getElementById('va-bbox-xmin');
+  const ymin = document.getElementById('va-bbox-ymin');
+  const xmax = document.getElementById('va-bbox-xmax');
+  const ymax = document.getElementById('va-bbox-ymax');
+
+  if (xmin) xmin.value = bbox.x_min !== undefined ? bbox.x_min.toFixed(1) : '0';
+  if (ymin) ymin.value = bbox.y_min !== undefined ? bbox.y_min.toFixed(1) : '0';
+  if (xmax) xmax.value = bbox.x_max !== undefined ? bbox.x_max.toFixed(1) : '0';
+  if (ymax) ymax.value = bbox.y_max !== undefined ? bbox.y_max.toFixed(1) : '0';
+}
+
+function resetAuditDisplay() {
+  const badge = document.getElementById('va-verdict-badge');
+  if (badge) {
+    badge.innerText = 'IDLE';
+    badge.className = 'badge';
+  }
+  const reason = document.getElementById('va-verdict-reason');
+  if (reason) reason.innerText = '--';
+  const lat = document.getElementById('va-total-latency');
+  if (lat) lat.innerText = '-- ms';
+  const expl = document.getElementById('va-verdict-explanation');
+  if (expl) expl.innerText = 'Awaiting audit execution.';
+
+  document.getElementById('va-iou-val').innerText = '--';
+  document.getElementById('va-boundary-val').innerText = '--';
+  document.getElementById('va-class-val').innerText = '--';
+  document.getElementById('va-instances-val').innerText = '--';
+
+  document.getElementById('time-decode').innerText = '--';
+  document.getElementById('time-preproc').innerText = '--';
+  document.getElementById('time-inference').innerText = '--';
+  document.getElementById('time-postproc').innerText = '--';
+  document.getElementById('time-overlays').innerText = '--';
+
+  document.getElementById('bar-decoding').style.width = '0%';
+  document.getElementById('bar-preproc').style.width = '0%';
+  document.getElementById('bar-inference').style.width = '0%';
+  document.getElementById('bar-postproc').style.width = '0%';
+  document.getElementById('bar-overlays').style.width = '0%';
+
+  const receiptCard = document.getElementById('va-receipt-card');
+  if (receiptCard) receiptCard.removeAttribute('open');
+  const receiptStatus = document.getElementById('va-receipt-status-badge');
+  if (receiptStatus) receiptStatus.style.display = 'none';
+  document.getElementById('va-receipt-id').innerText = 'No Receipt';
+  document.getElementById('va-receipt-checksum').innerText = 'Checksum: --';
+  document.getElementById('va-receipt-json').innerText = '';
+}
+
+function updateMainImageView() {
+  const mainImg = document.getElementById('va-main-image');
+  if (!mainImg) return;
+  const src = vaOverlays[currentVaView] || vaOverlays.original || currentVaImageBase64;
+  if (src) {
+    mainImg.src = src;
+  }
+}
+
+async function runNeuralVisionAudit() {
+  if (!currentVaImageBase64) {
+    alert('Please select or upload an authentic photograph.');
+    return;
+  }
+
+  const btn = document.getElementById('btn-run-vision-audit');
+  const spinner = document.getElementById('va-btn-spinner');
+  const btnText = document.getElementById('va-btn-text');
+
+  try {
+    btn.disabled = true;
+    if (spinner) spinner.style.display = 'inline-block';
+    if (btnText) btnText.innerText = 'Executing Mask2Former Inference...';
+
+    const presetSelect = document.getElementById('va-preset-select');
+    const presetKey = presetSelect ? presetSelect.value : 'authentic';
+
+    let segmentation = null;
+    if (currentVaSample && presetKey === 'authentic' && currentVaSample.annotation) {
+      segmentation = currentVaSample.annotation.segmentation;
+    } else if (currentVaSample && presetKey === 'shifted_25px' && currentVaSample.perturbation_presets.shifted_25px) {
+      segmentation = currentVaSample.perturbation_presets.shifted_25px.segmentation;
+    }
+
+    const payload = {
+      image_base64: currentVaImageBase64,
+      annotation: {
+        category_name: document.getElementById('va-ann-category').value.trim(),
+        bbox: {
+          x_min: parseFloat(document.getElementById('va-bbox-xmin').value) || 0.0,
+          y_min: parseFloat(document.getElementById('va-bbox-ymin').value) || 0.0,
+          x_max: parseFloat(document.getElementById('va-bbox-xmax').value) || 0.0,
+          y_max: parseFloat(document.getElementById('va-bbox-ymax').value) || 0.0,
+        },
+        segmentation: segmentation,
+      },
+      manifest_image_id: currentVaSample ? currentVaSample.manifest_image_id : null,
+      image_source_type: currentVaSample ? 'MANIFEST_VERIFIED_DATASET_IMAGE' : 'USER_UPLOADED_IMAGE',
+      settings: {
+        confidence_threshold: parseFloat(document.getElementById('va-conf-thresh').value) || 0.50,
+        blur_threshold: parseFloat(document.getElementById('va-blur-thresh').value) || 100.0,
+        iou_accept_threshold: parseFloat(document.getElementById('va-iou-accept').value) || 0.70,
+        iou_review_threshold: parseFloat(document.getElementById('va-iou-review').value) || 0.40,
+        boundary_agreement_threshold: 0.60,
+        matching_strategy: document.getElementById('va-matching-strategy').value || 'class_aware',
+      },
+    };
+
+    const resp = await fetch('/api/vision/audit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (!resp.ok) {
+      const errData = await resp.json().catch(() => ({}));
+      throw new Error(errData.detail || `Server returned HTTP ${resp.status}`);
+    }
+
+    const data = await resp.json();
+
+    // 1. Cache Overlays & Set View
+    vaOverlays.disagreement = data.visual_overlays.disagreement;
+    vaOverlays.reference = data.visual_overlays.reference;
+    vaOverlays.predicted = data.visual_overlays.predicted;
+    vaOverlays.original = currentVaImageBase64;
+
+    currentVaView = 'disagreement';
+    const viewToggles = document.getElementById('va-view-toggles');
+    if (viewToggles) {
+      viewToggles.querySelectorAll('button').forEach((b) => {
+        b.classList.toggle('active', b.dataset.view === 'disagreement');
+      });
+    }
+    updateMainImageView();
+
+    // 2. Verdict & Reasons
+    const verdictBadge = document.getElementById('va-verdict-badge');
+    if (verdictBadge) {
+      verdictBadge.innerText = data.verdict;
+      if (data.verdict === 'ACCEPT') {
+        verdictBadge.className = 'badge badge-success';
+      } else if (data.verdict === 'REVIEW') {
+        verdictBadge.className = 'badge badge-warning';
+      } else {
+        verdictBadge.className = 'badge badge-danger';
+      }
+    }
+
+    document.getElementById('va-verdict-reason').innerText = data.verdict_reason;
+    document.getElementById('va-verdict-explanation').innerText = data.explanation;
+
+    // 3. Core Metrics
+    document.getElementById('va-iou-val').innerText = data.metrics.iou.toFixed(3);
+    document.getElementById('va-boundary-val').innerText = data.metrics.boundary_agreement.toFixed(3);
+    document.getElementById('va-class-val').innerText = data.metrics.class_match ? 'MATCH' : 'MISMATCH';
+    document.getElementById('va-instances-val').innerText = `${data.detected_instances_count} obj`;
+
+    // 4. Latency Breakdown
+    const lat = data.latency_breakdown_ms;
+    document.getElementById('va-total-latency').innerText = `${lat.total_wall_clock_ms.toFixed(1)} ms`;
+    document.getElementById('va-breakdown-summary').innerText = `Inf: ${lat.model_inference_ms.toFixed(1)}ms | Post: ${lat.mask_postprocessing_ms.toFixed(1)}ms`;
+
+    document.getElementById('time-decode').innerText = `${lat.image_decoding_ms.toFixed(1)}ms`;
+    document.getElementById('time-preproc').innerText = `${lat.preprocessing_ms.toFixed(1)}ms`;
+    document.getElementById('time-inference').innerText = `${lat.model_inference_ms.toFixed(1)}ms`;
+    document.getElementById('time-postproc').innerText = `${lat.mask_postprocessing_ms.toFixed(1)}ms`;
+    document.getElementById('time-overlays').innerText = `${lat.overlay_generation_ms.toFixed(1)}ms`;
+
+    const total = lat.total_wall_clock_ms || 1;
+    document.getElementById('bar-decoding').style.width = `${((lat.image_decoding_ms / total) * 100).toFixed(1)}%`;
+    document.getElementById('bar-preproc').style.width = `${((lat.preprocessing_ms / total) * 100).toFixed(1)}%`;
+    document.getElementById('bar-inference').style.width = `${((lat.model_inference_ms / total) * 100).toFixed(1)}%`;
+    document.getElementById('bar-postproc').style.width = `${((lat.mask_postprocessing_ms / total) * 100).toFixed(1)}%`;
+    document.getElementById('bar-overlays').style.width = `${((lat.overlay_generation_ms / total) * 100).toFixed(1)}%`;
+
+    // 5. Evidence Receipt Card
+    const receipt = data.evidence_receipt;
+    document.getElementById('va-receipt-id').innerText = receipt.report_id;
+    document.getElementById('va-receipt-checksum').innerText = `SHA-256 Checksum: ${receipt.receipt_sha256}`;
+    document.getElementById('va-receipt-json').innerText = JSON.stringify(receipt, null, 2);
+
+    const receiptStatus = document.getElementById('va-receipt-status-badge');
+    if (receiptStatus) {
+      receiptStatus.style.display = 'inline-block';
+      receiptStatus.innerText = data.receipt_verified ? 'VERIFIED (Tamper Check Passed)' : 'VERIFICATION FAILED';
+      receiptStatus.className = data.receipt_verified ? 'badge badge-success' : 'badge badge-danger';
+    }
+
+    // 6. Device & Checkpoint Provenance
+    if (data.model_execution) {
+      const devBadge = document.getElementById('va-model-device-badge');
+      if (devBadge) devBadge.innerText = `Device: ${data.model_execution.device.toUpperCase()}`;
+      const ckptBadge = document.getElementById('va-checkpoint-hash-badge');
+      if (ckptBadge && data.model_execution.checkpoint_sha256) {
+        ckptBadge.innerText = `Checkpoint: ${data.model_execution.checkpoint_sha256.substring(0, 10)}...`;
+      }
+    }
+
+  } catch (err) {
+    console.error('Vision audit error', err);
+    alert(`Vision Audit Failed: ${err.message}`);
+  } finally {
+    btn.disabled = false;
+    if (spinner) spinner.style.display = 'none';
+    if (btnText) btnText.innerText = 'Execute Neural Vision Audit (POST /api/vision/audit)';
+  }
+}
+

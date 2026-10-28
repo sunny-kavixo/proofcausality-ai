@@ -26,6 +26,7 @@
   <!-- Navigation Tabs -->
   <nav class="sub-nav">
     <button class="nav-tab active" data-tab="tab-overview">Overview</button>
+    <button class="nav-tab" data-tab="tab-vision-audit">Neural Vision Audit <span class="badge" style="background:#10B981;color:#000;font-weight:700;font-size:10px;padding:1px 5px;border-radius:4px;margin-left:4px;">REAL MASK2FORMER</span></button>
     <button class="nav-tab" data-tab="tab-labelcourt">LabelCourt Auditor</button>
     <button class="nav-tab" data-tab="tab-actionproof">ActionProof Studio</button>
     <button class="nav-tab" data-tab="tab-recapture">ReCapture Planner</button>
@@ -124,6 +125,223 @@
               <span class="diag-val">SHA-256 Canonical Receipts</span>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab: Neural Vision Audit (Real Mask2Former Integration) -->
+    <section id="tab-vision-audit" class="tab-pane">
+      <div class="panel-header flex-between">
+        <div>
+          <h2>Neural Vision Audit — Unprompted Mask2Former &amp; LabelCourt Grounding</h2>
+          <p class="text-muted">Execute genuine neural inference on original photograph pixels, compare instance masks with human annotations, and produce tamper-evident SHA-256 evidence receipts.</p>
+        </div>
+        <div class="flex-gap-sm">
+          <span class="badge badge-success" id="va-model-device-badge">Device: Apple MPS</span>
+          <span class="badge badge-neutral" id="va-model-name-badge">Mask2Former Tiny</span>
+        </div>
+      </div>
+
+      <!-- Provenance & Integrity Banner -->
+      <div class="card mb-4" style="border-left: 3px solid #10B981;">
+        <div class="p-3 flex-between">
+          <div>
+            <strong>Authentic Model-Inference Guarantee:</strong> Ground-truth annotations are strictly excluded from model input (zero leakage). Inference runs directly on Apple MPS using local weights with verified SHA-256 checkpoint checksum.
+          </div>
+          <span class="badge badge-outline" id="va-checkpoint-hash-badge">Checkpoint: 3550e8b2...</span>
+        </div>
+      </div>
+
+      <div class="grid-2col">
+        <!-- Left Column: Input Configuration & Sample Selection -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Photograph &amp; Annotation Input</h3>
+          </div>
+          
+          <div class="form-group">
+            <label for="va-sample-select">Select Authentic COCO 2017 Validation Photograph:</label>
+            <select id="va-sample-select" class="form-control">
+              <option value="">Loading authentic COCO pilot samples...</option>
+            </select>
+            <small class="text-muted" id="va-sample-desc">Authentic photograph from COCO 2017 validation pilot subset.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="va-preset-select">Annotation Integrity Scenario (Ground Truth vs Perturbation):</label>
+            <select id="va-preset-select" class="form-control">
+              <option value="authentic">Authentic Ground Truth Annotation</option>
+              <option value="shifted_25px">Controlled Perturbation: Spatial Shift (+25px Misalignment)</option>
+              <option value="category_mismatch">Controlled Perturbation: Class Label Mismatch</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="va-upload-file">Or Upload Custom Photograph (PNG/JPEG &lt; 10MB):</label>
+            <input type="file" id="va-upload-file" class="form-control" accept="image/png, image/jpeg">
+            <small class="text-muted" id="va-upload-info">Upload custom photographic evidence to test unprompted neural segmentation.</small>
+          </div>
+
+          <div class="grid-2col mb-2">
+            <div class="form-group">
+              <label for="va-ann-category">Target Category Name:</label>
+              <input type="text" id="va-ann-category" class="form-control" value="bottle">
+            </div>
+            <div class="form-group">
+              <label for="va-matching-strategy">Matching Strategy:</label>
+              <select id="va-matching-strategy" class="form-control">
+                <option value="class_aware">Class-Aware One-to-One</option>
+                <option value="class_agnostic">Class-Agnostic (Max IoU)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Bounding Box Coordinates -->
+          <div class="form-group">
+            <label>Reference Bounding Box Coordinates [xmin, ymin, xmax, ymax]:</label>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;">
+              <input type="number" id="va-bbox-xmin" class="form-control" placeholder="xmin" value="217.6">
+              <input type="number" id="va-bbox-ymin" class="form-control" placeholder="ymin" value="240.5">
+              <input type="number" id="va-bbox-xmax" class="form-control" placeholder="xmax" value="256.6">
+              <input type="number" id="va-bbox-ymax" class="form-control" placeholder="ymax" value="298.3">
+            </div>
+          </div>
+
+          <!-- Model & Threshold Controls -->
+          <details class="form-group mb-3" style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color);">
+            <summary style="cursor: pointer; font-weight: 500; color: var(--text-secondary);">Advanced Model &amp; Auditor Thresholds</summary>
+            <div class="grid-2col mt-2">
+              <div class="form-group">
+                <label for="va-conf-thresh">Model Confidence Threshold: <span id="va-conf-val">0.50</span></label>
+                <input type="range" id="va-conf-thresh" min="0.10" max="0.95" step="0.05" value="0.50" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="va-blur-thresh">Laplacian Blur Threshold: <span id="va-blur-val">100</span></label>
+                <input type="number" id="va-blur-thresh" value="100.0" step="10" class="form-control">
+              </div>
+            </div>
+            <div class="grid-2col">
+              <div class="form-group">
+                <label for="va-iou-accept">IoU Accept Threshold: <span id="va-accept-val">0.70</span></label>
+                <input type="number" id="va-iou-accept" value="0.70" step="0.05" min="0.1" max="1.0" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="va-iou-review">IoU Review Threshold: <span id="va-review-val">0.40</span></label>
+                <input type="number" id="va-iou-review" value="0.40" step="0.05" min="0.0" max="0.9" class="form-control">
+              </div>
+            </div>
+          </details>
+
+          <button class="btn btn-primary" id="btn-run-vision-audit" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <span id="va-btn-spinner" class="spinner" style="display: none;"></span>
+            <span id="va-btn-text">Execute Neural Vision Audit (POST /api/vision/audit)</span>
+          </button>
+        </div>
+
+        <!-- Right Column: Visual Overlays & Causal Verdict -->
+        <div class="card">
+          <div class="card-header flex-between">
+            <h3>Visual Evidence &amp; Verdict</h3>
+            <div class="flex-gap-xs" id="va-view-toggles">
+              <button class="btn btn-xs btn-outline active" data-view="disagreement">Disagreement</button>
+              <button class="btn btn-xs btn-outline" data-view="reference">Reference Mask</button>
+              <button class="btn btn-xs btn-outline" data-view="predicted">Model Mask</button>
+              <button class="btn btn-xs btn-outline" data-view="original">Original</button>
+            </div>
+          </div>
+
+          <!-- Image Display Container -->
+          <div style="position: relative; width: 100%; min-height: 280px; background: #000; border-radius: 6px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color); margin-bottom: 12px;">
+            <img id="va-main-image" src="" alt="Neural Vision Display" style="max-width: 100%; max-height: 380px; display: block; object-fit: contain;">
+            <div id="va-img-placeholder" style="color: var(--text-muted); font-size: 13px; text-align: center; padding: 20px;">
+              Select an authentic photograph or upload an image and click Execute Audit.
+            </div>
+          </div>
+
+          <!-- Legend Bar -->
+          <div id="va-legend-bar" style="display: flex; gap: 14px; font-size: 11px; margin-bottom: 12px; padding: 6px 10px; background: rgba(255,255,255,0.03); border-radius: 4px;">
+            <span><strong style="color: #00FF40;">■ Green:</strong> Concordant Agreement</span>
+            <span><strong style="color: #FF3030;">■ Red:</strong> Reference Deficit (Ground Truth Only)</span>
+            <span><strong style="color: #00C8FF;">■ Cyan:</strong> Model Excess (Prediction Only)</span>
+          </div>
+
+          <!-- Verdict & Metrics Banner -->
+          <div class="verdict-banner flex-between mb-3" style="padding: 10px 14px; border-radius: 6px; background: var(--bg-card-hover); border: 1px solid var(--border-light);">
+            <div>
+              <span class="text-muted" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; display: block;">LabelCourt Verdict</span>
+              <span class="badge" id="va-verdict-badge" style="font-size: 14px; font-weight: 700; padding: 4px 10px;">IDLE</span>
+              <span id="va-verdict-reason" style="margin-left: 8px; font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary);">--</span>
+            </div>
+            <div style="text-align: right;">
+              <span class="text-muted" style="font-size: 11px; display: block;">Total Wall-Clock</span>
+              <span id="va-total-latency" style="font-family: var(--font-mono); font-weight: 700; color: var(--accent-cyan);">-- ms</span>
+            </div>
+          </div>
+
+          <p id="va-verdict-explanation" class="text-sm mb-3" style="color: var(--text-secondary); line-height: 1.5; padding: 0 4px;">
+            Awaiting audit execution.
+          </p>
+
+          <!-- Core Numerical Metrics Grid -->
+          <div class="metrics-row mb-3" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+            <div class="metric-block" style="text-align: center; padding: 8px 4px; background: rgba(255,255,255,0.02); border-radius: 4px;">
+              <span class="metric-label" style="font-size: 10px;">Mask IoU</span>
+              <span class="metric-val" id="va-iou-val" style="font-size: 16px; font-weight: 700;">--</span>
+            </div>
+            <div class="metric-block" style="text-align: center; padding: 8px 4px; background: rgba(255,255,255,0.02); border-radius: 4px;">
+              <span class="metric-label" style="font-size: 10px;">Boundary Agr.</span>
+              <span class="metric-val" id="va-boundary-val" style="font-size: 16px; font-weight: 700;">--</span>
+            </div>
+            <div class="metric-block" style="text-align: center; padding: 8px 4px; background: rgba(255,255,255,0.02); border-radius: 4px;">
+              <span class="metric-label" style="font-size: 10px;">Class Match</span>
+              <span class="metric-val" id="va-class-val" style="font-size: 16px; font-weight: 700;">--</span>
+            </div>
+            <div class="metric-block" style="text-align: center; padding: 8px 4px; background: rgba(255,255,255,0.02); border-radius: 4px;">
+              <span class="metric-label" style="font-size: 10px;">AI Instances</span>
+              <span class="metric-val" id="va-instances-val" style="font-size: 16px; font-weight: 700;">--</span>
+            </div>
+          </div>
+
+          <!-- Latency Breakdown Bar -->
+          <div class="mb-3" style="background: rgba(255,255,255,0.02); padding: 10px; border-radius: 6px; border: 1px solid var(--border-color);">
+            <div class="flex-between mb-1" style="font-size: 11px;">
+              <span style="font-weight: 600; color: var(--text-secondary);">Direct Wall-Clock Latency Breakdown:</span>
+              <span id="va-breakdown-summary" style="font-family: var(--font-mono); color: var(--text-muted);">--</span>
+            </div>
+            <div id="va-latency-bars" style="display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: #1F2937; margin: 6px 0;">
+              <div id="bar-decoding" style="width: 0%; background: #60A5FA;" title="Decoding"></div>
+              <div id="bar-preproc" style="width: 0%; background: #34D399;" title="Preprocessing"></div>
+              <div id="bar-inference" style="width: 0%; background: #F59E0B;" title="Model Inference"></div>
+              <div id="bar-postproc" style="width: 0%; background: #A78BFA;" title="Postprocessing"></div>
+              <div id="bar-overlays" style="width: 0%; background: #EC4899;" title="Overlays"></div>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; font-size: 10px; color: var(--text-muted); margin-top: 4px;">
+              <span><span style="color:#60A5FA;">●</span> Decode: <strong id="time-decode">--</strong></span>
+              <span><span style="color:#34D399;">●</span> Preproc: <strong id="time-preproc">--</strong></span>
+              <span><span style="color:#F59E0B;">●</span> Inference: <strong id="time-inference">--</strong></span>
+              <span><span style="color:#A78BFA;">●</span> Postproc: <strong id="time-postproc">--</strong></span>
+              <span><span style="color:#EC4899;">●</span> Overlays: <strong id="time-overlays">--</strong></span>
+            </div>
+          </div>
+
+          <!-- Cryptographic Evidence Receipt -->
+          <details id="va-receipt-card" style="background: rgba(255,255,255,0.02); border-radius: 6px; border: 1px solid var(--border-color); padding: 8px 12px;">
+            <summary class="flex-between" style="cursor: pointer; font-weight: 600; font-size: 12px; color: var(--text-primary);">
+              <span>SHA-256 Evidence Receipt (<span id="va-receipt-id">No Receipt</span>)</span>
+              <span class="badge badge-success" id="va-receipt-status-badge" style="display: none;">VERIFIED</span>
+            </summary>
+            <div class="mt-2">
+              <div class="flex-between mb-2">
+                <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); word-break: break-all;" id="va-receipt-checksum">Checksum: --</span>
+                <div class="flex-gap-xs">
+                  <button class="btn btn-xs btn-outline" id="btn-copy-receipt">Copy JSON</button>
+                  <button class="btn btn-xs btn-outline" id="btn-download-receipt">Download</button>
+                </div>
+              </div>
+              <pre id="va-receipt-json" style="max-height: 180px; overflow-y: auto; background: #0A0D14; padding: 8px; border-radius: 4px; font-size: 11px; font-family: var(--font-mono); color: #A5B4FC;"></pre>
+            </div>
+          </details>
+
         </div>
       </div>
     </section>

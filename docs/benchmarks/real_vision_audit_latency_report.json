@@ -1,0 +1,178 @@
+{
+  "benchmark_title": "Direct End-to-End Real Vision Audit Latency Benchmark",
+  "timestamp_utc": "2026-10-28T20:41:16Z",
+  "workload": {
+    "endpoint": "POST /api/vision/audit",
+    "protocol": "HTTP via FastAPI TestClient (in-process ASGI roundtrip)",
+    "image_filename": "000000397133.jpg",
+    "image_dimensions": "640x427",
+    "manifest_image_id": 397133,
+    "category_name": "bottle",
+    "detected_instances_count": 26,
+    "model_identifier": "facebook/mask2former-swin-tiny-coco-instance",
+    "device": "mps",
+    "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80"
+  },
+  "execution_conditions": {
+    "number_of_measured_runs": 20,
+    "warmup_runs": 2,
+    "concurrency": 1,
+    "peak_memory_rss_mb": 655.64,
+    "hardware": "arm",
+    "os": "Darwin 27.0.0",
+    "python_version": "3.12.14"
+  },
+  "cold_start": {
+    "client_total_wall_clock_ms": 9009.99,
+    "server_breakdown_ms": {
+      "image_decoding_ms": 7.84,
+      "preprocessing_ms": 3.49,
+      "model_inference_ms": 8529.69,
+      "mask_postprocessing_ms": 345.31,
+      "labelcourt_evaluation_ms": 0.01,
+      "overlay_generation_ms": 118.0,
+      "receipt_generation_ms": 0.22,
+      "total_wall_clock_ms": 9004.56
+    }
+  },
+  "measured_warm_full_request_latency": {
+    "client_roundtrip": {
+      "p50_median_ms": 982.79,
+      "p90_ms": 1007.93,
+      "p95_ms": 1021.25,
+      "p99_ms": 1025.45,
+      "mean_ms": 986.92,
+      "std_dev_ms": 14.21,
+      "min_ms": 969.86,
+      "max_ms": 1026.5
+    },
+    "server_total_wall_clock": {
+      "p50_median_ms": 979.83,
+      "p90_ms": 1005.03,
+      "p95_ms": 1018.38,
+      "p99_ms": 1022.37,
+      "mean_ms": 983.92,
+      "std_dev_ms": 14.22,
+      "min_ms": 966.89,
+      "max_ms": 1023.37
+    }
+  },
+  "disaggregated_server_components_summary": {
+    "image_decoding_ms": {
+      "p50_median_ms": 1.9,
+      "p90_ms": 2.0,
+      "p95_ms": 2.01,
+      "p99_ms": 2.03,
+      "mean_ms": 1.91,
+      "std_dev_ms": 0.07,
+      "min_ms": 1.78,
+      "max_ms": 2.03
+    },
+    "preprocessing_ms": {
+      "p50_median_ms": 2.76,
+      "p90_ms": 2.84,
+      "p95_ms": 2.96,
+      "p99_ms": 2.96,
+      "mean_ms": 2.79,
+      "std_dev_ms": 0.06,
+      "min_ms": 2.74,
+      "max_ms": 2.96
+    },
+    "model_inference_ms": {
+      "p50_median_ms": 518.16,
+      "p90_ms": 535.6,
+      "p95_ms": 540.95,
+      "p99_ms": 553.55,
+      "mean_ms": 520.05,
+      "std_dev_ms": 11.46,
+      "min_ms": 504.87,
+      "max_ms": 556.7
+    },
+    "mask_postprocessing_ms": {
+      "p50_median_ms": 341.03,
+      "p90_ms": 344.34,
+      "p95_ms": 347.98,
+      "p99_ms": 354.71,
+      "mean_ms": 342.13,
+      "std_dev_ms": 3.72,
+      "min_ms": 339.13,
+      "max_ms": 356.39
+    },
+    "labelcourt_evaluation_ms": {
+      "p50_median_ms": 0.0,
+      "p90_ms": 0.0,
+      "p95_ms": 0.0,
+      "p99_ms": 0.0,
+      "mean_ms": 0.0,
+      "std_dev_ms": 0.0,
+      "min_ms": 0.0,
+      "max_ms": 0.0
+    },
+    "overlay_generation_ms": {
+      "p50_median_ms": 116.9,
+      "p90_ms": 117.55,
+      "p95_ms": 118.53,
+      "p99_ms": 121.23,
+      "mean_ms": 116.94,
+      "std_dev_ms": 1.33,
+      "min_ms": 115.59,
+      "max_ms": 121.91
+    },
+    "receipt_generation_ms": {
+      "p50_median_ms": 0.11,
+      "p90_ms": 0.11,
+      "p95_ms": 0.12,
+      "p99_ms": 0.13,
+      "mean_ms": 0.11,
+      "std_dev_ms": 0.01,
+      "min_ms": 0.09,
+      "max_ms": 0.13
+    }
+  },
+  "raw_samples": {
+    "client_total_durations_ms": [
+      987.78,
+      979.02,
+      1006.49,
+      979.05,
+      976.58,
+      981.74,
+      982.12,
+      984.16,
+      1020.97,
+      969.86,
+      987.32,
+      982.15,
+      983.42,
+      973.47,
+      984.61,
+      989.95,
+      1026.5,
+      978.81,
+      984.46,
+      979.92
+    ],
+    "server_total_durations_ms": [
+      984.54,
+      975.97,
+      1003.58,
+      975.95,
+      973.74,
+      978.77,
+      979.16,
+      981.15,
+      1018.12,
+      966.89,
+      984.43,
+      979.21,
+      980.45,
+      970.36,
+      981.75,
+      986.81,
+      1023.37,
+      975.71,
+      981.54,
+      976.9
+    ]
+  }
+}

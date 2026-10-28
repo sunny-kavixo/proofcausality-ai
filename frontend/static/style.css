@@ -645,3 +645,43 @@ select {
     overflow-x: auto;
   }
 }
+
+/* Neural Vision Audit Helpers */
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.flex-gap-xs {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.flex-gap-sm {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn-xs {
+  padding: 3px 8px;
+  font-size: 11px;
+  border-radius: 4px;
+}
+
+.badge-outline {
+  background: transparent;
+  border: 1px solid var(--border-light);
+  color: var(--text-secondary);
+}
+
