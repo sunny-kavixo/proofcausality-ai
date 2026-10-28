@@ -416,7 +416,8 @@ def evaluate_recapture_followup(req: ReCaptureFollowupRequest) -> dict[str, Any]
 
     # Cryptographic Evidence Receipt for the ReCapture Transition
     report_id = f"RC-{uuid.uuid4().hex[:12].upper()}"
-    inputs_hash = calculate_sha256(f"{req.task_id}_{transition}_{req.effort_seconds:.1f}_{followup_sha256 or "NOMEDIA"}")
+    media_tag = followup_sha256 or 'NOMEDIA'
+    inputs_hash = calculate_sha256(f"{req.task_id}_{transition}_{req.effort_seconds:.1f}_{media_tag}")
     receipt = generate_receipt(
         report_id=report_id,
         engine_name="ReCapture Closed-Loop Recovery Engine",
