@@ -124,3 +124,65 @@ class EvidenceReceipt(BaseModel):
     recapture_directive: Optional[str] = None
     provenance: Optional[dict[str, Any]] = None
     receipt_sha256: str
+
+
+class VisionAuditAnnotation(BaseModel):
+    id: Optional[int | str] = None
+    category_name: str
+    category_id: Optional[int] = None
+    bbox: BoundingBox
+    segmentation: Optional[List[List[float]] | List[float]] = None
+
+
+class VisionAuditSettings(BaseModel):
+    confidence_threshold: float = Field(0.50, ge=0.0, le=1.0)
+    iou_accept_threshold: float = Field(0.70, ge=0.05, le=1.0)
+    iou_review_threshold: float = Field(0.40, ge=0.0, le=0.95)
+    boundary_agreement_threshold: float = Field(0.60, ge=0.0, le=1.0)
+    matching_strategy: str = Field("class_aware", pattern="^(class_aware|class_agnostic)$")
+    blur_threshold: float = Field(100.0, ge=0.0)
+    boundary_margin_px: int = Field(3, ge=1, le=50)
+
+
+class VisionAuditRequest(BaseModel):
+    image_base64: str
+    annotation: VisionAuditAnnotation
+    settings: Optional[VisionAuditSettings] = None
+    manifest_image_id: Optional[int] = None
+    image_source_type: Optional[str] = "USER_UPLOADED_IMAGE"
+    dataset_manifest_ref: Optional[str] = None
+
+
+class VisionAuditVerdict(str, Enum):
+    ACCEPT = "ACCEPT"
+    REVIEW = "REVIEW"
+    UNCERTAIN = "UNCERTAIN"
+
+
+class MatchedModelInstance(BaseModel):
+    instance_id: int
+    label: str
+    label_id: int
+    score: float
+    iou_with_reference: float
+    boundary_agreement: float
+    class_match: bool
+    bbox: BoundingBox
+    rle: list[int] | str
+
+
+class VisionAuditResponse(BaseModel):
+    verdict: VisionAuditVerdict
+    verdict_reason: str
+    explanation: str
+    metrics: dict[str, Any]
+    matched_prediction: Optional[MatchedModelInstance] = None
+    detected_instances_count: int
+    all_detected_instances: List[dict[str, Any]]
+    model_execution: dict[str, Any]
+    evidence_receipt: dict[str, Any]
+    receipt_verified: bool
+    provenance: dict[str, Any]
+    latency_breakdown_ms: dict[str, float]
+    visual_overlays: dict[str, str]
+

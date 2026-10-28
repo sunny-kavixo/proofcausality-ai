@@ -11,7 +11,7 @@
     {
       "check": "engine_badge",
       "status": "PASS",
-      "value": "ENGINE V0.2.4"
+      "value": "ENGINE V0.2.5"
     },
     {
       "check": "rust_badge",
@@ -24,18 +24,28 @@
       "value": "META: BLOCKED (OFFLINE)"
     },
     {
+      "check": "neural_vision_audit_real_model_inference",
+      "status": "PASS",
+      "sample": "000000397133.jpg \u2014 bottle (640x427)",
+      "verdict": "REVIEW",
+      "reason": "LOW_SPATIAL_OVERLAP",
+      "iou": "0.242",
+      "latency": "6666.1 ms",
+      "receipt": "VREC-C892C77A2C78"
+    },
+    {
       "check": "labelcourt_audit_run",
       "status": "PASS",
       "verdict": "ACCEPT",
       "iou": "94.1%",
-      "receipt": "Receipt: LC-87EBF42A2628"
+      "receipt": "Receipt: LC-F5D5DED83FCE"
     },
     {
       "check": "actionproof_verification_run",
       "status": "PASS",
       "verdict": "SUCCESS",
       "displacement": "322.02 px",
-      "receipt": "Receipt: AP-FB5C279BAA14"
+      "receipt": "Receipt: AP-5BA91C0F7906"
     },
     {
       "check": "evidence_calculus_dag_and_eval",
@@ -60,6 +70,7 @@
   ],
   "screenshots": {
     "overview": "docs/screenshots/browser_01_overview.png",
+    "vision_audit": "docs/screenshots/browser_07_vision_audit.png",
     "labelcourt": "docs/screenshots/browser_02_labelcourt.png",
     "actionproof": "docs/screenshots/browser_03_actionproof.png",
     "calculus": "docs/screenshots/browser_04_calculus.png",

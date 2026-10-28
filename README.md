@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Rust Accelerated](https://img.shields.io/badge/Rust-optional%20kernels-orange.svg)](native/proofcausality_core/)
-[![Tests](https://img.shields.io/badge/tests-119%20passed-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-139%20passed-brightgreen.svg)](tests/)
 [![Meta Hackathon 2026](https://img.shields.io/badge/Meta_Global_AI_Hackathon-Indie_Developer-purple.svg)](https://cerebralvalley.ai/e/meta-ai-developer-hackathon)
 
 ProofCausality AI investigates reliable visual evidence verification for annotation-quality workflows and physical-action assessment.
@@ -67,13 +67,78 @@ Release **`v0.2.5`** finalizes model compatibility analysis, isolated installati
      - **Workload C: Deterministic Evidence-Processing API Endpoint (`POST /api/labelcourt/audit`)**:
        - Complete HTTP request/response cycle: p50 = **95.19 ms** (p95 = 96.10 ms)
        - *Crucial Disclosure*: This API endpoint executes deterministic geometric, spatial, and boundary debt evaluation with visual overlay generation and SHA-256 receipt issuance. **It does NOT invoke the neural Mask2Former forward pass.**
-     - **Workload D: Monolithic Image-to-Neural-Inference-to-Verdict HTTP Route**:
-       - **Status: NOT IMPLEMENTED / NOT MEASURED**. The application operates neural perception offline in batch evaluation pipelines (`evaluation/benchmarks/genuine_model_benchmark.py`). Combining Workload A and Workload C into a hypothetical single-request number is avoided to preserve empirical measurement integrity.
+     - **Workload D: Monolithic Integrated Image-to-Neural-Inference-to-Verdict HTTP Route (`POST /api/vision/audit`)**:
+       - **Status: FULLY IMPLEMENTED & EMPIRICALLY MEASURED (Phase 7)**. Direct end-to-end client roundtrip latency: p50 = **982.79 ms** (p95 = **1021.25 ms**, mean = 986.92 ms across 20 measured warm trials). Direct server wall-clock duration: p50 = **979.83 ms** (p95 = **1018.38 ms**). Cold start first invocation: **9009.99 ms** client total.
 5. **Real Browser E2E Acceptance (Google Chrome on Apple Silicon)**:
    - Automated via Playwright driving system Google Chrome: verified landing page, engine badge (`Engine v0.2.5`), Rust native SIMD badge, LabelCourt interactive audit, ActionProof verification, interactive SVG Evidence Calculus DAG, Scientific Benchmarks table, and 375px mobile responsive layout with **0 console errors**.
 6. **Defect Repairs**:
    - Fixed missing argument in `document.querySelector` on hash navigation in `frontend/static/app.js`.
    - Added clean `/favicon.ico` handler in `backend/app.py` returning HTTP 204 No Content to eliminate browser 404 console errors.
+
+---
+
+## Phase 7: Complete Real-Vision Integration, Measured Latency & Scientific Validation
+
+In Phase 7, ProofCausality AI delivers the full **end-to-end, unprompted neural vision audit workflow** connecting authentic photograph pixels directly to local Mask2Former inference, LabelCourt spatial grounding, grounded tri-state verdicts, and tamper-evident SHA-256 evidence receipts.
+
+### 1. Workflow Architecture & Information Flow
+
+```mermaid
+flowchart TD
+    A["Authentic Photograph\n(640x427 JPEG/PNG)"] -->|"Strict Magic-Byte Validation"| B["Image Validation\n(SHA-256 Digest)"]
+    B --> C["Laplacian Blur\n& Canvas Border Check"]
+    B -->|"Original Pixels ONLY\n(Reference Strictly Excluded)"| D["Mask2Former Swin-Tiny\n(Apple MPS Inference)"]
+    D --> E["Instance Predictions\n(Masks, BBoxes, Scores)"]
+    C --> F["LabelCourt Matching Engine\n(Class-Aware One-to-One)"]
+    E --> F
+    REF["Reference Annotation\n(COCO Polygon/BBox)"] --> F
+    F --> G["Grounded Verdict\n(ACCEPT / REVIEW / UNCERTAIN)"]
+    G --> H["Multi-View Overlays\n(Disagreement / Ref / Model)"]
+    G --> I["Canonical SHA-256\nEvidence Receipt"]
+```
+
+### 2. Scientific Core Principles
+- **Why It Exists**: High-capacity vision backbones emit high confidence scores even on corrupted, clipped, or fabricated visual data. ProofCausality AI grounds decisions on verified, falsifiable visual evidence.
+- **Zero Label Leakage**: Ground-truth masks and annotations are **strictly excluded** from model inputs. Mask2Former performs unprompted COCO instance segmentation solely on photograph pixels.
+- **Specific Verdict Semantics**:
+  - `ACCEPT`: Model prediction is highly concordant with reference annotation (IoU ≥ 0.70, Boundary Agreement ≥ 0.60, matching category).
+  - `REVIEW`: Annotation defect or model discrepancy detected (class mismatch, partial overlap, spatial shift, or zero detections).
+  - `UNCERTAIN`: Perceptual degradation prevents conclusive verification (severe blur with Laplacian variance below threshold, or canvas border clipping).
+- **Not Proof of Physical Truth**: Verdicts represent annotation agreement against an independent perception model; they must never be presented as proof of real-world physical action.
+
+### 3. Direct End-to-End Latency Profile (`POST /api/vision/audit`)
+Empirically measured over 20 consecutive warm requests on authentic MS COCO 2017 validation photographs (`000000397133.jpg`, 640x427) using local Apple MPS acceleration:
+
+| Processing Stage | p50 Median (ms) | p90 (ms) | p95 (ms) | Mean (ms) | Description |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **1. Image Decoding** | **1.90** | 2.00 | 2.01 | 1.91 | Binary validation, SHA-256 hashing, PIL RGB decode |
+| **2. Preprocessing & Quality** | **2.76** | 2.84 | 2.96 | 2.79 | Grayscale transform, Laplacian blur variance, border check |
+| **3. Model Inference (MPS)** | **518.16** | 535.60 | 540.95 | 520.05 | Mask2Former Swin forward pass on Apple Silicon MPS |
+| **4. Mask Postprocessing** | **341.03** | 344.34 | 347.98 | 342.13 | Query thresholding, RLE encoding, instance extraction |
+| **5. LabelCourt Evaluation** | **0.01** | 0.01 | 0.01 | 0.01 | Class-aware one-to-one matching, IoU, boundary agreement |
+| **6. Overlay Generation** | **116.90** | 117.55 | 118.53 | 116.94 | Disagreement heatmap, reference & predicted PNG overlays |
+| **7. Receipt Generation** | **0.11** | 0.11 | 0.12 | 0.11 | Canonical JSON serialization, unkeyed SHA-256 hashing |
+| **Full Server Wall-Clock** | **979.83** | **1005.03** | **1018.38** | **983.92** | Direct server duration from request arrival to return |
+| **Full Client Roundtrip** | **982.79** | **1007.93** | **1021.25** | **986.92** | Complete HTTP roundtrip via ASGI TestClient |
+
+*Cold Start*: 9,009.99 ms client total (includes PyTorch MPS graph initialization, layer weight binding, and JIT caching). Peak RSS: 655.64 MB.
+
+### 4. Interactive Real Product UI
+The web interface features the **Neural Vision Audit** tab with:
+- **Authentic Photograph Selection**: 6 preloaded COCO 2017 validation pilot images (`GET /api/vision/samples`).
+- **Controlled Perturbation Presets**: Instant comparison of authentic ground truth vs +25px spatial misalignment and class label mismatch.
+- **Custom Image Upload**: Real drag-and-drop / file selector for PNG/JPEG photographs (<10MB).
+- **Interactive Multi-View Overlays**: One-click switching between Disagreement Heatmap (Green/Red/Cyan), Amber Reference Mask, Cyan Predicted Mask, and Original Photograph.
+- **Visual Latency Breakdown Bar**: Proportional color-coded timing across perception, matching, and overlay generation.
+- **Tamper-Evident SHA-256 Receipt Viewer**: Inspect, copy, and download canonical evidence receipts (`VREC-...`).
+
+![Neural Vision Audit UI](docs/screenshots/browser_07_vision_audit.png)
+
+### 5. Evidence Receipt Test Inventory Reconciliation
+- **Total tests in `tests/test_receipts.py`**: **11 tests** collected and verified by pytest.
+- **Baseline before hotfix**: 1 test (`test_receipt_generation_and_verification`).
+- **Newly added by hotfix**: 10 tests (11 new tests replacing the 1 old test, net +10 tests).
+- **Repository-wide total**: **139 tests passed** (119 original baseline + 10 receipt hotfix + 10 Phase 7 neural vision audit tests).
 
 ---
 

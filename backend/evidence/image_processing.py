@@ -162,6 +162,22 @@ def create_disagreement_visual_overlay(
     return np.clip(overlay, 0, 255).astype(np.uint8)
 
 
+def create_single_mask_overlay(
+    image_rgb: np.ndarray,
+    mask: np.ndarray,
+    color_rgb: tuple[int, int, int] = (0, 200, 255),
+    alpha: float = 0.45,
+) -> np.ndarray:
+    """Render a single highlighted mask overlay on the RGB image."""
+    overlay = image_rgb.astype(np.float32).copy()
+    m = mask.astype(bool)
+    if np.any(m):
+        color = np.array(color_rgb, dtype=np.float32)
+        overlay[m] = (1.0 - alpha) * overlay[m] + alpha * color
+    return np.clip(overlay, 0, 255).astype(np.uint8)
+
+
+
 def encode_image_to_base64_png(image_array: np.ndarray) -> str:
     """Encode RGB or RGBA numpy array to a data:image/png;base64 string."""
     pil_img = Image.fromarray(image_array)

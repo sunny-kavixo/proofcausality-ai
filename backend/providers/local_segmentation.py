@@ -111,6 +111,8 @@ class LocalMask2FormerProvider:
         self._torch: Any = None
         self.device = "unloaded"
         self.checkpoint_path: Path | None = None
+        self._checkpoint_sha256: str | None = None
+        self._checkpoint_size_bytes: int = 0
 
     def load(self) -> None:
         if self._model is not None:
@@ -139,19 +141,25 @@ class LocalMask2FormerProvider:
                 )
             if not self.checkpoint_path.is_file():
                 raise ModelUnavailableError("Cached safetensors checkpoint was not found")
+            self._checkpoint_size_bytes = self.checkpoint_path.stat().st_size
+            if self._checkpoint_sha256 is None:
+                self._checkpoint_sha256 = sha256_bytes(self.checkpoint_path.read_bytes())
         except ModelUnavailableError:
             raise
         except Exception as exc:
             raise ModelUnavailableError(f"Local segmentation model unavailable: {type(exc).__name__}: {exc}") from exc
 
-    def predict(self, image_path: str | Path, threshold: float = 0.5) -> tuple[list[InstancePrediction], InferenceExecution]:
+    def predict_from_rgb(
+        self,
+        rgb_arr: np.ndarray,
+        threshold: float = 0.5,
+        raw_bytes: bytes | None = None,
+    ) -> tuple[list[InstancePrediction], InferenceExecution]:
+        """Perform instance segmentation directly from an RGB numpy array."""
         self.load()
-        path = Path(image_path)
-        image_bytes = path.read_bytes()
-        with Image.open(path) as opened:
-            image = opened.convert("RGB")
-            width, height = image.size
-            inputs = self._processor(images=image, return_tensors="pt")
+        height, width, _ = rgb_arr.shape
+        image = Image.fromarray(rgb_arr)
+        inputs = self._processor(images=image, return_tensors="pt")
         inputs = {key: value.to(self.device) for key, value in inputs.items()}
         started = time.perf_counter()
         with self._torch.inference_mode():
@@ -159,6 +167,7 @@ class LocalMask2FormerProvider:
         if self.device == "mps":
             self._torch.mps.synchronize()
         latency_ms = (time.perf_counter() - started) * 1000.0
+
         processed = self._processor.post_process_instance_segmentation(
             raw, target_sizes=[(height, width)], threshold=threshold
         )
@@ -197,19 +206,19 @@ class LocalMask2FormerProvider:
                 "rle": encode_binary_mask_rle(mask),
             })
         output_bytes = json.dumps(serializable, sort_keys=True, separators=(",", ":")).encode()
-        checkpoint_bytes = self.checkpoint_path.read_bytes()
+        input_hash = sha256_bytes(raw_bytes) if raw_bytes else sha256_bytes(rgb_arr.tobytes())
         execution = InferenceExecution(
             provider="Hugging Face Transformers / local PyTorch",
             model_identifier=self.model_id,
             model_revision=MODEL_REVISION,
             inference_mode="UNPROMPTED_INSTANCE_SEGMENTATION",
             device=self.device,
-            input_sha256=sha256_bytes(image_bytes),
+            input_sha256=input_hash,
             input_width=width,
             input_height=height,
             prompt=None,
-            checkpoint_sha256=sha256_bytes(checkpoint_bytes),
-            checkpoint_size_bytes=len(checkpoint_bytes),
+            checkpoint_sha256=self._checkpoint_sha256 or "UNKNOWN",
+            checkpoint_size_bytes=self._checkpoint_size_bytes,
             output_sha256=sha256_bytes(output_bytes),
             latency_ms=round(latency_ms, 3),
             execution_status="SUCCEEDED",
@@ -220,4 +229,39 @@ class LocalMask2FormerProvider:
             },
         )
         return predictions, execution
+
+    def predict(self, image_path: str | Path, threshold: float = 0.5) -> tuple[list[InstancePrediction], InferenceExecution]:
+        path = Path(image_path)
+        image_bytes = path.read_bytes()
+        with Image.open(path) as opened:
+            image = opened.convert("RGB")
+            rgb_arr = np.array(image, dtype=np.uint8)
+        return self.predict_from_rgb(rgb_arr, threshold=threshold, raw_bytes=image_bytes)
+
+
+import threading
+
+_PROVIDER_LOCK = threading.Lock()
+_CACHED_PROVIDER: LocalMask2FormerProvider | None = None
+
+
+def get_local_mask2former_provider() -> LocalMask2FormerProvider:
+    """Thread-safe singleton accessor for LocalMask2FormerProvider."""
+    global _CACHED_PROVIDER
+    with _PROVIDER_LOCK:
+        if _CACHED_PROVIDER is None:
+            _CACHED_PROVIDER = LocalMask2FormerProvider()
+        return _CACHED_PROVIDER
+
+
+def unload_local_mask2former_provider() -> None:
+    """Unload cached model and release memory."""
+    global _CACHED_PROVIDER
+    with _PROVIDER_LOCK:
+        if _CACHED_PROVIDER is not None:
+            if _CACHED_PROVIDER._torch is not None and _CACHED_PROVIDER.device == "mps":
+                if hasattr(_CACHED_PROVIDER._torch, "mps") and hasattr(_CACHED_PROVIDER._torch.mps, "empty_cache"):
+                    _CACHED_PROVIDER._torch.mps.empty_cache()
+            _CACHED_PROVIDER = None
+
 
