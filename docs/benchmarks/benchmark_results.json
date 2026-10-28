@@ -1,0 +1,297 @@
+{
+  "evaluation_name": "ProofCausality AI Physical Action & Uncertainty Benchmark",
+  "sample_size": 25,
+  "ground_truth_composition": {
+    "SUCCESS": 10,
+    "FAILED": 6,
+    "UNCERTAIN": 9
+  },
+  "false_success_rate": {
+    "description": "False Success Count / Total Non-Success Cases",
+    "denominator": 15,
+    "proofcausality_fsr": 0.0,
+    "proofcausality_percentage": "0.0%",
+    "naive_baseline_fsr": 0.8,
+    "naive_baseline_percentage": "80.0%",
+    "relative_reduction": "100.0%"
+  },
+  "recapture_resolution_rate": {
+    "description": "Initially Uncertain Cases Decided Correctly Post-Recapture / Total Uncertain Cases",
+    "denominator": 9,
+    "proofcausality_rrr": 1.0,
+    "proofcausality_percentage": "100.0%",
+    "generic_baseline_rrr": 0.0,
+    "generic_baseline_percentage": "0.0%",
+    "relative_gain": "100.0% improvement"
+  },
+  "detailed_records": [
+    {
+      "case_id": "CASE-S01",
+      "name": "Clean Movement Success #1",
+      "ground_truth": "SUCCESS",
+      "proofcausality_verdict": "SUCCESS",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "CASE-S02",
+      "name": "Clean Movement Success #2",
+      "ground_truth": "SUCCESS",
+      "proofcausality_verdict": "SUCCESS",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "CASE-S03",
+      "name": "Clean Movement Success #3",
+      "ground_truth": "SUCCESS",
+      "proofcausality_verdict": "SUCCESS",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "CASE-S04",
+      "name": "Clean Movement Success #4",
+      "ground_truth": "SUCCESS",
+      "proofcausality_verdict": "SUCCESS",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "CASE-S05",
+      "name": "Clean Movement Success #5",
+      "ground_truth": "SUCCESS",
+      "proofcausality_verdict": "SUCCESS",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "CASE-S06",
+      "name": "Clean Movement Success #6",
+      "ground_truth": "SUCCESS",
+      "proofcausality_verdict": "SUCCESS",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "CASE-S07",
+      "name": "Clean Movement Success #7",
+      "ground_truth": "SUCCESS",
+      "proofcausality_verdict": "SUCCESS",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "CASE-S08",
+      "name": "Clean Movement Success #8",
+      "ground_truth": "SUCCESS",
+      "proofcausality_verdict": "SUCCESS",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "CASE-S09",
+      "name": "Clean Movement Success #9",
+      "ground_truth": "SUCCESS",
+      "proofcausality_verdict": "SUCCESS",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "CASE-S10",
+      "name": "Clean Movement Success #10",
+      "ground_truth": "SUCCESS",
+      "proofcausality_verdict": "SUCCESS",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "CASE-F01",
+      "name": "Incomplete Action Failure #1",
+      "ground_truth": "FAILED",
+      "proofcausality_verdict": "FAILED",
+      "naive_baseline_verdict": "FAILED",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "CASE-F02",
+      "name": "Incomplete Action Failure #2",
+      "ground_truth": "FAILED",
+      "proofcausality_verdict": "FAILED",
+      "naive_baseline_verdict": "FAILED",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "CASE-F03",
+      "name": "Incomplete Action Failure #3",
+      "ground_truth": "FAILED",
+      "proofcausality_verdict": "FAILED",
+      "naive_baseline_verdict": "FAILED",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "CASE-F04",
+      "name": "Incomplete Action Failure #4",
+      "ground_truth": "FAILED",
+      "proofcausality_verdict": "FAILED",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "CASE-F05",
+      "name": "Incomplete Action Failure #5",
+      "ground_truth": "FAILED",
+      "proofcausality_verdict": "FAILED",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "CASE-F06",
+      "name": "Incomplete Action Failure #6",
+      "ground_truth": "FAILED",
+      "proofcausality_verdict": "FAILED",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "CASE-U_BLUR_01",
+      "name": "Motion Blur Uncertainty #1",
+      "ground_truth": "UNCERTAIN",
+      "proofcausality_verdict": "UNCERTAIN",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [
+        "BLUR"
+      ],
+      "recapture_directive": "Hold the camera steady and allow the object to become sharp before ending the capture.",
+      "recapture_resolved": true
+    },
+    {
+      "case_id": "CASE-U_BLUR_02",
+      "name": "Motion Blur Uncertainty #2",
+      "ground_truth": "UNCERTAIN",
+      "proofcausality_verdict": "UNCERTAIN",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [
+        "BLUR"
+      ],
+      "recapture_directive": "Hold the camera steady and allow the object to become sharp before ending the capture.",
+      "recapture_resolved": true
+    },
+    {
+      "case_id": "CASE-U_BLUR_03",
+      "name": "Motion Blur Uncertainty #3",
+      "ground_truth": "UNCERTAIN",
+      "proofcausality_verdict": "UNCERTAIN",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [
+        "BLUR"
+      ],
+      "recapture_directive": "Hold the camera steady and allow the object to become sharp before ending the capture.",
+      "recapture_resolved": true
+    },
+    {
+      "case_id": "CASE-U_FRAME_01",
+      "name": "Boundary Escape Uncertainty #1",
+      "ground_truth": "UNCERTAIN",
+      "proofcausality_verdict": "UNCERTAIN",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [
+        "OUT_OF_FRAME"
+      ],
+      "recapture_directive": "Move the camera back so the full object remains inside the frame.",
+      "recapture_resolved": true
+    },
+    {
+      "case_id": "CASE-U_FRAME_02",
+      "name": "Boundary Escape Uncertainty #2",
+      "ground_truth": "UNCERTAIN",
+      "proofcausality_verdict": "UNCERTAIN",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [
+        "OUT_OF_FRAME"
+      ],
+      "recapture_directive": "Move the camera back so the full object remains inside the frame.",
+      "recapture_resolved": true
+    },
+    {
+      "case_id": "CASE-U_FRAME_03",
+      "name": "Boundary Escape Uncertainty #3",
+      "ground_truth": "UNCERTAIN",
+      "proofcausality_verdict": "UNCERTAIN",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [
+        "OUT_OF_FRAME"
+      ],
+      "recapture_directive": "Move the camera back so the full object remains inside the frame.",
+      "recapture_resolved": true
+    },
+    {
+      "case_id": "CASE-U_OCCLUSION_01",
+      "name": "Severe Occlusion Uncertainty #1",
+      "ground_truth": "UNCERTAIN",
+      "proofcausality_verdict": "UNCERTAIN",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [
+        "OCCLUSION"
+      ],
+      "recapture_directive": "Keep the object visible after releasing it and record the final state.",
+      "recapture_resolved": true
+    },
+    {
+      "case_id": "CASE-U_OCCLUSION_02",
+      "name": "Severe Occlusion Uncertainty #2",
+      "ground_truth": "UNCERTAIN",
+      "proofcausality_verdict": "UNCERTAIN",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [
+        "OCCLUSION"
+      ],
+      "recapture_directive": "Keep the object visible after releasing it and record the final state.",
+      "recapture_resolved": true
+    },
+    {
+      "case_id": "CASE-U_OCCLUSION_03",
+      "name": "Severe Occlusion Uncertainty #3",
+      "ground_truth": "UNCERTAIN",
+      "proofcausality_verdict": "UNCERTAIN",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [
+        "OCCLUSION"
+      ],
+      "recapture_directive": "Keep the object visible after releasing it and record the final state.",
+      "recapture_resolved": true
+    }
+  ]
+}

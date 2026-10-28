@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProofCausality AI — Evidence-Aware Visual Verification</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header Bar -->
+  <header class="top-nav">
+    <div class="nav-brand">
+      <div class="brand-title">ProofCausality AI</div>
+      <div class="brand-tagline">Prove what happened. Detect what is missing. Capture the evidence that changes the decision.</div>
+    </div>
+    <div class="nav-meta">
+      <span class="badge badge-neutral" id="engine-badge">Engine v0.1.0</span>
+      <span class="badge badge-accent" id="provider-badge">Meta Adapter: Fallback</span>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <nav class="sub-nav">
+    <button class="nav-tab active" data-tab="tab-overview">Overview</button>
+    <button class="nav-tab" data-tab="tab-labelcourt">LabelCourt Auditor</button>
+    <button class="nav-tab" data-tab="tab-actionproof">ActionProof Studio</button>
+    <button class="nav-tab" data-tab="tab-recapture">ReCapture Planner</button>
+    <button class="nav-tab" data-tab="tab-benchmarks">Scientific Benchmarks</button>
+    <button class="nav-tab" data-tab="tab-receipts">Evidence Receipts</button>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="main-content">
+    
+    <!-- Tab 1: Overview -->
+    <section id="tab-overview" class="tab-pane active">
+      <div class="hero-card">
+        <h2>Evidence-Aware Visual Action Verification & Annotation Auditing</h2>
+        <p class="hero-description">
+          Modern vision models produce confident scores even when the visual evidence is occluded, blurred, clipped, or truncated.
+          <strong>ProofCausality AI</strong> introduces an evidence-first tri-state decision model (<code>SUCCESS</code> / <code>FAILED</code> / <code>UNCERTAIN</code>) paired with deterministic spatial metrics and targeted recovery directives.
+        </p>
+      </div>
+
+      <div class="grid-2col">
+        <div class="card">
+          <div class="card-header">
+            <h3>The Four Internal Engines</h3>
+          </div>
+          <div class="engine-list">
+            <div class="engine-item">
+              <span class="engine-title">LabelCourt</span>
+              <span class="engine-desc">Visual Annotation Evidence Auditor comparing human masks against AI evidence with IoU and boundary metrics. Emits <code>ACCEPT</code>, <code>REVIEW</code>, or <code>UNCERTAIN</code>.</span>
+            </div>
+            <div class="engine-item">
+              <span class="engine-title">ActionProof</span>
+              <span class="engine-desc">Physical Action Verification Engine analyzing before-and-after spatial state transitions. Emits <code>SUCCESS</code>, <code>FAILED</code>, or <code>UNCERTAIN</code>.</span>
+            </div>
+            <div class="engine-item">
+              <span class="engine-title">EvidenceCore</span>
+              <span class="engine-desc">Shared measurement and uncertainty engine detecting Laplacian motion blur, boundary contact, and visible area occlusion.</span>
+            </div>
+            <div class="engine-item">
+              <span class="engine-title">ReCapture</span>
+              <span class="engine-desc">Deterministic missing-evidence recovery planner providing actionable physical re-recording directives to resolve ambiguity.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>System Status & Diagnostics</h3>
+          </div>
+          <div class="status-grid">
+            <div class="status-row">
+              <span class="status-label">API Status</span>
+              <span class="status-val text-success" id="diag-api-status">Connecting...</span>
+            </div>
+            <div class="status-row">
+              <span class="status-label">Software Version</span>
+              <span class="status-val font-mono">v0.1.0 (Hackathon Release)</span>
+            </div>
+            <div class="status-row">
+              <span class="status-label">Meta Model Adapter</span>
+              <span class="status-val font-mono" id="diag-provider-mode">Loading...</span>
+            </div>
+            <div class="status-row">
+              <span class="status-label">Cryptographic Integrity</span>
+              <span class="status-val text-success font-mono">SHA-256 Canonical JSON Active</span>
+            </div>
+            <div class="status-row">
+              <span class="status-label">Evaluation Benchmark</span>
+              <span class="status-val font-mono text-cyan" id="diag-bench-summary">25 Cases • 0.0% FSR</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 2: LabelCourt -->
+    <section id="tab-labelcourt" class="tab-pane">
+      <div class="section-header">
+        <div>
+          <h2>LabelCourt — Visual Annotation Evidence Auditor</h2>
+          <p class="section-desc">Audit human-annotated bounding boxes and polygons against candidate masks with deterministic spatial metrics.</p>
+        </div>
+        <div class="preset-controls">
+          <label>Load Preset Case:</label>
+          <select id="lc-preset-select">
+            <option value="clean">1. Clean Coffee Cup (High Agreement - ACCEPT)</option>
+            <option value="shifted">2. Shifted Tool Bounding Box (Spatial Discrepancy - REVIEW)</option>
+            <option value="blurry">3. Severe Camera Motion Blur (Degraded Visibility - UNCERTAIN)</option>
+            <option value="mislabeled">4. Class Label Mismatch (Semantic Contradiction - REVIEW)</option>
+          </select>
+          <button class="btn btn-primary" id="btn-run-labelcourt">Audit Annotation</button>
+        </div>
+      </div>
+
+      <div class="grid-2col">
+        <!-- Visual Comparison Canvas -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Visual Evidence Canvas</h3>
+            <span class="badge" id="lc-verdict-badge">PENDING</span>
+          </div>
+          <div class="canvas-container">
+            <div class="canvas-box" id="lc-canvas-box">
+              <div class="canvas-overlay-view" id="lc-overlay-view">
+                <div class="canvas-placeholder">Select a preset and click "Audit Annotation" to render overlay evidence.</div>
+              </div>
+            </div>
+            <div class="legend-bar">
+              <span class="legend-item"><span class="legend-dot dot-green"></span> Agreement (Intersection)</span>
+              <span class="legend-item"><span class="legend-dot dot-red"></span> Human Only (Missed by Candidate)</span>
+              <span class="legend-item"><span class="legend-dot dot-blue"></span> Candidate Only (Human Missed)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Audit Metrics & Decisions -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Spatial Measurements & Verdict</h3>
+          </div>
+          <div class="metrics-grid">
+            <div class="metric-box">
+              <div class="metric-val" id="lc-iou-val">--</div>
+              <div class="metric-lbl">Mask IoU (Target ≥ 0.85)</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-val" id="lc-boundary-val">--</div>
+              <div class="metric-lbl">Boundary Agreement</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-val" id="lc-disp-val">--</div>
+              <div class="metric-lbl">Centroid Shift</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-val" id="lc-class-val">--</div>
+              <div class="metric-lbl">Class Match</div>
+            </div>
+          </div>
+
+          <div class="uncertainty-box" id="lc-uncertainty-box">
+            <h4>Detected Visual Uncertainty Signals</h4>
+            <div id="lc-signals-list">
+              <div class="empty-state">No uncertainty signals detected.</div>
+            </div>
+          </div>
+
+          <div class="receipt-action-bar">
+            <span class="font-mono text-sm" id="lc-receipt-id">Receipt: None</span>
+            <button class="btn btn-secondary btn-sm" id="btn-export-coco">Export COCO Fix</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 3: ActionProof -->
+    <section id="tab-actionproof" class="tab-pane">
+      <div class="section-header">
+        <div>
+          <h2>ActionProof — Physical Action Verification Studio</h2>
+          <p class="section-desc">Verify real-world state transitions from before/after evidence frames with deterministic uncertainty gates.</p>
+        </div>
+        <div class="preset-controls">
+          <label>Load Action Scenario:</label>
+          <select id="ap-scenario-select">
+            <option value="clean_move">1. Object Moved Region A → B (Clean Execution - SUCCESS)</option>
+            <option value="incomplete_move">2. Object Failed to Reach B (Incomplete Action - FAILED)</option>
+            <option value="motion_blur">3. Motion Blur During Placement (Blurred Evidence - UNCERTAIN)</option>
+            <option value="boundary_clipped">4. Object Exits Frame Boundary (Clipping Risk - UNCERTAIN)</option>
+            <option value="hand_occlusion">5. Hand Obstructs Destination (Severe Occlusion - UNCERTAIN)</option>
+          </select>
+          <button class="btn btn-primary" id="btn-run-actionproof">Verify Action</button>
+        </div>
+      </div>
+
+      <div class="grid-2col">
+        <!-- Before/After Frame Canvas -->
+        <div class="card">
+          <div class="card-header">
+            <h3>State Comparison: Initial vs Final Observation</h3>
+            <span class="badge" id="ap-verdict-badge">PENDING</span>
+          </div>
+          <div class="state-frames-container">
+            <div class="frame-box">
+              <div class="frame-title">Frame 0 (Initial State)</div>
+              <div class="frame-preview" id="ap-frame-before">
+                <div class="bbox-indicator bbox-a">Region A</div>
+              </div>
+            </div>
+            <div class="frame-box">
+              <div class="frame-title">Frame 1 (Post-Action Observation)</div>
+              <div class="frame-preview" id="ap-frame-after">
+                <div class="bbox-indicator bbox-b">Region B</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Verification Results -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Observable Evidence & Causal Decision</h3>
+          </div>
+          <div class="metrics-grid">
+            <div class="metric-box">
+              <div class="metric-val" id="ap-disp-val">--</div>
+              <div class="metric-lbl">Displacement (px)</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-val" id="ap-conf-val">--</div>
+              <div class="metric-lbl">Calibrated Confidence</div>
+            </div>
+          </div>
+
+          <div class="recapture-callout" id="ap-recapture-box" style="display:none;">
+            <div class="recapture-title">Targeted ReCapture Directive</div>
+            <div class="recapture-directive" id="ap-recapture-text"></div>
+            <button class="btn btn-accent btn-sm" id="btn-trigger-guided-recapture">Simulate Guided ReCapture</button>
+          </div>
+
+          <div class="uncertainty-box" id="ap-uncertainty-box">
+            <h4>Signals Influencing Verdict</h4>
+            <div id="ap-signals-list">
+              <div class="empty-state">No uncertainty signals detected.</div>
+            </div>
+          </div>
+
+          <div class="receipt-action-bar">
+            <span class="font-mono text-sm" id="ap-receipt-id">Receipt: None</span>
+            <button class="btn btn-secondary btn-sm" id="btn-view-ap-receipt">Inspect Receipt</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 4: ReCapture Planner -->
+    <section id="tab-recapture" class="tab-pane">
+      <div class="section-header">
+        <div>
+          <h2>ReCapture — Deterministic Missing-Evidence Recovery Planner</h2>
+          <p class="section-desc">Transform uncertain visual observations into actionable physical recovery directives.</p>
+        </div>
+      </div>
+
+      <div class="grid-2col">
+        <div class="card">
+          <div class="card-header">
+            <h3>Recovery Rule Matrix</h3>
+          </div>
+          <div class="recovery-matrix">
+            <div class="matrix-row">
+              <span class="matrix-tag tag-blur">BLUR</span>
+              <div>
+                <strong>Hold camera steady until object is sharp.</strong>
+                <p>Stabilize device and ensure adequate lighting to suppress exposure motion artifacts.</p>
+              </div>
+            </div>
+            <div class="matrix-row">
+              <span class="matrix-tag tag-frame">OUT_OF_FRAME</span>
+              <div>
+                <strong>Move camera back so full object remains in frame.</strong>
+                <p>Increase distance by 15–30 cm and maintain 70% inner boundary margins.</p>
+              </div>
+            </div>
+            <div class="matrix-row">
+              <span class="matrix-tag tag-occ">OCCLUSION</span>
+              <div>
+                <strong>Keep object visible after releasing it.</strong>
+                <p>Withdraw hands completely and capture an unobstructed overhead angle.</p>
+              </div>
+            </div>
+            <div class="matrix-row">
+              <span class="matrix-tag tag-state">MISSING_STATE</span>
+              <div>
+                <strong>Continue recording after action until stationary.</strong>
+                <p>Hold frame for at least 1.5 seconds post-equilibrium.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>Interactive ReCapture Simulator</h3>
+          </div>
+          <div class="sim-content">
+            <p>Select an initial ambiguous defect to observe how ProofCausality AI extracts the failure signal and guides the user to a decisive resolution:</p>
+            <div class="sim-buttons">
+              <button class="btn btn-secondary" onclick="simulateRecovery('BLUR')">Simulate Blur Recovery</button>
+              <button class="btn btn-secondary" onclick="simulateRecovery('OUT_OF_FRAME')">Simulate Out-of-Frame Recovery</button>
+              <button class="btn btn-secondary" onclick="simulateRecovery('OCCLUSION')">Simulate Occlusion Recovery</button>
+            </div>
+            <div class="sim-results-box" id="sim-results-box" style="display:none;">
+              <div class="sim-step">
+                <span class="step-badge">Initial State</span>
+                <span class="badge badge-warning" id="sim-initial-verdict">UNCERTAIN</span>
+                <div id="sim-directive-text" class="text-sm font-mono mt-2"></div>
+              </div>
+              <div class="sim-step mt-3">
+                <span class="step-badge">Post ReCapture State</span>
+                <span class="badge badge-success" id="sim-final-verdict">SUCCESS</span>
+                <div id="sim-resolved-note" class="text-sm text-success mt-2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 5: Scientific Benchmarks -->
+    <section id="tab-benchmarks" class="tab-pane">
+      <div class="section-header">
+        <div>
+          <h2>Scientific Evaluation & Empirical Benchmarks</h2>
+          <p class="section-desc">Independent reproducible evaluation measuring False-Success Rate and Re-Capture Resolution Rate across 25 standardized cases.</p>
+        </div>
+        <button class="btn btn-primary" id="btn-refresh-benchmarks">Rerun Benchmark</button>
+      </div>
+
+      <div class="stats-overview-grid">
+        <div class="stat-card">
+          <div class="stat-val text-success" id="bench-fsr-proofcausality">0.0%</div>
+          <div class="stat-title">ProofCausality False-Success Rate</div>
+          <div class="stat-sub">0 / 15 non-success cases (Zero False Successes)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val text-danger" id="bench-fsr-naive">80.0%</div>
+          <div class="stat-title">Naive Baseline False-Success Rate</div>
+          <div class="stat-sub">12 / 15 non-success cases incorrectly called SUCCESS</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val text-cyan" id="bench-rrr-proofcausality">100.0%</div>
+          <div class="stat-title">Targeted ReCapture Resolution Rate</div>
+          <div class="stat-sub">9 / 9 uncertain cases resolved post-recapture</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val text-neutral" id="bench-rrr-generic">0.0%</div>
+          <div class="stat-title">Generic "Re-record" Baseline Rate</div>
+          <div class="stat-sub">Repeats defect without specific physical guidance</div>
+        </div>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-header">
+          <h3>Standardized Test Cases (25 Real Observations)</h3>
+        </div>
+        <div class="table-container">
+          <table class="data-table" id="bench-table">
+            <thead>
+              <tr>
+                <th>Case ID</th>
+                <th>Scenario Name</th>
+                <th>Ground Truth</th>
+                <th>ProofCausality</th>
+                <th>Naive Baseline</th>
+                <th>Detected Signals</th>
+                <th>ReCapture Resolution</th>
+              </tr>
+            </thead>
+            <tbody id="bench-tbody">
+              <tr><td colspan="7" class="text-center">Loading benchmark records...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 6: Evidence Receipts -->
+    <section id="tab-receipts" class="tab-pane">
+      <div class="section-header">
+        <div>
+          <h2>Evidence Receipts — Verifiable Audit Ledger</h2>
+          <p class="section-desc">Cryptographic SHA-256 evidence receipts binding input hashes, measurements, signals, and verdicts into a tamper-evident record.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>Cryptographic Receipt Inspector</h3>
+          <span class="badge badge-success" id="receipt-verify-badge">VERIFIED CRYPTOGRAPHICALLY</span>
+        </div>
+        <div class="receipt-viewer">
+          <pre class="json-code" id="receipt-json-view">Select an audit or action verification to inspect its verifiable JSON Evidence Receipt.</pre>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

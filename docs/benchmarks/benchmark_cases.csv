@@ -1,0 +1,26 @@
+case_id,name,ground_truth,proofcausality_verdict,naive_baseline_verdict,signals_detected,recapture_directive,recapture_resolved
+CASE-S01,Clean Movement Success #1,SUCCESS,SUCCESS,SUCCESS,,N/A,None
+CASE-S02,Clean Movement Success #2,SUCCESS,SUCCESS,SUCCESS,,N/A,None
+CASE-S03,Clean Movement Success #3,SUCCESS,SUCCESS,SUCCESS,,N/A,None
+CASE-S04,Clean Movement Success #4,SUCCESS,SUCCESS,SUCCESS,,N/A,None
+CASE-S05,Clean Movement Success #5,SUCCESS,SUCCESS,SUCCESS,,N/A,None
+CASE-S06,Clean Movement Success #6,SUCCESS,SUCCESS,SUCCESS,,N/A,None
+CASE-S07,Clean Movement Success #7,SUCCESS,SUCCESS,SUCCESS,,N/A,None
+CASE-S08,Clean Movement Success #8,SUCCESS,SUCCESS,SUCCESS,,N/A,None
+CASE-S09,Clean Movement Success #9,SUCCESS,SUCCESS,SUCCESS,,N/A,None
+CASE-S10,Clean Movement Success #10,SUCCESS,SUCCESS,SUCCESS,,N/A,None
+CASE-F01,Incomplete Action Failure #1,FAILED,FAILED,FAILED,,N/A,None
+CASE-F02,Incomplete Action Failure #2,FAILED,FAILED,FAILED,,N/A,None
+CASE-F03,Incomplete Action Failure #3,FAILED,FAILED,FAILED,,N/A,None
+CASE-F04,Incomplete Action Failure #4,FAILED,FAILED,SUCCESS,,N/A,None
+CASE-F05,Incomplete Action Failure #5,FAILED,FAILED,SUCCESS,,N/A,None
+CASE-F06,Incomplete Action Failure #6,FAILED,FAILED,SUCCESS,,N/A,None
+CASE-U_BLUR_01,Motion Blur Uncertainty #1,UNCERTAIN,UNCERTAIN,SUCCESS,BLUR,Hold the camera steady and allow the object to become sharp before ending the capture.,True
+CASE-U_BLUR_02,Motion Blur Uncertainty #2,UNCERTAIN,UNCERTAIN,SUCCESS,BLUR,Hold the camera steady and allow the object to become sharp before ending the capture.,True
+CASE-U_BLUR_03,Motion Blur Uncertainty #3,UNCERTAIN,UNCERTAIN,SUCCESS,BLUR,Hold the camera steady and allow the object to become sharp before ending the capture.,True
+CASE-U_FRAME_01,Boundary Escape Uncertainty #1,UNCERTAIN,UNCERTAIN,SUCCESS,OUT_OF_FRAME,Move the camera back so the full object remains inside the frame.,True
+CASE-U_FRAME_02,Boundary Escape Uncertainty #2,UNCERTAIN,UNCERTAIN,SUCCESS,OUT_OF_FRAME,Move the camera back so the full object remains inside the frame.,True
+CASE-U_FRAME_03,Boundary Escape Uncertainty #3,UNCERTAIN,UNCERTAIN,SUCCESS,OUT_OF_FRAME,Move the camera back so the full object remains inside the frame.,True
+CASE-U_OCCLUSION_01,Severe Occlusion Uncertainty #1,UNCERTAIN,UNCERTAIN,SUCCESS,OCCLUSION,Keep the object visible after releasing it and record the final state.,True
+CASE-U_OCCLUSION_02,Severe Occlusion Uncertainty #2,UNCERTAIN,UNCERTAIN,SUCCESS,OCCLUSION,Keep the object visible after releasing it and record the final state.,True
+CASE-U_OCCLUSION_03,Severe Occlusion Uncertainty #3,UNCERTAIN,UNCERTAIN,SUCCESS,OCCLUSION,Keep the object visible after releasing it and record the final state.,True
