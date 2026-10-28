@@ -278,7 +278,7 @@ def get_receipt(report_id: str) -> dict[str, Any]:
 
 
 @router.get("/benchmark/summary")
-def get_benchmark_summary(dataset: str = Query("all", enum=["all", "synthetic", "real"])) -> dict[str, Any]:
+def get_benchmark_summary(dataset: str = Query("all")) -> dict[str, Any]:
     """Return scientific evaluation results partitioned into Synthetic Baseline and Real-World Evaluation."""
     base_dir = Path(__file__).resolve().parent.parent.parent / "docs" / "benchmarks"
     syn_file = base_dir / "benchmark_results_synthetic.json"
