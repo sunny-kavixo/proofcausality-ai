@@ -1,0 +1,17 @@
+[package]
+name = "proofcausality_core"
+version = "0.1.0"
+edition = "2021"
+authors = ["Sunny <sandeepkisan1432@gmail.com>"]
+description = "High-performance Rust acceleration kernels for ProofCausality AI"
+license = "MIT"
+
+[lib]
+name = "proofcausality_core"
+crate-type = ["cdylib", "rlib"]
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"

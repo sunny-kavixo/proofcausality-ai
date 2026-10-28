@@ -143,6 +143,9 @@ def run_benchmarks(output_dir: str = DEFAULT_OUTPUT_DIR) -> dict[str, Any]:
     json_path = os.path.join(output_dir, "benchmark_results.json")
     with open(json_path, "w") as f:
         json.dump(benchmark_summary, f, indent=2)
+    syn_path = os.path.join(output_dir, "benchmark_results_synthetic.json")
+    with open(syn_path, "w") as f:
+        json.dump(benchmark_summary, f, indent=2)
 
     # Write CSV summary
     csv_path = os.path.join(output_dir, "benchmark_cases.csv")

@@ -1,12 +1,24 @@
-from backend.evidence.schemas import BoundingBox
-from backend.providers.meta_adapter import MetaAdapter, redact_token, sanitize_error_detail
+import pytest
+import httpx
 import numpy as np
+
+from backend.evidence.schemas import BoundingBox
+from backend.providers.meta_adapter import (
+    MetaAdapter,
+    MetaAuthError,
+    MetaRateLimitError,
+    MetaProviderError,
+    MetaShapeMismatchError,
+    redact_token,
+    sanitize_error_detail,
+)
 
 
 def test_redact_token():
     assert redact_token(None) == "[NOT_SET]"
     assert redact_token("") == "[NOT_SET]"
-    assert redact_token("meta-secret-key-12345") == "[REDACTED]"
+    assert "2345" in redact_token("meta-secret-key-12345")
+    assert "REDACTED" in redact_token("meta-secret-key-12345")
 
 
 def test_sanitize_error_detail():
@@ -21,9 +33,88 @@ def test_meta_adapter_fallback_mode():
     diag = adapter.get_diagnostics()
     assert diag["configured"] is False
     assert diag["active_mode"] == "EvidenceCore Deterministic Fallback"
+    assert diag["provider_status"] == "BLOCKED_NO_CREDENTIALS"
 
     img = np.zeros((100, 100, 3), dtype=np.uint8)
     bbox = BoundingBox(x_min=10, y_min=10, x_max=40, y_max=40)
-    mask = adapter.predict_mask(img, prompt_bbox=bbox)
+    mask, meta = adapter.predict_mask(img, prompt_bbox=bbox)
     assert mask.shape == (100, 100)
     assert bool(mask[20, 20]) is True
+    assert meta["source"] == "GEOMETRIC_FALLBACK"
+
+
+def test_meta_adapter_mock_success_200():
+    # Mock transport simulating Meta SAM 2.1 200 OK response
+    expected_mask = np.zeros((50, 50), dtype=bool)
+    expected_mask[10:30, 10:30] = True
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.headers["authorization"] == "Bearer test-meta-token-12345"
+        return httpx.Response(200, json={"mask": expected_mask.tolist()})
+
+    transport = httpx.MockTransport(handler)
+    adapter = MetaAdapter(
+        api_key="test-meta-token-12345",
+        sam_endpoint="https://api.meta.mock/v1/sam",
+        enabled=True,
+        transport=transport,
+    )
+
+    img = np.zeros((50, 50, 3), dtype=np.uint8)
+    mask, meta = adapter.predict_mask(img)
+    assert mask.shape == (50, 50)
+    assert meta["source"] == "META_SAM_REMOTE"
+    assert meta["http_status"] == 200
+    assert np.array_equal(mask, expected_mask)
+
+
+def test_meta_adapter_mock_auth_401():
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(401, json={"error": "Unauthorized key"})
+
+    transport = httpx.MockTransport(handler)
+    adapter = MetaAdapter(
+        api_key="invalid-key",
+        sam_endpoint="https://api.meta.mock/v1/sam",
+        enabled=True,
+        transport=transport,
+    )
+
+    img = np.zeros((50, 50, 3), dtype=np.uint8)
+    with pytest.raises(MetaAuthError, match="authentication failed"):
+        adapter.predict_mask(img)
+
+
+def test_meta_adapter_mock_rate_limit_429():
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(429, json={"error": "Rate limit exceeded"})
+
+    transport = httpx.MockTransport(handler)
+    adapter = MetaAdapter(
+        api_key="valid-key",
+        sam_endpoint="https://api.meta.mock/v1/sam",
+        enabled=True,
+        transport=transport,
+    )
+
+    img = np.zeros((50, 50, 3), dtype=np.uint8)
+    with pytest.raises(MetaRateLimitError, match="rate limit exceeded"):
+        adapter.predict_mask(img)
+
+
+def test_meta_adapter_mock_shape_mismatch():
+    def handler(request: httpx.Request) -> httpx.Response:
+        # Returns 10x10 mask when input is 50x50
+        return httpx.Response(200, json={"mask": np.zeros((10, 10), dtype=bool).tolist()})
+
+    transport = httpx.MockTransport(handler)
+    adapter = MetaAdapter(
+        api_key="valid-key",
+        sam_endpoint="https://api.meta.mock/v1/sam",
+        enabled=True,
+        transport=transport,
+    )
+
+    img = np.zeros((50, 50, 3), dtype=np.uint8)
+    with pytest.raises(MetaShapeMismatchError, match="does not match"):
+        adapter.predict_mask(img)
