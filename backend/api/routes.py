@@ -168,7 +168,7 @@ def get_receipt(report_id: str) -> dict[str, Any]:
 @router.get("/benchmark/summary")
 def get_benchmark_summary() -> dict[str, Any]:
     """Return latest scientific evaluation results and metrics."""
-    bench_file = "/Users/sunny/Projects/proofcausality-ai/docs/benchmarks/benchmark_results.json"
+    bench_file = str(Path(__file__).resolve().parent.parent.parent / "docs" / "benchmarks" / "benchmark_results.json")
     if not os.path.exists(bench_file):
         from evaluation.benchmark import run_benchmarks
         return run_benchmarks()

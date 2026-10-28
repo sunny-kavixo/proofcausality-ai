@@ -14,7 +14,9 @@ from backend.evidence.schemas import ActionVerdict, ActionVerificationRequest
 from evaluation.cases.action_dataset import get_standard_action_benchmark_cases
 
 
-def run_benchmarks(output_dir: str = "/Users/sunny/Projects/proofcausality-ai/docs/benchmarks") -> dict[str, Any]:
+DEFAULT_OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docs", "benchmarks")
+
+def run_benchmarks(output_dir: str = DEFAULT_OUTPUT_DIR) -> dict[str, Any]:
     """Execute complete scientific evaluation over all standardized test cases."""
     os.makedirs(output_dir, exist_ok=True)
     cases = get_standard_action_benchmark_cases()
