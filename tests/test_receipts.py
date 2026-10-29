@@ -19,7 +19,7 @@ def _build_sample_receipt() -> EvidenceReceipt:
     return generate_receipt(
         report_id="TEST-001",
         engine_name="ActionProof",
-        software_version="0.2.5",
+        software_version="0.2.6",
         inputs_hash="abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
         measurements={"displacement": 120.5, "max_velocity": 45.2},
         signals=[signal],

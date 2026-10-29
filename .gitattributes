@@ -1,0 +1,20 @@
+# Git Attributes & Release Archive Export Rules
+# Files and directories marked export-ignore are excluded from 'git archive' release distributions.
+
+.gitattributes export-ignore
+.gitignore export-ignore
+.github export-ignore
+.venv export-ignore
+.pytest_cache export-ignore
+__pycache__ export-ignore
+*.pyc export-ignore
+native/proofcausality_core/target export-ignore
+
+# Exclude third-party copyrighted and non-commercial/no-derivatives photographic assets from public source archive.
+# Downstream users can acquire authentic validation photographs using: python scripts/download_coco_subset.py
+data/coco_val2017_subset/images export-ignore
+
+# Exclude developer scratch directories and caches
+scratch export-ignore
+.cache export-ignore
+dist export-ignore
