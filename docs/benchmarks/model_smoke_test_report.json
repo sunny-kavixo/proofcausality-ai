@@ -1,0 +1,18 @@
+{
+  "timestamp_utc": "2026-10-29T15:20:47Z",
+  "model_id": "facebook/mask2former-swin-tiny-coco-instance",
+  "model_revision": "22c4a2f15dc88149b8b8d9f4d42c54431fbd66f6",
+  "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
+  "device": "mps",
+  "sample_image": "000000397133.jpg",
+  "detected_instances_count": 26,
+  "load_time_ms": 3936.6,
+  "inference_latency_ms": 3725.86,
+  "output_sha256": "a5c4d915157d12e4eed08167d79ad35a4451d2b1dca4f6ac3cbddb759d45bb21",
+  "statuses": {
+    "core_ci": "PASS",
+    "mock_integration": "PASS",
+    "genuine_model_smoke_test": "PASS",
+    "local_apple_mps_validation": "PASS"
+  }
+}

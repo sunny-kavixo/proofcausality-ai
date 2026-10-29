@@ -19,7 +19,7 @@
       "license_status": "KNOWN",
       "license_name": "Attribution License",
       "license_url": "http://creativecommons.org/licenses/by/2.0/",
-      "redistribution_status": "UNKNOWN",
+      "redistribution_status": "PERMITTED_WITH_ATTRIBUTION",
       "annotation_linkage_confirmed": true
     },
     {
@@ -33,7 +33,7 @@
       "license_status": "KNOWN",
       "license_name": "Attribution-NonCommercial-ShareAlike License",
       "license_url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
-      "redistribution_status": "UNKNOWN",
+      "redistribution_status": "RESTRICTED",
       "annotation_linkage_confirmed": true
     },
     {
@@ -47,7 +47,7 @@
       "license_status": "KNOWN",
       "license_name": "Attribution License",
       "license_url": "http://creativecommons.org/licenses/by/2.0/",
-      "redistribution_status": "UNKNOWN",
+      "redistribution_status": "PERMITTED_WITH_ATTRIBUTION",
       "annotation_linkage_confirmed": true
     },
     {
@@ -61,7 +61,7 @@
       "license_status": "KNOWN",
       "license_name": "Attribution-NonCommercial-ShareAlike License",
       "license_url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
-      "redistribution_status": "UNKNOWN",
+      "redistribution_status": "RESTRICTED",
       "annotation_linkage_confirmed": true
     },
     {
@@ -75,7 +75,7 @@
       "license_status": "KNOWN",
       "license_name": "Attribution-NoDerivs License",
       "license_url": "http://creativecommons.org/licenses/by-nd/2.0/",
-      "redistribution_status": "UNKNOWN",
+      "redistribution_status": "RESTRICTED",
       "annotation_linkage_confirmed": true
     },
     {
@@ -89,7 +89,7 @@
       "license_status": "KNOWN",
       "license_name": "Attribution License",
       "license_url": "http://creativecommons.org/licenses/by/2.0/",
-      "redistribution_status": "UNKNOWN",
+      "redistribution_status": "PERMITTED_WITH_ATTRIBUTION",
       "annotation_linkage_confirmed": true
     },
     {
@@ -103,7 +103,7 @@
       "license_status": "KNOWN",
       "license_name": "Attribution License",
       "license_url": "http://creativecommons.org/licenses/by/2.0/",
-      "redistribution_status": "UNKNOWN",
+      "redistribution_status": "PERMITTED_WITH_ATTRIBUTION",
       "annotation_linkage_confirmed": true
     },
     {
@@ -117,7 +117,7 @@
       "license_status": "KNOWN",
       "license_name": "Attribution-NoDerivs License",
       "license_url": "http://creativecommons.org/licenses/by-nd/2.0/",
-      "redistribution_status": "UNKNOWN",
+      "redistribution_status": "RESTRICTED",
       "annotation_linkage_confirmed": true
     },
     {
@@ -131,7 +131,7 @@
       "license_status": "KNOWN",
       "license_name": "Attribution License",
       "license_url": "http://creativecommons.org/licenses/by/2.0/",
-      "redistribution_status": "UNKNOWN",
+      "redistribution_status": "PERMITTED_WITH_ATTRIBUTION",
       "annotation_linkage_confirmed": true
     },
     {
@@ -145,7 +145,7 @@
       "license_status": "KNOWN",
       "license_name": "Attribution License",
       "license_url": "http://creativecommons.org/licenses/by/2.0/",
-      "redistribution_status": "UNKNOWN",
+      "redistribution_status": "PERMITTED_WITH_ATTRIBUTION",
       "annotation_linkage_confirmed": true
     },
     {
@@ -159,7 +159,7 @@
       "license_status": "KNOWN",
       "license_name": "Attribution-NonCommercial-NoDerivs License",
       "license_url": "http://creativecommons.org/licenses/by-nc-nd/2.0/",
-      "redistribution_status": "UNKNOWN",
+      "redistribution_status": "RESTRICTED",
       "annotation_linkage_confirmed": true
     },
     {
@@ -173,7 +173,7 @@
       "license_status": "KNOWN",
       "license_name": "Attribution-NonCommercial-ShareAlike License",
       "license_url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
-      "redistribution_status": "UNKNOWN",
+      "redistribution_status": "RESTRICTED",
       "annotation_linkage_confirmed": true
     },
     {
@@ -187,7 +187,7 @@
       "license_status": "KNOWN",
       "license_name": "Attribution-NonCommercial-NoDerivs License",
       "license_url": "http://creativecommons.org/licenses/by-nc-nd/2.0/",
-      "redistribution_status": "UNKNOWN",
+      "redistribution_status": "RESTRICTED",
       "annotation_linkage_confirmed": true
     },
     {
@@ -201,7 +201,7 @@
       "license_status": "KNOWN",
       "license_name": "Attribution-NonCommercial-NoDerivs License",
       "license_url": "http://creativecommons.org/licenses/by-nc-nd/2.0/",
-      "redistribution_status": "UNKNOWN",
+      "redistribution_status": "RESTRICTED",
       "annotation_linkage_confirmed": true
     },
     {
@@ -215,7 +215,7 @@
       "license_status": "KNOWN",
       "license_name": "Attribution-NonCommercial-ShareAlike License",
       "license_url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
-      "redistribution_status": "UNKNOWN",
+      "redistribution_status": "RESTRICTED",
       "annotation_linkage_confirmed": true
     },
     {
@@ -229,7 +229,7 @@
       "license_status": "KNOWN",
       "license_name": "Attribution-NonCommercial-NoDerivs License",
       "license_url": "http://creativecommons.org/licenses/by-nc-nd/2.0/",
-      "redistribution_status": "UNKNOWN",
+      "redistribution_status": "RESTRICTED",
       "annotation_linkage_confirmed": true
     },
     {
@@ -243,7 +243,7 @@
       "license_status": "KNOWN",
       "license_name": "Attribution-NonCommercial-NoDerivs License",
       "license_url": "http://creativecommons.org/licenses/by-nc-nd/2.0/",
-      "redistribution_status": "UNKNOWN",
+      "redistribution_status": "RESTRICTED",
       "annotation_linkage_confirmed": true
     },
     {
@@ -257,7 +257,7 @@
       "license_status": "KNOWN",
       "license_name": "Attribution-NonCommercial-ShareAlike License",
       "license_url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
-      "redistribution_status": "UNKNOWN",
+      "redistribution_status": "RESTRICTED",
       "annotation_linkage_confirmed": true
     },
     {
@@ -271,7 +271,7 @@
       "license_status": "KNOWN",
       "license_name": "Attribution-NonCommercial-NoDerivs License",
       "license_url": "http://creativecommons.org/licenses/by-nc-nd/2.0/",
-      "redistribution_status": "UNKNOWN",
+      "redistribution_status": "RESTRICTED",
       "annotation_linkage_confirmed": true
     },
     {
@@ -285,7 +285,7 @@
       "license_status": "KNOWN",
       "license_name": "Attribution-NonCommercial-ShareAlike License",
       "license_url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
-      "redistribution_status": "UNKNOWN",
+      "redistribution_status": "RESTRICTED",
       "annotation_linkage_confirmed": true
     }
   ]

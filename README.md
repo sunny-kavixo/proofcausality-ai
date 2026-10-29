@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Rust Accelerated](https://img.shields.io/badge/Rust-optional%20kernels-orange.svg)](native/proofcausality_core/)
-[![Tests](https://img.shields.io/badge/tests-139%20passed-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-183%20passed-brightgreen.svg)](tests/)
 [![Meta Hackathon 2026](https://img.shields.io/badge/Meta_Global_AI_Hackathon-Indie_Developer-purple.svg)](https://cerebralvalley.ai/e/meta-ai-developer-hackathon)
 
 ProofCausality AI investigates reliable visual evidence verification for annotation-quality workflows and physical-action assessment.
@@ -68,7 +68,7 @@ Release **`v0.2.5`** finalizes model compatibility analysis, isolated installati
        - Complete HTTP request/response cycle: p50 = **95.19 ms** (p95 = 96.10 ms)
        - *Crucial Disclosure*: This API endpoint executes deterministic geometric, spatial, and boundary debt evaluation with visual overlay generation and SHA-256 receipt issuance. **It does NOT invoke the neural Mask2Former forward pass.**
      - **Workload D: Monolithic Integrated Image-to-Neural-Inference-to-Verdict HTTP Route (`POST /api/vision/audit`)**:
-       - **Status: FULLY IMPLEMENTED & EMPIRICALLY MEASURED (Phase 7)**. Direct end-to-end client roundtrip latency: p50 = **982.79 ms** (p95 = **1021.25 ms**, mean = 986.92 ms across 20 measured warm trials). Direct server wall-clock duration: p50 = **979.83 ms** (p95 = **1018.38 ms**). Cold start first invocation: **9009.99 ms** client total.
+       - **Status: FULLY IMPLEMENTED & INTEGRITY-HARDENED (Phase 8)**. Direct end-to-end client roundtrip latency: p50 = **1020.81 ms** (p95 = **1059.33 ms**, mean = 1027.61 ms across 20 measured warm trials). Direct server wall-clock duration: p50 = **1017.89 ms** (p95 = **1056.02 ms**). Cold start first invocation: **8278.05 ms** client total. Peak RSS: 682.86 MB on Apple MPS. (Phase 7 baseline was 982.79 ms; +3.8% delta reflects server-authoritative provenance verification, lock bounds, and MPS cache purging; see [SCIENTIFIC_BENCHMARK_TAXONOMY.md](docs/research/SCIENTIFIC_BENCHMARK_TAXONOMY.md)).
 5. **Real Browser E2E Acceptance (Google Chrome on Apple Silicon)**:
    - Automated via Playwright driving system Google Chrome: verified landing page, engine badge (`Engine v0.2.5`), Rust native SIMD badge, LabelCourt interactive audit, ActionProof verification, interactive SVG Evidence Calculus DAG, Scientific Benchmarks table, and 375px mobile responsive layout with **0 console errors**.
 6. **Defect Repairs**:
@@ -107,21 +107,22 @@ flowchart TD
 - **Not Proof of Physical Truth**: Verdicts represent annotation agreement against an independent perception model; they must never be presented as proof of real-world physical action.
 
 ### 3. Direct End-to-End Latency Profile (`POST /api/vision/audit`)
-Empirically measured over 20 consecutive warm requests on authentic MS COCO 2017 validation photographs (`000000397133.jpg`, 640x427) using local Apple MPS acceleration:
+Empirically measured over 20 consecutive warm requests on authentic MS COCO 2017 validation photographs (`000000397133.jpg`, 640x427) using local Apple MPS acceleration (Phase 8 integrity-hardened):
 
 | Processing Stage | p50 Median (ms) | p90 (ms) | p95 (ms) | Mean (ms) | Description |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **1. Image Decoding** | **1.90** | 2.00 | 2.01 | 1.91 | Binary validation, SHA-256 hashing, PIL RGB decode |
-| **2. Preprocessing & Quality** | **2.76** | 2.84 | 2.96 | 2.79 | Grayscale transform, Laplacian blur variance, border check |
-| **3. Model Inference (MPS)** | **518.16** | 535.60 | 540.95 | 520.05 | Mask2Former Swin forward pass on Apple Silicon MPS |
-| **4. Mask Postprocessing** | **341.03** | 344.34 | 347.98 | 342.13 | Query thresholding, RLE encoding, instance extraction |
-| **5. LabelCourt Evaluation** | **0.01** | 0.01 | 0.01 | 0.01 | Class-aware one-to-one matching, IoU, boundary agreement |
-| **6. Overlay Generation** | **116.90** | 117.55 | 118.53 | 116.94 | Disagreement heatmap, reference & predicted PNG overlays |
-| **7. Receipt Generation** | **0.11** | 0.11 | 0.12 | 0.11 | Canonical JSON serialization, unkeyed SHA-256 hashing |
-| **Full Server Wall-Clock** | **979.83** | **1005.03** | **1018.38** | **983.92** | Direct server duration from request arrival to return |
-| **Full Client Roundtrip** | **982.79** | **1007.93** | **1021.25** | **986.92** | Complete HTTP roundtrip via ASGI TestClient |
+| **1. Image Decoding** | **1.88** | 1.95 | 1.98 | 1.88 | Binary validation, SHA-256 hashing, PIL RGB decode |
+| **2. Preprocessing & Quality** | **2.76** | 2.89 | 2.92 | 2.78 | Grayscale transform, Laplacian blur variance, border check |
+| **3. Model Inference (MPS)** | **556.22** | 575.61 | 592.79 | 562.74 | Mask2Former Swin forward pass on Apple Silicon MPS |
+| **4. Mask Postprocessing** | **341.24** | 342.49 | 342.81 | 341.38 | Query thresholding, RLE encoding, instance extraction |
+| **5. LabelCourt Evaluation** | **0.00** | 0.00 | 0.00 | 0.00 | Class-aware point query matching, IoU, boundary agreement |
+| **6. Overlay Generation** | **115.48** | 116.64 | 117.04 | 115.72 | Disagreement heatmap, reference & predicted PNG overlays |
+| **7. Receipt Generation** | **0.12** | 0.13 | 0.14 | 0.12 | Canonical JSON serialization, unkeyed SHA-256 hashing |
+| **Full Server Wall-Clock** | **1017.89** | **1036.34** | **1056.02** | **1024.63** | Direct server duration from request arrival to return |
+| **Full Client Roundtrip** | **1020.81** | **1039.62** | **1059.33** | **1027.61** | Complete HTTP roundtrip via ASGI TestClient |
 
-*Cold Start*: 9,009.99 ms client total (includes PyTorch MPS graph initialization, layer weight binding, and JIT caching). Peak RSS: 655.64 MB.
+*Cold Start*: 8,278.05 ms client total (includes PyTorch MPS graph initialization, layer weight binding, and JIT caching). Peak RSS: 682.86 MB.  
+*Performance Reconciliation*: Sum of component medians (1017.70 ms) directly matches total server p50 (1017.89 ms). The +38 ms delta from Phase 7 (982.79 ms) reflects server-authoritative cryptographic provenance verification, concurrency locks, and MPS cache purging. See [SCIENTIFIC_BENCHMARK_TAXONOMY.md](docs/research/SCIENTIFIC_BENCHMARK_TAXONOMY.md).
 
 ### 4. Interactive Real Product UI
 The web interface features the **Neural Vision Audit** tab with:
@@ -332,8 +333,11 @@ Open [http://localhost:8000](http://localhost:8000) in your browser to inspect t
 
 ## License & Provenance
 
-- **Code**: MIT License ([LICENSE](LICENSE))
+- **Software Code**: MIT License ([LICENSE](LICENSE)) — Copyright (c) 2026 Sunny Kavixo
 - **Tabletop Dataset**: Creative Commons Attribution 4.0 International ([CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/))
+- **COCO 2017 Validation Subset**: Individual Flickr creator licenses (6 CC-BY 2.0 permitted; 14 CC BY-NC / CC BY-ND restricted; 13 extra tracked unresolved; see [DATASET_LICENSING_AUDIT.md](docs/research/DATASET_LICENSING_AUDIT.md)).
+- **Model Checkpoint (`facebook/mask2former-swin-tiny-coco-instance`)**: CC BY-NC 4.0 by Meta AI Research.
+- **No Blanket Licensing**: Third-party photographs and neural network weights are NOT covered by the software MIT license.
 - **Tagline**: *"Prove what happened. Detect what is missing. Capture the evidence that changes the decision."*
 
 ---

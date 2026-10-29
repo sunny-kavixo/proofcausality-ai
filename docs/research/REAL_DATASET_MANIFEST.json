@@ -37,7 +37,7 @@
         "spoon"
       ],
       "local_path": "data/coco_val2017_subset/images/000000397133.jpg",
-      "redistribution_status": "Permitted for research/evaluation under CC-BY / Open Access terms"
+      "redistribution_status": "PERMITTED_WITH_ATTRIBUTION (CC-BY 2.0 with author attribution)"
     },
     {
       "dataset_name": "MS COCO 2017 Validation Set",
@@ -69,7 +69,7 @@
         "sink"
       ],
       "local_path": "data/coco_val2017_subset/images/000000037777.jpg",
-      "redistribution_status": "Permitted for research/evaluation under CC-BY / Open Access terms"
+      "redistribution_status": "RESTRICTED (Non-Commercial or No-Derivatives license; not sublicensable under MIT)"
     },
     {
       "dataset_name": "MS COCO 2017 Validation Set",
@@ -98,7 +98,7 @@
         "umbrella"
       ],
       "local_path": "data/coco_val2017_subset/images/000000252219.jpg",
-      "redistribution_status": "Permitted for research/evaluation under CC-BY / Open Access terms"
+      "redistribution_status": "PERMITTED_WITH_ATTRIBUTION (CC-BY 2.0 with author attribution)"
     },
     {
       "dataset_name": "MS COCO 2017 Validation Set",
@@ -125,7 +125,7 @@
         "skateboard"
       ],
       "local_path": "data/coco_val2017_subset/images/000000087038.jpg",
-      "redistribution_status": "Permitted for research/evaluation under CC-BY / Open Access terms"
+      "redistribution_status": "RESTRICTED (Non-Commercial or No-Derivatives license; not sublicensable under MIT)"
     },
     {
       "dataset_name": "MS COCO 2017 Validation Set",
@@ -153,7 +153,7 @@
         "truck"
       ],
       "local_path": "data/coco_val2017_subset/images/000000174482.jpg",
-      "redistribution_status": "Permitted for research/evaluation under CC-BY / Open Access terms"
+      "redistribution_status": "RESTRICTED (Non-Commercial or No-Derivatives license; not sublicensable under MIT)"
     },
     {
       "dataset_name": "MS COCO 2017 Validation Set",
@@ -179,7 +179,7 @@
         "toilet"
       ],
       "local_path": "data/coco_val2017_subset/images/000000403385.jpg",
-      "redistribution_status": "Permitted for research/evaluation under CC-BY / Open Access terms"
+      "redistribution_status": "PERMITTED_WITH_ATTRIBUTION (CC-BY 2.0 with author attribution)"
     },
     {
       "dataset_name": "MS COCO 2017 Validation Set",
@@ -204,7 +204,7 @@
         "toilet"
       ],
       "local_path": "data/coco_val2017_subset/images/000000006818.jpg",
-      "redistribution_status": "Permitted for research/evaluation under CC-BY / Open Access terms"
+      "redistribution_status": "PERMITTED_WITH_ATTRIBUTION (CC-BY 2.0 with author attribution)"
     },
     {
       "dataset_name": "MS COCO 2017 Validation Set",
@@ -230,7 +230,7 @@
         "person"
       ],
       "local_path": "data/coco_val2017_subset/images/000000480985.jpg",
-      "redistribution_status": "Permitted for research/evaluation under CC-BY / Open Access terms"
+      "redistribution_status": "RESTRICTED (Non-Commercial or No-Derivatives license; not sublicensable under MIT)"
     },
     {
       "dataset_name": "MS COCO 2017 Validation Set",
@@ -255,7 +255,7 @@
         "toilet"
       ],
       "local_path": "data/coco_val2017_subset/images/000000458054.jpg",
-      "redistribution_status": "Permitted for research/evaluation under CC-BY / Open Access terms"
+      "redistribution_status": "PERMITTED_WITH_ATTRIBUTION (CC-BY 2.0 with author attribution)"
     },
     {
       "dataset_name": "MS COCO 2017 Validation Set",
@@ -281,7 +281,7 @@
         "toilet"
       ],
       "local_path": "data/coco_val2017_subset/images/000000331352.jpg",
-      "redistribution_status": "Permitted for research/evaluation under CC-BY / Open Access terms"
+      "redistribution_status": "PERMITTED_WITH_ATTRIBUTION (CC-BY 2.0 with author attribution)"
     },
     {
       "dataset_name": "MS COCO 2017 Validation Set",
@@ -311,7 +311,7 @@
         "truck"
       ],
       "local_path": "data/coco_val2017_subset/images/000000296649.jpg",
-      "redistribution_status": "Permitted for research/evaluation under CC-BY / Open Access terms"
+      "redistribution_status": "RESTRICTED (Non-Commercial or No-Derivatives license; not sublicensable under MIT)"
     },
     {
       "dataset_name": "MS COCO 2017 Validation Set",
@@ -340,7 +340,7 @@
         "tv"
       ],
       "local_path": "data/coco_val2017_subset/images/000000386912.jpg",
-      "redistribution_status": "Permitted for research/evaluation under CC-BY / Open Access terms"
+      "redistribution_status": "RESTRICTED (Non-Commercial or No-Derivatives license; not sublicensable under MIT)"
     },
     {
       "dataset_name": "MS COCO 2017 Validation Set",
@@ -366,7 +366,7 @@
         "vase"
       ],
       "local_path": "data/coco_val2017_subset/images/000000502136.jpg",
-      "redistribution_status": "Permitted for research/evaluation under CC-BY / Open Access terms"
+      "redistribution_status": "RESTRICTED (Non-Commercial or No-Derivatives license; not sublicensable under MIT)"
     },
     {
       "dataset_name": "MS COCO 2017 Validation Set",
@@ -394,7 +394,7 @@
         "tv"
       ],
       "local_path": "data/coco_val2017_subset/images/000000491497.jpg",
-      "redistribution_status": "Permitted for research/evaluation under CC-BY / Open Access terms"
+      "redistribution_status": "RESTRICTED (Non-Commercial or No-Derivatives license; not sublicensable under MIT)"
     },
     {
       "dataset_name": "MS COCO 2017 Validation Set",
@@ -420,7 +420,7 @@
         "orange"
       ],
       "local_path": "data/coco_val2017_subset/images/000000184791.jpg",
-      "redistribution_status": "Permitted for research/evaluation under CC-BY / Open Access terms"
+      "redistribution_status": "RESTRICTED (Non-Commercial or No-Derivatives license; not sublicensable under MIT)"
     },
     {
       "dataset_name": "MS COCO 2017 Validation Set",
@@ -447,7 +447,7 @@
         "suitcase"
       ],
       "local_path": "data/coco_val2017_subset/images/000000348881.jpg",
-      "redistribution_status": "Permitted for research/evaluation under CC-BY / Open Access terms"
+      "redistribution_status": "RESTRICTED (Non-Commercial or No-Derivatives license; not sublicensable under MIT)"
     },
     {
       "dataset_name": "MS COCO 2017 Validation Set",
@@ -475,7 +475,7 @@
         "potted plant"
       ],
       "local_path": "data/coco_val2017_subset/images/000000289393.jpg",
-      "redistribution_status": "Permitted for research/evaluation under CC-BY / Open Access terms"
+      "redistribution_status": "RESTRICTED (Non-Commercial or No-Derivatives license; not sublicensable under MIT)"
     },
     {
       "dataset_name": "MS COCO 2017 Validation Set",
@@ -502,7 +502,7 @@
         "person"
       ],
       "local_path": "data/coco_val2017_subset/images/000000522713.jpg",
-      "redistribution_status": "Permitted for research/evaluation under CC-BY / Open Access terms"
+      "redistribution_status": "RESTRICTED (Non-Commercial or No-Derivatives license; not sublicensable under MIT)"
     },
     {
       "dataset_name": "MS COCO 2017 Validation Set",
@@ -528,7 +528,7 @@
         "sheep"
       ],
       "local_path": "data/coco_val2017_subset/images/000000181666.jpg",
-      "redistribution_status": "Permitted for research/evaluation under CC-BY / Open Access terms"
+      "redistribution_status": "RESTRICTED (Non-Commercial or No-Derivatives license; not sublicensable under MIT)"
     },
     {
       "dataset_name": "MS COCO 2017 Validation Set",
@@ -555,7 +555,7 @@
         "person"
       ],
       "local_path": "data/coco_val2017_subset/images/000000017627.jpg",
-      "redistribution_status": "Permitted for research/evaluation under CC-BY / Open Access terms"
+      "redistribution_status": "RESTRICTED (Non-Commercial or No-Derivatives license; not sublicensable under MIT)"
     }
   ]
 }

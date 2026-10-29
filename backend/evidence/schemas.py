@@ -150,6 +150,7 @@ class VisionAuditRequest(BaseModel):
     settings: Optional[VisionAuditSettings] = None
     manifest_image_id: Optional[int] = None
     image_source_type: Optional[str] = "USER_UPLOADED_IMAGE"
+    annotation_source_type: Optional[str] = "HUMAN_ANNOTATION"
     dataset_manifest_ref: Optional[str] = None
 
 

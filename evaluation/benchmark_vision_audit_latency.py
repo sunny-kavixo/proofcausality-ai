@@ -54,6 +54,7 @@ def run_vision_audit_latency_benchmark(
         "annotation": sample["annotation"],
         "manifest_image_id": sample["manifest_image_id"],
         "image_source_type": "MANIFEST_VERIFIED_DATASET_IMAGE",
+        "annotation_source_type": "MANIFEST_VERIFIED_REFERENCE_ANNOTATION",
         "settings": {
             "confidence_threshold": 0.50,
             "iou_accept_threshold": 0.70,
