@@ -87,4 +87,12 @@ test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
 ## 5. Release Decision & Final Verification
 
 - All 9 Release Gates (Gate A through Gate I) have been systematically inspected, tested, and validated as **PASS**.
-- The codebase is verified clean, reproducible, and ready for tagging as immutable release `v0.2.6`.
+- **Final Main SHA**: `5094ef1e0f9d3a88ea4f67b715d27b39733b6011`
+- **Pull Request**: [#6: feat(release): v0.2.6 release readiness, packaging safety and verified distribution](https://github.com/sunny-kavixo/proofcausality-ai/pull/6) (Merged into `main`)
+- **PR CI Run**: [Run #40910903337](https://github.com/sunny-kavixo/proofcausality-ai/actions) — **PASS**
+- **Post-Merge Main CI Run**: [Run #40911199896](https://github.com/sunny-kavixo/proofcausality-ai/actions/runs/40911199896) — **PASS**
+- **Public Release URL**: [v0.2.6 on GitHub](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.6)
+- **Verified Downloaded Asset Checksums**:
+  - `proofcausality-ai-0.2.6.tar.gz` (9,699,056 bytes): `856c968b9b1ac23a49c404b9ff04555c7c8a1cd7f7dd963be7b7bad7bbd19f76`
+  - `proofcausality-ai-0.2.6.zip` (9,780,171 bytes): `03e5c513a7d378cd49be9cc31ab0d2cec74ccbcee8649b944eb00d51fb8881e6`
+- **Release Decision**: **APPROVED & PUBLISHED**. Release `v0.2.6` is live and verified; historical release tags `v0.1.0` through `v0.2.5` remain strictly preserved and immutable.
