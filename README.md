@@ -3,11 +3,11 @@
 > **"Prove what happened. Detect what is missing. Capture the evidence that changes the decision."**
 
 [![CI](https://github.com/sunny-kavixo/proofcausality-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/sunny-kavixo/proofcausality-ai/actions)
-[![Release: v0.2.5](https://img.shields.io/badge/Release-v0.2.5-blue.svg)](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.5)
+[![Release: v0.2.6](https://img.shields.io/badge/Release-v0.2.6-blue.svg)](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.6)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Rust Accelerated](https://img.shields.io/badge/Rust-optional%20kernels-orange.svg)](native/proofcausality_core/)
-[![Tests](https://img.shields.io/badge/tests-185%20passed-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-188%20passed-brightgreen.svg)](tests/)
 [![Meta Hackathon 2026](https://img.shields.io/badge/Meta_Global_AI_Hackathon-Indie_Developer-purple.svg)](https://cerebralvalley.ai/e/meta-ai-developer-hackathon)
 
 ProofCausality AI investigates reliable visual evidence verification for annotation-quality workflows and physical-action assessment.
@@ -32,6 +32,28 @@ Modern deep vision models produce confident probability scores even when visual 
 ### Real-World Impact
 Potential applications include robotics demonstration quality control, computer-vision dataset evaluation, annotation auditing, and research into reliable physical AI.
 *(Note: As an experimental research prototype, no measured industrial cost savings or production deployments are claimed without empirical customer telemetry.)*
+
+---
+
+## Release v0.2.6: Final Release Readiness, Distribution Safety & Integrity Hardening
+
+Release **`v0.2.6`** delivers comprehensive defect remediation, distribution safety, licensing compliance, and scientific rigor across all system layers:
+
+1. **Server-Authoritative Provenance Verification (P0)**:
+   - Eliminates trust-boundary vulnerabilities in `/api/vision/audit`. Client-supplied origin claims are verified against 7 mandatory server-side checks (SHA-256 digest, dimensions, manifest linkage, category integrity, and licensing). Untrusted or unverified uploads are safely downgraded to unverified provenance.
+2. **Model Revision Pinning & Checkpoint Integrity (P1)**:
+   - Pinned immutable model revision `22c4a2f15dc88149b8b8d9f4d42c54431fbd66f6` and verified safetensors SHA-256 (`3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80`). Fails closed upon hash mismatch.
+3. **Resource Safety & Sanitized Error Handling (P1)**:
+   - Bounded inference concurrency via thread-safe semaphores, double-checked model loading locks, Apple MPS unified memory cache purging, bounded LRU receipt store (1,000 entries), and strict error redaction of internal paths and tokens.
+4. **Bipartite Instance Matching Correctness (P1)**:
+   - Implemented global 1-to-1 Kuhn-Munkres Hungarian matching (`HungarianInstanceMatcher`) in `backend/evidence/matching.py`, ensuring candidate predictions cannot satisfy multiple reference annotations in multi-object evaluations.
+5. **Distribution Safety & Licensing Compliance (P1)**:
+   - Audited all 33 tracked images in `data/coco_val2017_subset/` ([DATASET_LICENSING_AUDIT.md](docs/research/DATASET_LICENSING_AUDIT.md)).
+   - Enforced `.gitattributes` `export-ignore` rules on release archives to exclude restricted third-party photographs, while supporting reproducible user-side acquisition via `scripts/download_coco_subset.py`.
+6. **Unified Quality Assurance**:
+   - 188 Python regression tests passed.
+   - 19 Rust native SIMD kernel tests passed.
+   - 10/10 Google Chrome Playwright browser tests passed (0 console errors).
 
 ---
 
@@ -139,7 +161,7 @@ The web interface features the **Neural Vision Audit** tab with:
 - **Total tests in `tests/test_receipts.py`**: **11 tests** collected and verified by pytest.
 - **Baseline before hotfix**: 1 test (`test_receipt_generation_and_verification`).
 - **Newly added by hotfix**: 10 tests (11 new tests replacing the 1 old test, net +10 tests).
-- **Repository-wide total**: **139 tests passed** (119 original baseline + 10 receipt hotfix + 10 Phase 7 neural vision audit tests).
+- **Repository-wide total**: **188 tests passed** (comprehensive regression, security, model error safety, provenance trust boundary, and release packaging verification).
 
 ---
 

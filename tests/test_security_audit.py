@@ -141,7 +141,7 @@ def test_receipt_store_lru_bounding():
         receipt = EvidenceReceipt(
             report_id=f"TEST-REPORT-{i:04d}",
             timestamp="2026-10-29T20:00:00Z",
-            software_version="0.2.5",
+            software_version="0.2.6",
             engine_name="TestEngine",
             inputs_hash="a" * 64,
             receipt_sha256="b" * 64,

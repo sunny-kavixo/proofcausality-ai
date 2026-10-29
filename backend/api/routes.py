@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import uuid
+from backend import __version__
 from backend.evidence.calculus.engine import EvidenceCalculusEngine
 from backend.evidence.calculus.graph import build_canonical_task_graph
 from backend.evidence.calculus.budget_planner import EvidenceBudgetPlanner
@@ -150,7 +151,7 @@ def health() -> dict[str, Any]:
     acc_info = get_accelerator_info()
     return {
         "status": "ok",
-        "version": "0.2.5",
+        "version": __version__,
         "project": "ProofCausality AI",
         "tagline": "Prove what happened. Detect what is missing. Capture the evidence that changes the decision.",
         "engines": [
@@ -1148,7 +1149,7 @@ def audit_vision_annotation(req: VisionAuditRequest) -> VisionAuditResponse:
     receipt = generate_receipt(
         report_id=report_id,
         engine_name="LabelCourt Real Vision Inference Auditor",
-        software_version="0.2.5",
+        software_version=__version__,
         inputs_hash=inputs_hash,
         measurements=measurements,
         signals=signals,

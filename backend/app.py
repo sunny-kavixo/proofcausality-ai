@@ -10,6 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 
+from backend import __version__
 from backend.api.routes import router as api_router
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +28,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="ProofCausality AI",
     description="Prove what happened. Detect what is missing. Capture the evidence that changes the decision.",
-    version="0.2.5",
+    version=__version__,
     lifespan=lifespan,
 )
 
