@@ -30,6 +30,21 @@ from backend.evidence.dataset_manifest import (
 )
 from backend.evidence.provenance import ProvenanceCategory, ProvenanceGate, ProvenanceViolationError
 from backend.evidence.schemas import BoundingBox, VisionAuditAnnotation
+from backend.providers.local_segmentation import get_local_mask2former_provider
+
+try:
+    import torch
+    import transformers
+    _p = get_local_mask2former_provider()
+    _p.load()
+    _MODEL_AVAILABLE = True
+except Exception:
+    _MODEL_AVAILABLE = False
+
+requires_local_model = pytest.mark.skipif(
+    not _MODEL_AVAILABLE,
+    reason="PyTorch, Transformers, or local Mask2Former checkpoint not available in test environment",
+)
 
 
 @pytest.fixture(scope="module")
@@ -53,6 +68,28 @@ def _create_synthetic_jpeg_b64(width: int = 640, height: int = 427, color=(200, 
     return f"data:image/jpeg;base64,{base64.b64encode(buf.getvalue()).decode('ascii')}"
 
 
+def test_valid_manifest_authoritative_verification_direct(authentic_coco_sample: dict):
+    """Direct server-authoritative provenance verification succeeds without model dependency."""
+    raw_b64 = authentic_coco_sample["image_base64"]
+    if "," in raw_b64:
+        raw_b64 = raw_b64.split(",", 1)[1]
+    raw_bytes = base64.b64decode(raw_b64)
+    sha256 = hashlib.sha256(raw_bytes).hexdigest()
+
+    prov = verify_authoritative_provenance(
+        image_bytes=raw_bytes,
+        image_sha256=sha256,
+        width=authentic_coco_sample["image_width"],
+        height=authentic_coco_sample["image_height"],
+        claimed_source_type="MANIFEST_VERIFIED_DATASET_IMAGE",
+        manifest_image_id=authentic_coco_sample["manifest_image_id"],
+    )
+    assert prov.is_verified is True
+    assert prov.image_source_type == "MANIFEST_VERIFIED_DATASET_IMAGE"
+    assert prov.canonical_source_url is not None
+
+
+@requires_local_model
 def test_valid_manifest_backed_image_accepted(client: TestClient, authentic_coco_sample: dict):
     """An authentic image matching manifest hash, dimensions, and ID is granted verified status."""
     payload = {
@@ -194,6 +231,22 @@ def test_unknown_license_represented_accurately():
             assert rec["redistribution_status"] == "UNKNOWN"
 
 
+def test_user_upload_authoritative_verification_direct():
+    """User upload verified directly without manifest is labeled unverified."""
+    prov = verify_authoritative_provenance(
+        image_bytes=b"dummy",
+        image_sha256="1" * 64,
+        width=300,
+        height=300,
+        claimed_source_type="USER_UPLOADED_IMAGE",
+    )
+    assert prov.image_source_type == "USER_UPLOADED_IMAGE"
+    assert prov.category == "DECODED_IMAGE"
+    assert prov.is_verified is False
+    assert prov.manifest_image_id is None
+
+
+@requires_local_model
 def test_user_upload_without_manifest_accepted_as_unverified(client: TestClient):
     """A legitimate user-uploaded photograph without manifest is accepted but labeled unverified."""
     user_img_b64 = _create_synthetic_jpeg_b64(width=300, height=300, color=(120, 180, 240))

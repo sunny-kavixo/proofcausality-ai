@@ -55,6 +55,7 @@ def test_correct_revision_accepted():
     assert provider.revision == MODEL_REVISION
 
 
+@requires_local_model
 def test_incorrect_revision_rejected():
     """An unpinned, altered, or incorrect revision must fail closed immediately."""
     provider = LocalMask2FormerProvider(

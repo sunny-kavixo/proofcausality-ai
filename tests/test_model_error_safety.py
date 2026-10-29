@@ -28,6 +28,21 @@ from backend.providers.local_segmentation import (
     LocalMask2FormerProvider,
     ModelOutputError,
     ModelUnavailableError,
+    get_local_mask2former_provider,
+)
+
+try:
+    import torch
+    import transformers
+    _p = get_local_mask2former_provider()
+    _p.load()
+    _MODEL_AVAILABLE = True
+except Exception:
+    _MODEL_AVAILABLE = False
+
+requires_local_model = pytest.mark.skipif(
+    not _MODEL_AVAILABLE,
+    reason="PyTorch, Transformers, or local Mask2Former checkpoint not available in test environment",
 )
 
 
@@ -143,6 +158,7 @@ def test_oversized_base64_payload_rejected(client: TestClient, authentic_coco_sa
     assert "exceeds maximum allowed size limit" in resp.json()["detail"]
 
 
+@requires_local_model
 def test_bounded_concurrency_and_simultaneous_requests(client: TestClient, authentic_coco_sample: dict):
     """Simultaneous requests execute safely without device memory collisions."""
     payload = {

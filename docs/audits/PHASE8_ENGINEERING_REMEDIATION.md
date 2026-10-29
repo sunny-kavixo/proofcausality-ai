@@ -233,10 +233,10 @@
 | **7. Licensing Audit Completed** | 33 tracked images cataloged; CC-BY vs NC/ND segregated; no blanket MIT | 5 licensing tests passing; `DATASET_LICENSING_AUDIT.md` comprehensive | **PASS** |
 | **8. Benchmark Reporting Consistent** | 8 categories strictly segregated; latency reconciled without fabricated medians | 4 scientific benchmark tests passing; p50 = 1017.89 ms server / 1020.81 ms client | **PASS** |
 | **9. Security Regression Tests** | Path traversal blocked, payload bounds, secret redaction, offline guarantees | 6 security tests passing across all public API routes | **PASS** |
-| **10. Python Test Suite** | All unit, integration, and security tests passing | **183 / 183 tests passed** in 17.28s (`.venv/bin/pytest`) | **PASS** |
+| **10. Python Test Suite** | All unit, integration, and security tests passing | **185 / 185 tests passed** in 19.86s (`.venv/bin/pytest`) | **PASS** |
 | **11. Rust Native Tests** | Native SIMD/zero-copy C-ABI kernel verification | **19 / 19 tests passed** in 0.00s (`cargo test`) | **PASS** |
 | **12. Browser Verification** | Real Google Chrome driving all workflows; 0 console errors | **10 / 10 checks passed** in 11.2s; 7 screenshots saved | **PASS** |
-| **13. README & Diagrams Accurate** | Badges updated, architecture diagrams verified, zero `file://` links | 183-test badge; 11 diagrams/screenshots verified; no broken links | **PASS** |
+| **13. README & Diagrams Accurate** | Badges updated, architecture diagrams verified, zero `file://` links | 185-test badge; 11 diagrams/screenshots verified; no broken links | **PASS** |
 | **14. Git Diff Reviewed** | Clean focused changes staged; no accidental or unrelated edits | Reviewed; only Phase 8 remediation files modified | **PASS** |
 | **15. No Secrets Committed** | Secrets, keys, tokens, or local credentials excluded | Verified via regex search; no credentials committed | **PASS** |
 
