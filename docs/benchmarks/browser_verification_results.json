@@ -2,11 +2,12 @@
   "suite": "ProofCausality AI Real Browser E2E Acceptance Suite",
   "browser": "Google Chrome (macOS arm64 Apple Silicon)",
   "base_url": "http://127.0.0.1:8080",
+  "timestamp_utc": "2026-10-29T15:44:09Z",
   "checks": [
     {
       "check": "landing_page_title",
       "status": "PASS",
-      "value": "ProofCausality AI \u2014 Evidence-Aware Visual Verification"
+      "value": "ProofCausality AI — Evidence-Aware Visual Verification"
     },
     {
       "check": "engine_badge",
@@ -26,26 +27,26 @@
     {
       "check": "neural_vision_audit_real_model_inference",
       "status": "PASS",
-      "sample": "000000397133.jpg \u2014 bottle (640x427)",
+      "sample": "000000397133.jpg — bottle (640x427)",
       "verdict": "REVIEW",
       "reason": "LOW_SPATIAL_OVERLAP",
       "iou": "0.242",
-      "latency": "6666.1 ms",
-      "receipt": "VREC-C892C77A2C78"
+      "latency": "5365.8 ms",
+      "receipt": "VREC-C27E28920FC1"
     },
     {
       "check": "labelcourt_audit_run",
       "status": "PASS",
       "verdict": "ACCEPT",
       "iou": "94.1%",
-      "receipt": "Receipt: LC-F5D5DED83FCE"
+      "receipt": "Receipt: LC-3E60E53B4767"
     },
     {
       "check": "actionproof_verification_run",
       "status": "PASS",
       "verdict": "SUCCESS",
       "displacement": "322.02 px",
-      "receipt": "Receipt: AP-5BA91C0F7906"
+      "receipt": "Receipt: AP-256F2E7BB1D6"
     },
     {
       "check": "evidence_calculus_dag_and_eval",

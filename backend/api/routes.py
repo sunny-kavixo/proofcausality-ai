@@ -15,17 +15,38 @@ from backend.evidence.calculus.schemas import (
 
 
 import base64
+import collections
 import json
+import logging
 import os
 from pathlib import Path
+import re
 from typing import Any, Optional
 from fastapi import APIRouter, File, HTTPException, Query, UploadFile
 from pydantic import BaseModel
 import numpy as np
 
+logger = logging.getLogger("proofcausality.api")
+
+
+def sanitize_error_message(exc: Exception) -> str:
+    """Sanitize error messages to eliminate local filesystem paths, secrets, or internal traces."""
+    msg = str(exc)
+    # Strip absolute filesystem paths (Unix / macOS)
+    msg = re.sub(r'(/[a-zA-Z0-9_\.\-]+){2,}', '[PATH_REDACTED]', msg)
+    # Strip Windows filesystem paths
+    msg = re.sub(r'[A-Za-z]:\\[\w\.\-\\]+', '[PATH_REDACTED]', msg)
+    # Strip sensitive hex strings > 32 characters (e.g. secret keys or hashes)
+    msg = re.sub(r'([A-Fa-f0-9]{32,64})', '[REDACTED_HASH]', msg)
+    # Strip environment variable or secret patterns
+    msg = re.sub(r'(TOKEN|KEY|SECRET|PASSWORD)=[\S]+', '[REDACTED_SECRET]', msg, flags=re.IGNORECASE)
+    return msg
+
+
 import time
 from backend.actionproof.verifier import ActionProofVerifier
 from backend.evidence.advanced_metrics import wilson_score_interval
+from backend.evidence.dataset_manifest import verify_authoritative_provenance
 from backend.evidence.image_processing import (
     ImageValidationError,
     create_disagreement_visual_overlay,
@@ -76,8 +97,17 @@ from backend.providers.meta_adapter import MetaAdapter
 
 router = APIRouter(prefix="/api")
 
-# In-memory receipt store
-_receipt_store: dict[str, EvidenceReceipt] = {}
+# In-memory receipt store (bounded to 1000 items to prevent memory exhaustion)
+MAX_RECEIPT_STORE_SIZE = 1000
+_receipt_store: collections.OrderedDict[str, EvidenceReceipt] = collections.OrderedDict()
+
+
+def store_receipt(receipt: EvidenceReceipt) -> None:
+    """Store an evidence receipt with LRU eviction when capacity is exceeded."""
+    _receipt_store[receipt.report_id] = receipt
+    if len(_receipt_store) > MAX_RECEIPT_STORE_SIZE:
+        _receipt_store.popitem(last=False)
+
 
 # Initialize engines
 auditor = LabelCourtAuditor()
@@ -148,6 +178,8 @@ def model_info() -> dict[str, Any]:
 def upload_image(payload: ImageUploadPayload) -> dict[str, Any]:
     """Validate and decode uploaded image, returning dimensions, SHA-256 hash, and blur variance."""
     raw_b64 = payload.image_base64
+    if len(raw_b64) > 20 * 1024 * 1024:
+        raise HTTPException(status_code=413, detail="Image payload exceeds 20MB limit")
     if "," in raw_b64:
         raw_b64 = raw_b64.split(",", 1)[1]
 
@@ -168,10 +200,13 @@ def upload_image(payload: ImageUploadPayload) -> dict[str, Any]:
             "is_blurry": is_blurry,
             "format": "RGB",
         }
+    except HTTPException:
+        raise
     except ImageValidationError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=sanitize_error_message(str(e)))
     except Exception as e:
-        raise HTTPException(status_code=422, detail=f"Failed to process image payload: {e}")
+        raise HTTPException(status_code=422, detail=f"Failed to process image payload: {sanitize_error_message(str(e))}")
+
 
 
 @router.post("/labelcourt/audit")
@@ -195,19 +230,21 @@ def audit_annotation(payload: AuditRequest) -> dict[str, Any]:
 
     if payload.image_base64:
         raw_b64 = payload.image_base64
+        if len(raw_b64) > 20 * 1024 * 1024:
+            raise HTTPException(status_code=413, detail="Image payload exceeds 20MB limit")
         if "," in raw_b64:
             raw_b64 = raw_b64.split(",", 1)[1]
         try:
             raw_bytes = base64.b64decode(raw_b64)
         except Exception as e:
-            raise HTTPException(status_code=400, detail=f"Malformed base64 image data: {e}")
+            raise HTTPException(status_code=400, detail=f"Malformed base64 image data: {sanitize_error_message(str(e))}")
 
         try:
             rgb_arr, sha256_hash, iw, ih = validate_and_decode_image(raw_bytes)
         except ImageValidationError as e:
-            raise HTTPException(status_code=400, detail=str(e))
+            raise HTTPException(status_code=400, detail=sanitize_error_message(str(e)))
         except Exception as e:
-            raise HTTPException(status_code=422, detail=f"Image decoding failed: {e}")
+            raise HTTPException(status_code=422, detail=f"Image decoding failed: {sanitize_error_message(str(e))}")
 
         if (ih, iw) != (h, w):
             raise HTTPException(
@@ -249,7 +286,7 @@ def audit_annotation(payload: AuditRequest) -> dict[str, Any]:
         provenance=provenance_dict,
     )
 
-    _receipt_store[receipt.report_id] = receipt
+    store_receipt(receipt)
 
     response_data: dict[str, Any] = {
         "audit_result": result.model_dump(),
@@ -281,19 +318,21 @@ def verify_action(payload: VerifyActionPayload) -> dict[str, Any]:
 
     if payload.after_image_base64:
         raw_b64 = payload.after_image_base64
+        if len(raw_b64) > 20 * 1024 * 1024:
+            raise HTTPException(status_code=413, detail="Image payload exceeds 20MB limit")
         if "," in raw_b64:
             raw_b64 = raw_b64.split(",", 1)[1]
         try:
             raw_bytes = base64.b64decode(raw_b64)
         except Exception as e:
-            raise HTTPException(status_code=400, detail=f"Malformed base64 image data: {e}")
+            raise HTTPException(status_code=400, detail=f"Malformed base64 image data: {sanitize_error_message(str(e))}")
 
         try:
             rgb_arr, sha256_hash, iw, ih = validate_and_decode_image(raw_bytes)
         except ImageValidationError as e:
-            raise HTTPException(status_code=400, detail=str(e))
+            raise HTTPException(status_code=400, detail=sanitize_error_message(str(e)))
         except Exception as e:
-            raise HTTPException(status_code=422, detail=f"Image decoding failed: {e}")
+            raise HTTPException(status_code=422, detail=f"Image decoding failed: {sanitize_error_message(str(e))}")
 
         if (ih, iw) != (h, w):
             raise HTTPException(
@@ -333,7 +372,7 @@ def verify_action(payload: VerifyActionPayload) -> dict[str, Any]:
         provenance=provenance_dict,
     )
 
-    _receipt_store[receipt.report_id] = receipt
+    store_receipt(receipt)
 
     return {
         "verification_result": result.model_dump(),
@@ -379,19 +418,21 @@ def evaluate_recapture_followup(req: ReCaptureFollowupRequest) -> dict[str, Any]
 
     if req.followup_image_base64:
         raw_b64 = req.followup_image_base64
+        if len(raw_b64) > 20 * 1024 * 1024:
+            raise HTTPException(status_code=413, detail="Image payload exceeds 20MB limit")
         if "," in raw_b64:
             raw_b64 = raw_b64.split(",", 1)[1]
         try:
             raw_bytes = base64.b64decode(raw_b64)
         except Exception as e:
-            raise HTTPException(status_code=400, detail=f"Malformed followup base64: {e}")
+            raise HTTPException(status_code=400, detail=f"Malformed followup base64: {sanitize_error_message(str(e))}")
 
         try:
             rgb_arr, sha256_hash, iw, ih = validate_and_decode_image(raw_bytes)
         except ImageValidationError as e:
-            raise HTTPException(status_code=400, detail=str(e))
+            raise HTTPException(status_code=400, detail=sanitize_error_message(str(e)))
         except Exception as e:
-            raise HTTPException(status_code=422, detail=f"Followup image decoding failed: {e}")
+            raise HTTPException(status_code=422, detail=f"Followup image decoding failed: {sanitize_error_message(str(e))}")
 
         if (ih, iw) != (req.canvas_height, req.canvas_width):
             raise HTTPException(
@@ -465,7 +506,7 @@ def evaluate_recapture_followup(req: ReCaptureFollowupRequest) -> dict[str, Any]
         recapture_directive=req.directive_issued,
         provenance=provenance_dict,
     )
-    _receipt_store[report_id] = receipt
+    store_receipt(receipt)
 
     return {
         "report_id": report_id,
@@ -497,6 +538,8 @@ def plan_recapture_endpoint(signals: list[UncertaintySignal]) -> dict[str, Any]:
 @router.get("/receipts/{report_id}")
 def get_receipt(report_id: str) -> dict[str, Any]:
     """Retrieve an evidence receipt by ID and check cryptographic SHA-256 integrity."""
+    if not re.match(r"^[A-Za-z0-9_\-]{1,64}$", report_id):
+        raise HTTPException(status_code=400, detail="Invalid report_id format.")
     if report_id not in _receipt_store:
         raise HTTPException(status_code=404, detail="Receipt not found")
     receipt = _receipt_store[report_id]
@@ -799,6 +842,11 @@ def audit_vision_annotation(req: VisionAuditRequest) -> VisionAuditResponse:
 
     # 1. Image decoding & validation
     b64_str = req.image_base64.strip()
+    if len(b64_str) > 20 * 1024 * 1024:
+        raise HTTPException(
+            status_code=413,
+            detail="Image payload exceeds maximum allowed size limit of 20MB base64.",
+        )
     if "," in b64_str:
         b64_str = b64_str.split(",", 1)[1]
     try:
@@ -810,6 +858,24 @@ def audit_vision_annotation(req: VisionAuditRequest) -> VisionAuditResponse:
         rgb_arr, image_sha256, width, height = validate_and_decode_image(raw_bytes)
     except ImageValidationError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+    # Authoritative server-side provenance verification (Issue 1 Trust-Boundary Remediation)
+    prov_result = verify_authoritative_provenance(
+        image_bytes=raw_bytes,
+        image_sha256=image_sha256,
+        width=width,
+        height=height,
+        claimed_source_type=req.image_source_type,
+        manifest_image_id=req.manifest_image_id,
+        annotation=req.annotation,
+        claimed_annotation_source=getattr(req, "annotation_source_type", None),
+        dataset_manifest_ref=req.dataset_manifest_ref,
+    )
+    if prov_result.failure_reason is not None:
+        raise HTTPException(
+            status_code=422,
+            detail=f"Provenance verification failed: {prov_result.failure_reason}",
+        )
 
     t_decode = time.perf_counter()
 
@@ -871,7 +937,19 @@ def audit_vision_annotation(req: VisionAuditRequest) -> VisionAuditResponse:
             raw_bytes=raw_bytes,
         )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Mask2Former inference execution failed: {e}")
+        correlation_id = f"INF-{uuid.uuid4().hex[:12].upper()}"
+        logger.error(
+            "Mask2Former inference execution failed [correlation_id=%s]: %s: %s",
+            correlation_id,
+            type(e).__name__,
+            e,
+            exc_info=True,
+        )
+        safe_detail = sanitize_error_message(e)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Mask2Former inference execution failed (Request ID: {correlation_id}): {safe_detail}",
+        )
 
     t_inference = time.perf_counter()
 
@@ -1028,17 +1106,21 @@ def audit_vision_annotation(req: VisionAuditRequest) -> VisionAuditResponse:
 
     # 7. Tamper-evident Evidence Receipt & Provenance
     report_id = f"VREC-{uuid.uuid4().hex[:12].upper()}"
-    image_source_type = (
-        req.image_source_type
-        if hasattr(req, "image_source_type") and req.image_source_type
-        else ("MANIFEST_VERIFIED_DATASET_IMAGE" if req.manifest_image_id else "USER_UPLOADED_IMAGE")
-    )
 
     provenance: dict[str, Any] = {
         "source_image_hash": image_sha256,
-        "image_source_type": image_source_type,
+        "image_source_type": prov_result.image_source_type,
+        "provenance_category": prov_result.category,
+        "is_independently_verified": prov_result.is_verified,
+        "canonical_source_url": prov_result.canonical_source_url,
+        "license_status": prov_result.license_status,
+        "license_name": prov_result.license_name,
+        "license_url": prov_result.license_url,
+        "redistribution_status": prov_result.redistribution_status,
+        "annotation_source_type": prov_result.annotation_source_type,
+        "annotation_verified": prov_result.annotation_verified,
         "image_dimensions": {"width": width, "height": height},
-        "manifest_image_id": req.manifest_image_id,
+        "manifest_image_id": prov_result.manifest_image_id,
         "human_annotation_hash": calculate_sha256(canonical_json_dump(req.annotation.model_dump())),
         "model_name": execution.model_identifier,
         "model_revision": execution.model_revision,
@@ -1079,7 +1161,7 @@ def audit_vision_annotation(req: VisionAuditRequest) -> VisionAuditResponse:
     if not receipt_is_valid:
         raise HTTPException(status_code=500, detail="Generated evidence receipt failed integrity verification.")
 
-    _receipt_store[receipt.report_id] = receipt
+    store_receipt(receipt)
     t_receipt = time.perf_counter()
 
     # 8. Full wall-clock disaggregated latency

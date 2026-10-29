@@ -19,10 +19,14 @@ from PIL import Image, ImageDraw
 
 from backend.evidence.schemas import BoundingBox
 
-
 class ImageValidationError(ValueError):
     """Raised when an uploaded image fails validation."""
     pass
+
+
+# Prevent decompression bomb attacks
+Image.MAX_IMAGE_PIXELS = 25_000_000
+
 
 
 def validate_and_decode_image(

@@ -67,10 +67,11 @@ def is_rust_accelerator_available() -> bool:
 
 def get_accelerator_info() -> dict[str, Any]:
     """Return runtime metadata regarding the active computational acceleration engine."""
+    lib_name = os.path.basename(_CANDIDATE_PATHS[0]) if _RUST_AVAILABLE and _CANDIDATE_PATHS else None
     return {
         "rust_accelerator_active": _RUST_AVAILABLE,
         "backend_engine": "Rust Native cdylib (SIMD/zero-copy)" if _RUST_AVAILABLE else "Pure NumPy Fallback",
-        "library_path": _CANDIDATE_PATHS[0] if _RUST_AVAILABLE else None,
+        "library_path": lib_name,
         "load_error": _LOAD_ERROR,
     }
 
