@@ -11,7 +11,7 @@
     {
       "check": "engine_badge",
       "status": "PASS",
-      "value": "ENGINE V0.2.5"
+      "value": "ENGINE V0.2.6"
     },
     {
       "check": "rust_badge",
@@ -30,22 +30,22 @@
       "verdict": "REVIEW",
       "reason": "LOW_SPATIAL_OVERLAP",
       "iou": "0.242",
-      "latency": "4362.4 ms",
-      "receipt": "VREC-CB7DC415C0E5"
+      "latency": "4423.6 ms",
+      "receipt": "VREC-0E3A936EF157"
     },
     {
       "check": "labelcourt_audit_run",
       "status": "PASS",
       "verdict": "ACCEPT",
       "iou": "94.1%",
-      "receipt": "Receipt: LC-69E4B0CE0FA2"
+      "receipt": "Receipt: LC-7DF836AED6B3"
     },
     {
       "check": "actionproof_verification_run",
       "status": "PASS",
       "verdict": "SUCCESS",
       "displacement": "322.02 px",
-      "receipt": "Receipt: AP-5A8F9BC34747"
+      "receipt": "Receipt: AP-02325A332C80"
     },
     {
       "check": "evidence_calculus_dag_and_eval",
