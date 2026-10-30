@@ -163,20 +163,39 @@ def clean_extract_and_smoke_test(archive_path: Path, prefix: str) -> dict[str, s
         if len(wheels) != 1:
             return {"status": "FAILED", "reason": f"Expected one wheel, found {len(wheels)}"}
         venv_dir = extract_dir / "venv"
-        venv_proc = subprocess.run([sys.executable, "-m", "venv", "--system-site-packages", str(venv_dir)], capture_output=True, text=True)
+        venv_proc = subprocess.run(
+            [sys.executable, "-m", "venv", str(venv_dir)],
+            capture_output=True,
+            text=True,
+        )
         if venv_proc.returncode != 0:
             return {"status": "FAILED", "reason": f"Virtualenv creation failed: {venv_proc.stderr}"}
         venv_python = venv_dir / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
         install_proc = subprocess.run(
-            [str(venv_python), "-m", "pip", "install", "--no-deps", str(wheels[0])],
+            [str(venv_python), "-m", "pip", "install", str(wheels[0])],
             capture_output=True, text=True,
         )
         if install_proc.returncode != 0:
             return {"status": "FAILED", "reason": f"Wheel install failed: {install_proc.stderr}"}
 
-        # 4. Import from outside the source tree and verify packaged frontend data.
+        # 4. Import from outside the source tree, verify every declared runtime
+        # dependency was installed into the isolated venv, and exercise the app.
         proc = subprocess.run(
-            [str(venv_python), "-c", "import backend, frontend; from pathlib import Path; assert (Path(frontend.__file__).parent / 'static/index.html').is_file(); print(backend.__version__)"],
+            [
+                str(venv_python),
+                "-c",
+                (
+                    "import backend, fastapi, frontend, httpx, numpy, PIL, pydantic, scipy, uvicorn; "
+                    "from pathlib import Path; "
+                    "from fastapi.testclient import TestClient; "
+                    "from backend.app import app; "
+                    "assert (Path(frontend.__file__).parent / 'static/index.html').is_file(); "
+                    "response = TestClient(app).get('/api/health'); "
+                    "assert response.status_code == 200, response.text; "
+                    "assert response.json()['version'] == backend.__version__; "
+                    "print(backend.__version__)"
+                ),
+            ],
             cwd=str(extract_dir),
             capture_output=True,
             text=True,

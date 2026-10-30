@@ -105,3 +105,13 @@ def test_release_packaging_archive_safety(tmp_path: Path):
     extract_result = clean_extract_and_smoke_test(tar_path, prefix)
     assert extract_result["status"] == "PASS", f"Extraction test failed: {extract_result}"
     assert extract_result["extracted_version"] == version
+
+
+def test_release_validator_uses_isolated_runtime_dependency_install():
+    """The artifact gate must not inherit or omit runtime dependencies."""
+    source = (REPO_ROOT / "scripts" / "package_release.py").read_text(encoding="utf-8")
+    assert "--system-site-packages" not in source
+    assert '"pip", "install", str(wheels[0])' in source
+    assert '"pip", "install", "--no-deps"' not in source
+    for runtime_import in ("fastapi", "httpx", "numpy", "PIL", "pydantic", "scipy", "uvicorn"):
+        assert runtime_import in source

@@ -19,9 +19,11 @@ from __future__ import annotations
 
 import base64
 import copy
+import io
 from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
+from PIL import Image
 
 from backend.app import app
 from backend.evidence.receipts import verify_receipt_integrity
@@ -59,6 +61,27 @@ def pilot_samples(client: TestClient) -> list[dict]:
     return samples
 
 
+@pytest.fixture(scope="module")
+def audit_sample(client: TestClient) -> dict:
+    """Use a real sample when present, otherwise a synthetic user upload for core API tests."""
+    resp = client.get("/api/vision/samples")
+    assert resp.status_code == 200
+    samples = resp.json()
+    if samples:
+        return samples[0]
+    image = Image.new("RGB", (64, 64), color=(120, 180, 240))
+    buffer = io.BytesIO()
+    image.save(buffer, format="JPEG")
+    return {
+        "image_base64": f"data:image/jpeg;base64,{base64.b64encode(buffer.getvalue()).decode('ascii')}",
+        "annotation": {
+            "id": 1,
+            "category_name": "cup",
+            "bbox": {"x_min": 8, "y_min": 8, "x_max": 48, "y_max": 48},
+        },
+    }
+
+
 def test_get_vision_samples_schema(pilot_samples: list[dict]):
     """Verify that COCO samples contain authentic photos and well-formed COCO annotations."""
     for s in pilot_samples:
@@ -71,9 +94,9 @@ def test_get_vision_samples_schema(pilot_samples: list[dict]):
         assert "perturbation_presets" in s
 
 
-def test_invalid_image_payloads(client: TestClient, pilot_samples: list[dict]):
+def test_invalid_image_payloads(client: TestClient, audit_sample: dict):
     """Invalid base64, empty bytes, or non-image format must be rejected with HTTP 400."""
-    sample = pilot_samples[0]
+    sample = audit_sample
 
     # Corrupt base64
     resp = client.post(
@@ -92,9 +115,9 @@ def test_invalid_image_payloads(client: TestClient, pilot_samples: list[dict]):
     assert "Unsupported image format" in resp.json()["detail"]
 
 
-def test_provider_unavailable_handling(client: TestClient, pilot_samples: list[dict], monkeypatch):
+def test_provider_unavailable_handling(client: TestClient, audit_sample: dict, monkeypatch):
     """When the model provider fails or raises an error, API returns HTTP 500 with explanatory detail."""
-    sample = pilot_samples[0]
+    sample = audit_sample
     from backend.api import routes
 
     class BrokenProvider:
