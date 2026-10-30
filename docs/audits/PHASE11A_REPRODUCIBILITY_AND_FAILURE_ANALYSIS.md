@@ -7,7 +7,7 @@
 
 ## Executive result
 
-Phase 11A repairs the source-package discovery failure, declares the missing SciPy runtime dependency, bounds dependency compatibility, packages frontend assets, makes excluded-photo prerequisites explicit, replaces the unsafe downloader, and adds artifact-level release validation. The enriched checkout now passes **191 tests** after the three new downloader regressions are included. A dependency-only environment installs successfully, serves `/api/health`, and runs the non-model suite with explicit model-only skips.
+Phase 11A repairs the source-package discovery failure, declares the missing SciPy runtime dependency, bounds dependency compatibility, packages frontend assets, makes excluded-photo prerequisites explicit, replaces the unsafe downloader, and adds artifact-level release validation. The final enriched checkout passes **193 tests**. A genuinely isolated dependency environment installs successfully, serves `/api/health`, and runs the non-model suite with explicit model/photo-only skips.
 
 This work does **not** make ProofCausality production-ready or scientifically validated. The 13-image holdout remains a small developer-controlled diagnostic set. No natural annotation-error adjudication, real temporal action benchmark, human ReCapture study, official COCO AP evaluation, or authenticated receipt signing was added.
 
@@ -48,11 +48,11 @@ The downloader records hashes it observes; it does not misrepresent those values
 | Check | Before | After repair |
 |---|---:|---:|
 | Exact release, enriched environment | 160 passed / 4 failed / 24 errors | 188 passed before adding downloader tests |
-| Current enriched checkout | — | 191 passed |
+| Current enriched checkout | — | 193 passed |
 | Fresh declared-dependency venv | install failure | 177 passed / 14 model-only skips after new tests |
 | Health endpoint in fresh venv | unavailable | HTTP 200, version 0.2.6 |
 | Wheel build/install from extracted archive | failed discovery | pass after repair commit |
-| Full tests in committed clean source archive | 160 passed / 4 failed / 24 errors | 163 passed / 28 explicit optional-prerequisite skips |
+| Full tests in committed clean source archive | 160 passed / 4 failed / 24 errors | 167 passed / 26 explicit optional-prerequisite skips |
 
 Model-only skips are tied to the absence of the optional `inference` extra/checkpoint. Genuine-photo skips are tied to excluded COCO files and state the acquisition command. Core deterministic behavior, API error handling that does not require the model, downloader safety, packaging metadata, and health loading still execute.
 
