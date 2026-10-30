@@ -1,0 +1,40 @@
+{
+  "audit_date": "2026-10-30",
+  "baseline_commit": "4e2503a360411a70214e71a45fe8014846e8780a",
+  "release": "v0.2.6",
+  "overall_status": "PARTIAL",
+  "neural_inference": "PASS",
+  "production_readiness": "FAIL",
+  "real_human_annotation_error_benchmark": "NOT_VERIFIED",
+  "genuine_temporal_action_validation": "PENDING",
+  "human_recapture_field_validation": "PENDING",
+  "historical_reproduction": {
+    "images": 20,
+    "annotations": 215,
+    "class_aware_recall_iou50": 0.4326,
+    "class_agnostic_recall_iou50": 0.5581,
+    "status": "REPRODUCED"
+  },
+  "holdout": {
+    "images": 13,
+    "ground_truth_polygon_instances": 102,
+    "predicted_instances": 135,
+    "class_aware_precision_iou50": 0.3926,
+    "class_aware_recall_iou50": 0.5196,
+    "class_aware_precision_iou75": 0.2074,
+    "class_aware_recall_iou75": 0.2745,
+    "small_object_recall_iou50": 0.1538
+  },
+  "completion": {
+    "engineering_implementation_percent": 83.3,
+    "functional_product_readiness_percent": 55.0,
+    "scientific_validation_percent": 35.0,
+    "real_world_deployment_readiness_percent": 31.3
+  },
+  "confirmed_release_test_result": {
+    "passed": 160,
+    "failed": 4,
+    "errors": 24,
+    "status": "FAIL"
+  }
+}

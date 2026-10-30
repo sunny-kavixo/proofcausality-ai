@@ -55,6 +55,8 @@ def test_version_synchronization_across_repository():
 def test_gitattributes_export_ignore_rules():
     """Verify that .gitattributes strictly enforces exclusion of forbidden distribution assets."""
     gitattributes_path = REPO_ROOT / ".gitattributes"
+    if not gitattributes_path.exists() and not (REPO_ROOT / ".git").exists():
+        pytest.skip("Checkout-only export policy is intentionally absent from an exported source archive")
     assert gitattributes_path.exists(), ".gitattributes must exist at repository root"
 
     with open(gitattributes_path, "r", encoding="utf-8") as f:
@@ -71,6 +73,8 @@ def test_gitattributes_export_ignore_rules():
 
 def test_release_packaging_archive_safety(tmp_path: Path):
     """Test generating release archives and verify that required files exist and forbidden files are excluded."""
+    if not (REPO_ROOT / ".git").exists():
+        pytest.skip("Creating a git archive is a checkout-only release-maintainer test")
     # Build test tarball into tmp_path
     version = "0.2.6"
     prefix = f"proofcausality-ai-{version}/"
@@ -101,3 +105,13 @@ def test_release_packaging_archive_safety(tmp_path: Path):
     extract_result = clean_extract_and_smoke_test(tar_path, prefix)
     assert extract_result["status"] == "PASS", f"Extraction test failed: {extract_result}"
     assert extract_result["extracted_version"] == version
+
+
+def test_release_validator_uses_isolated_runtime_dependency_install():
+    """The artifact gate must not inherit or omit runtime dependencies."""
+    source = (REPO_ROOT / "scripts" / "package_release.py").read_text(encoding="utf-8")
+    assert "--system-site-packages" not in source
+    assert '"pip", "install", str(wheels[0])' in source
+    assert '"pip", "install", "--no-deps"' not in source
+    for runtime_import in ("fastapi", "httpx", "numpy", "PIL", "pydantic", "scipy", "uvicorn"):
+        assert runtime_import in source

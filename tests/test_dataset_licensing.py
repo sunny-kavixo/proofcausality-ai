@@ -19,6 +19,9 @@ IMAGES_DIR = os.path.join(DATA_DIR, "images")
 PILOT_ANNOTATIONS_PATH = os.path.join(DATA_DIR, "annotations_coco_pilot20.json")
 MANIFEST_PATH = os.path.join(REPO_ROOT, "docs", "research", "REAL_DATASET_MANIFEST.json")
 AUDIT_DOC_PATH = os.path.join(REPO_ROOT, "docs", "research", "DATASET_LICENSING_AUDIT.md")
+FAILURE_GALLERY_DIR = os.path.join(
+    REPO_ROOT, "evaluation", "experiments", "phase10", "historical_reproduction", "failure_gallery"
+)
 
 
 def test_manifest_exists_and_has_valid_structure():
@@ -54,6 +57,8 @@ def test_manifest_separates_permitted_and_restricted_licenses():
 
 
 def test_manifest_hashes_match_disk_files():
+    if not os.path.isdir(IMAGES_DIR):
+        pytest.skip("Optional COCO photographs are excluded from source archives; run scripts/download_coco_subset.py")
     with open(MANIFEST_PATH, "r", encoding="utf-8") as f:
         data = json.load(f)
 
@@ -75,6 +80,8 @@ def test_manifest_hashes_match_disk_files():
 
 def test_tracked_images_outside_pilot_are_identified():
     """All 33 images in data/coco_val2017_subset/images/ are accounted for."""
+    if not os.path.isdir(IMAGES_DIR):
+        pytest.skip("Historical local-photo inventory is not part of the distributable source archive")
     all_files = sorted([f for f in os.listdir(IMAGES_DIR) if f.endswith(".jpg")])
     assert len(all_files) == 33
 
@@ -102,3 +109,16 @@ def test_no_blanket_mit_claim_over_third_party_assets():
     assert "No Blanket Licensing" in audit_content
     assert "CC BY-NC 4.0" in audit_content
     assert "Multi-License Framework" in audit_content
+
+
+def test_failure_gallery_carries_required_attribution_notice():
+    pngs = sorted(name for name in os.listdir(FAILURE_GALLERY_DIR) if name.endswith(".png"))
+    assert len(pngs) == 12
+    notice_path = os.path.join(FAILURE_GALLERY_DIR, "ATTRIBUTION.md")
+    assert os.path.isfile(notice_path)
+    notice = open(notice_path, "r", encoding="utf-8").read()
+    assert "Pot Noodle" in notice
+    assert "https://www.flickr.com/photos/maggiew/6255196340/" in notice
+    assert "https://creativecommons.org/licenses/by/2.0/" in notice
+    assert "Changes made" in notice
+    assert "MIT license does not apply" in " ".join(notice.split())

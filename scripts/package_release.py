@@ -133,7 +133,7 @@ def clean_extract_and_smoke_test(archive_path: Path, prefix: str) -> dict[str, s
                 zf.extractall(extract_dir)
         else:
             with tarfile.open(archive_path, "r:gz") as tf:
-                tf.extractall(extract_dir)
+                tf.extractall(extract_dir, filter="data")
 
         target_root = extract_dir / prefix.rstrip("/")
         if not target_root.exists():
@@ -149,10 +149,54 @@ def clean_extract_and_smoke_test(archive_path: Path, prefix: str) -> dict[str, s
         if not cargo_path.exists():
             return {"status": "FAILED", "reason": "Cargo.toml not found in extract"}
 
-        # 3. Check that python -c "import backend" works from target_root
+        # 3. Build and install the actual extracted package. Running an import from
+        # the source directory alone does not prove that package discovery works.
+        wheel_dir = extract_dir / "wheels"
+        wheel_dir.mkdir()
+        build_proc = subprocess.run(
+            [sys.executable, "-m", "pip", "wheel", "--no-deps", "--wheel-dir", str(wheel_dir), "."],
+            cwd=str(target_root), capture_output=True, text=True,
+        )
+        if build_proc.returncode != 0:
+            return {"status": "FAILED", "reason": f"Wheel build failed: {build_proc.stderr}"}
+        wheels = list(wheel_dir.glob("proofcausality_ai-*.whl"))
+        if len(wheels) != 1:
+            return {"status": "FAILED", "reason": f"Expected one wheel, found {len(wheels)}"}
+        venv_dir = extract_dir / "venv"
+        venv_proc = subprocess.run(
+            [sys.executable, "-m", "venv", str(venv_dir)],
+            capture_output=True,
+            text=True,
+        )
+        if venv_proc.returncode != 0:
+            return {"status": "FAILED", "reason": f"Virtualenv creation failed: {venv_proc.stderr}"}
+        venv_python = venv_dir / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+        install_proc = subprocess.run(
+            [str(venv_python), "-m", "pip", "install", str(wheels[0])],
+            capture_output=True, text=True,
+        )
+        if install_proc.returncode != 0:
+            return {"status": "FAILED", "reason": f"Wheel install failed: {install_proc.stderr}"}
+
+        # 4. Import from outside the source tree, verify every declared runtime
+        # dependency was installed into the isolated venv, and exercise the app.
         proc = subprocess.run(
-            [sys.executable, "-c", "import backend; print(backend.__version__)"],
-            cwd=str(target_root),
+            [
+                str(venv_python),
+                "-c",
+                (
+                    "import backend, fastapi, frontend, httpx, numpy, PIL, pydantic, scipy, uvicorn; "
+                    "from pathlib import Path; "
+                    "from fastapi.testclient import TestClient; "
+                    "from backend.app import app; "
+                    "assert (Path(frontend.__file__).parent / 'static/index.html').is_file(); "
+                    "response = TestClient(app).get('/api/health'); "
+                    "assert response.status_code == 200, response.text; "
+                    "assert response.json()['version'] == backend.__version__; "
+                    "print(backend.__version__)"
+                ),
+            ],
+            cwd=str(extract_dir),
             capture_output=True,
             text=True,
         )
@@ -167,7 +211,7 @@ def clean_extract_and_smoke_test(archive_path: Path, prefix: str) -> dict[str, s
                 "reason": f"Version mismatch: {extracted_version} != {expected_version}",
             }
 
-        # 4. Check Cargo compilation check
+        # 5. Check Cargo compilation check
         cargo_proc = subprocess.run(
             ["cargo", "check", "--manifest-path", str(cargo_path)],
             capture_output=True,
