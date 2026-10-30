@@ -54,6 +54,8 @@ def test_manifest_separates_permitted_and_restricted_licenses():
 
 
 def test_manifest_hashes_match_disk_files():
+    if not os.path.isdir(IMAGES_DIR):
+        pytest.skip("Optional COCO photographs are excluded from source archives; run scripts/download_coco_subset.py")
     with open(MANIFEST_PATH, "r", encoding="utf-8") as f:
         data = json.load(f)
 
@@ -75,6 +77,8 @@ def test_manifest_hashes_match_disk_files():
 
 def test_tracked_images_outside_pilot_are_identified():
     """All 33 images in data/coco_val2017_subset/images/ are accounted for."""
+    if not os.path.isdir(IMAGES_DIR):
+        pytest.skip("Historical local-photo inventory is not part of the distributable source archive")
     all_files = sorted([f for f in os.listdir(IMAGES_DIR) if f.endswith(".jpg")])
     assert len(all_files) == 33
 

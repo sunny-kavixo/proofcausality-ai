@@ -1,176 +1,147 @@
-# Authentic COCO 2017 Validation Subset Downloader
-import os
-import sys
-import json
-import hashlib
-import zipfile
-import urllib.request
+#!/usr/bin/env python3
+"""Explicit, non-destructive acquisition of the ProofCausality COCO pilot.
+
+COCO image files are intentionally excluded from release archives. This command
+requires the caller to provide the official ``instances_val2017.json`` metadata
+and performs no writes unless ``--write`` is supplied.
+"""
+
+from __future__ import annotations
+
+import argparse
 from datetime import datetime, timezone
+import hashlib
+import json
+from pathlib import Path
+import shutil
+import tempfile
+import urllib.request
+
 from PIL import Image
 
-COCO_VAL_BASE_URL = "http://images.cocodataset.org/val2017"
-
-PILOT_IMAGE_IDS = [
-    397133, 37777, 252219, 87038, 174482, 
-    403385, 6818, 480985, 458054, 331352, 
-    296649, 386912, 502136, 491497, 184791, 
-    348881, 289393, 522713, 181666, 17627
-]
-
-DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data", "coco_val2017_subset"))
-IMAGES_DIR = os.path.join(DATA_DIR, "images")
-DOCS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "docs", "research"))
-
-os.makedirs(IMAGES_DIR, exist_ok=True)
-os.makedirs(DOCS_DIR, exist_ok=True)
+REPO_ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_DATA_DIR = REPO_ROOT / "data" / "coco_val2017_subset"
+COCO_VAL_BASE_URL = "https://images.cocodataset.org/val2017"
+PILOT_IMAGE_IDS = [397133, 37777, 252219, 87038, 174482, 403385, 6818, 480985, 458054, 331352,
+                   296649, 386912, 502136, 491497, 184791, 348881, 289393, 522713, 181666, 17627]
 
 
-def download_and_hash_image(image_id: int) -> dict:
-    filename = f"{image_id:012d}.jpg"
-    url = f"{COCO_VAL_BASE_URL}/{filename}"
-    dest_path = os.path.join(IMAGES_DIR, filename)
-
-    if not os.path.exists(dest_path):
-        print(f"Downloading {filename} from {url}...")
-        urllib.request.urlretrieve(url, dest_path)
-    else:
-        print(f"Found existing {filename}")
-
-    with open(dest_path, "rb") as f:
-        data = f.read()
-        sha256 = hashlib.sha256(data).hexdigest()
-
-    with Image.open(dest_path) as img:
-        width, height = img.size
-        img_format = img.format
-
-    return {
-        "image_id": image_id,
-        "filename": filename,
-        "local_path": os.path.relpath(dest_path, start=os.path.dirname(os.path.dirname(DATA_DIR))),
-        "url": url,
-        "sha256": sha256,
-        "width": width,
-        "height": height,
-        "format": img_format,
-        "size_bytes": len(data),
-    }
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
-def process_coco_annotations(image_info_map: dict):
-    json_path = "/tmp/annotations/instances_val2017.json"
-    if not os.path.exists(json_path):
-        json_path = "/tmp/instances_val2017.json"
-
-    if not os.path.exists(json_path):
-        zip_path = "/tmp/annotations_trainval2017.zip"
-        print(f"Extracting instances_val2017.json from {zip_path}...")
-        with zipfile.ZipFile(zip_path, "r") as zf:
-            zf.extract("annotations/instances_val2017.json", "/tmp")
-        json_path = "/tmp/annotations/instances_val2017.json"
-
-    print(f"Loading annotations from {json_path}...")
-    with open(json_path, "r") as f:
-        coco_raw = json.load(f)
-
-    categories = {c["id"]: c["name"] for c in coco_raw.get("categories", [])}
-    licenses = {lic["id"]: lic for lic in coco_raw.get("licenses", [])}
-
-    target_ids = set(image_info_map.keys())
-    matched_images = [img for img in coco_raw.get("images", []) if img["id"] in target_ids]
-    matched_annotations = [ann for ann in coco_raw.get("annotations", []) if ann["image_id"] in target_ids]
-
-    print(f"Found {len(matched_images)} images and {len(matched_annotations)} annotations in val2017.")
-
-    subset_data = {
-        "info": {
-            "description": "ProofCausality AI COCO 2017 Val 20-Image Pilot Subset",
-            "url": "https://github.com/sunny-kavixo/proofcausality-ai",
-            "version": "v0.2.4",
-            "year": 2026,
-            "date_created": datetime.now(timezone.utc).isoformat(),
-        },
-        "licenses": coco_raw.get("licenses", []),
-        "categories": coco_raw.get("categories", []),
-        "images": matched_images,
-        "annotations": matched_annotations,
-    }
-
-    annotations_out_path = os.path.join(DATA_DIR, "annotations_coco_pilot20.json")
-    with open(annotations_out_path, "w") as f:
-        json.dump(subset_data, f, indent=2)
-    print(f"Saved pilot annotations to {annotations_out_path}")
-
-    manifest_entries = []
-    for img_meta in matched_images:
-        img_id = img_meta["id"]
-        info = image_info_map[img_id]
-        img_anns = [a for a in matched_annotations if a["image_id"] == img_id]
-        cat_names = sorted(list(set(categories.get(a["category_id"], "unknown") for a in img_anns)))
-        lic_info = licenses.get(img_meta.get("license", 0), {})
-
-        manifest_entries.append({
-            "dataset_name": "MS COCO 2017 Validation Set",
-            "official_image_id": img_id,
-            "filename": info["filename"],
-            "original_source_url": info["url"],
-            "flickr_url": img_meta.get("flickr_url", ""),
-            "coco_url": img_meta.get("coco_url", ""),
-            "date_captured": img_meta.get("date_captured", ""),
-            "license_id": img_meta.get("license", 0),
-            "license_name": lic_info.get("name", "Creative Commons Attribution 2.0 / 4.0"),
-            "license_url": lic_info.get("url", "https://creativecommons.org/licenses/"),
-            "author_attribution": lic_info.get("name", "Flickr User / COCO Consortium"),
-            "download_timestamp": datetime.now(timezone.utc).isoformat(),
-            "original_sha256": info["sha256"],
-            "image_width": info["width"],
-            "image_height": info["height"],
-            "size_bytes": info["size_bytes"],
-            "format": info["format"],
-            "annotation_count": len(img_anns),
-            "object_categories": cat_names,
-            "local_path": info["local_path"],
-            "redistribution_status": "Permitted for research/evaluation under CC-BY / Open Access terms",
-        })
-
-    manifest_path = os.path.join(DOCS_DIR, "REAL_DATASET_MANIFEST.json")
-    with open(manifest_path, "w") as f:
-        json.dump({
-            "version": "v0.2.4",
-            "curated_date": datetime.now(timezone.utc).isoformat(),
-            "total_images": len(manifest_entries),
-            "total_annotations": len(matched_annotations),
-            "dataset": manifest_entries,
-        }, f, indent=2)
-    print(f"Saved manifest to {manifest_path}")
-
-    md_path = os.path.join(DOCS_DIR, "REAL_DATASET_PROVENANCE.md")
-    with open(md_path, "w") as f:
-        f.write("# Authentic Real-World Photographic Benchmark Dataset: COCO 2017 Validation Subset\n\n")
-        f.write("**Dataset**: Microsoft Common Objects in Context (MS COCO 2017 Val)\n")
-        f.write(f"**Curated Subset**: {len(manifest_entries)} authentic photographic images with {len(matched_annotations)} polygon annotations\n")
-        f.write(f"**Curated Date**: {datetime.now(timezone.utc).strftime('%B %d, %Y')}\n")
-        f.write("**License**: Creative Commons Attribution 4.0 International / CC-BY Flickr\n")
-        f.write("**Total Download Size**: ~2.8 MB (Lightweight, reproducible pilot)\n\n")
-        f.write("| Image ID | Filename | Dimensions | SHA-256 (Original Bytes) | Annotations | Categories | License |\n")
-        f.write("|---|---|---|---|---|---|---|\n")
-        for m in manifest_entries:
-            cats = ', '.join(m['object_categories'][:3])
-            sha_trunc = m['original_sha256'][:16] + '...'
-            f.write(f"|  |  | {m['image_width']}x{m['image_height']} |  | {m['annotation_count']} | {cats} | [{m['license_name']}]({m['license_url']}) |\n")
-    print(f"Saved markdown provenance doc to {md_path}")
+def redistribution_status(license_id: int | None) -> str:
+    if license_id == 4:
+        return "PERMITTED_WITH_ATTRIBUTION"
+    if license_id in {1, 3, 6}:
+        return "RESTRICTED_REVIEW_SOURCE_LICENSE"
+    return "UNKNOWN_DO_NOT_REDISTRIBUTE"
 
 
-def main():
-    print("=== Starting COCO 2017 Pilot Subset Download ===")
-    image_info_map = {}
-    for img_id in PILOT_IMAGE_IDS:
-        info = download_and_hash_image(img_id)
-        image_info_map[img_id] = info
+def load_subset(annotations_path: Path) -> tuple[dict, list[dict], list[dict]]:
+    raw = json.loads(annotations_path.read_text(encoding="utf-8"))
+    target_ids = set(PILOT_IMAGE_IDS)
+    images = [item for item in raw.get("images", []) if item.get("id") in target_ids]
+    annotations = [item for item in raw.get("annotations", []) if item.get("image_id") in target_ids]
+    missing = sorted(target_ids - {item["id"] for item in images})
+    if missing:
+        raise ValueError(f"Annotation file is not COCO val2017 or lacks pilot IDs: {missing}")
+    return raw, images, annotations
 
-    process_coco_annotations(image_info_map)
-    print("=== Finished COCO 2017 Pilot Subset Acquisition ===")
+
+def download_atomic(url: str, destination: Path) -> None:
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(dir=destination.parent, delete=False) as temp:
+        temp_path = Path(temp.name)
+        try:
+            request = urllib.request.Request(url, headers={"User-Agent": "ProofCausality-AI/0.2.6"})
+            with urllib.request.urlopen(request, timeout=60) as response:
+                shutil.copyfileobj(response, temp)
+        except Exception:
+            temp_path.unlink(missing_ok=True)
+            raise
+    temp_path.replace(destination)
+
+
+def acquire(annotations_path: Path, data_dir: Path, replace: bool, base_url: str) -> dict:
+    raw, images, annotations = load_subset(annotations_path)
+    images_dir = data_dir / "images"
+    annotations_output = data_dir / "annotations_coco_pilot20.json"
+    manifest_output = data_dir / "acquisition_manifest.json"
+    protected = [path for path in (annotations_output, manifest_output) if path.exists()]
+    if protected and not replace:
+        names = ", ".join(str(path) for path in protected)
+        raise FileExistsError(f"Refusing to replace existing generated files: {names}; pass --replace explicitly")
+
+    licenses = {item["id"]: item for item in raw.get("licenses", [])}
+    categories = {item["id"]: item.get("name", "unknown") for item in raw.get("categories", [])}
+    acquired_at = datetime.now(timezone.utc).isoformat()
+    entries = []
+    for metadata in images:
+        filename = metadata["file_name"]
+        destination = images_dir / filename
+        url = f"{base_url.rstrip('/')}/{filename}"
+        if not destination.exists():
+            print(f"download {url}")
+            download_atomic(url, destination)
+        digest = sha256_file(destination)
+        with Image.open(destination) as image:
+            width, height = image.size
+            image_format = image.format
+        if (width, height) != (metadata.get("width"), metadata.get("height")):
+            raise ValueError(f"Dimension mismatch for {filename}")
+        license_id = metadata.get("license")
+        license_record = licenses.get(license_id, {})
+        image_annotations = [item for item in annotations if item["image_id"] == metadata["id"]]
+        entries.append({"official_image_id": metadata["id"], "filename": filename, "source_url": url,
+                        "coco_url": metadata.get("coco_url"), "flickr_url": metadata.get("flickr_url"),
+                        "license_id": license_id, "license_name": license_record.get("name", "UNKNOWN"),
+                        "license_url": license_record.get("url"),
+                        "redistribution_status": redistribution_status(license_id), "sha256": digest,
+                        "width": width, "height": height, "format": image_format,
+                        "size_bytes": destination.stat().st_size, "annotation_count": len(image_annotations),
+                        "categories": sorted({categories.get(item["category_id"], "unknown") for item in image_annotations})})
+
+    subset = {"info": {"description": "ProofCausality COCO 2017 val pilot subset", "created": acquired_at},
+              "licenses": raw.get("licenses", []), "categories": raw.get("categories", []),
+              "images": images, "annotations": annotations}
+    manifest = {"schema_version": 1, "acquired_at": acquired_at,
+                "annotations_source": str(annotations_path.resolve()),
+                "annotations_sha256": sha256_file(annotations_path),
+                "notice": "Licenses are copied from official COCO metadata per image; UNKNOWN entries must not be redistributed.",
+                "images": entries}
+    data_dir.mkdir(parents=True, exist_ok=True)
+    annotations_output.write_text(json.dumps(subset, indent=2) + "\n", encoding="utf-8")
+    manifest_output.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    return manifest
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--annotations-json", type=Path, required=True, help="Official instances_val2017.json path")
+    parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
+    parser.add_argument("--base-url", default=COCO_VAL_BASE_URL, help="HTTPS image origin")
+    parser.add_argument("--write", action="store_true", help="Perform network and filesystem writes")
+    parser.add_argument("--replace", action="store_true", help="Replace generated annotation/manifest files")
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    _raw, images, annotations = load_subset(args.annotations_json)
+    print(f"validated {len(images)} pilot image records and {len(annotations)} annotations")
+    print(f"destination: {args.data_dir.resolve()}")
+    if not args.write:
+        print("dry run only; pass --write to download images and generate files")
+        return 0
+    manifest = acquire(args.annotations_json, args.data_dir.resolve(), args.replace, args.base_url)
+    print(f"acquired {len(manifest['images'])} images; manifest: {args.data_dir / 'acquisition_manifest.json'}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
