@@ -52,6 +52,7 @@ The downloader records hashes it observes; it does not misrepresent those values
 | Fresh declared-dependency venv | install failure | 177 passed / 14 model-only skips after new tests |
 | Health endpoint in fresh venv | unavailable | HTTP 200, version 0.2.6 |
 | Wheel build/install from extracted archive | failed discovery | pass after repair commit |
+| Full tests in committed clean source archive | 160 passed / 4 failed / 24 errors | 163 passed / 28 explicit optional-prerequisite skips |
 
 Model-only skips are tied to the absence of the optional `inference` extra/checkpoint. Genuine-photo skips are tied to excluded COCO files and state the acquisition command. Core deterministic behavior, API error handling that does not require the model, downloader safety, packaging metadata, and health loading still execute.
 
