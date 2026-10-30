@@ -56,9 +56,21 @@ def authentic_coco_sample(client: TestClient) -> dict:
     resp = client.get("/api/vision/samples")
     assert resp.status_code == 200
     samples = resp.json()
-    if not samples:
-        pytest.skip("Optional COCO photographs are excluded from source archives; run the explicit downloader")
-    return samples[0]
+    if samples:
+        return {**samples[0], "image_source_type": "MANIFEST_VERIFIED_DATASET_IMAGE"}
+    image = Image.new("RGB", (64, 64), color=(120, 180, 240))
+    buffer = io.BytesIO()
+    image.save(buffer, format="JPEG")
+    return {
+        "image_base64": f"data:image/jpeg;base64,{base64.b64encode(buffer.getvalue()).decode('ascii')}",
+        "annotation": {
+            "id": 1,
+            "category_name": "cup",
+            "bbox": {"x_min": 8, "y_min": 8, "x_max": 48, "y_max": 48},
+        },
+        "manifest_image_id": None,
+        "image_source_type": "USER_UPLOADED_IMAGE",
+    }
 
 
 def test_missing_model_produces_safe_error_response(client: TestClient, authentic_coco_sample: dict, monkeypatch):
@@ -73,7 +85,7 @@ def test_missing_model_produces_safe_error_response(client: TestClient, authenti
         "image_base64": authentic_coco_sample["image_base64"],
         "annotation": authentic_coco_sample["annotation"],
         "manifest_image_id": authentic_coco_sample["manifest_image_id"],
-        "image_source_type": "MANIFEST_VERIFIED_DATASET_IMAGE",
+        "image_source_type": authentic_coco_sample["image_source_type"],
     }
     resp = client.post("/api/vision/audit", json=payload)
     assert resp.status_code == 500
@@ -100,7 +112,7 @@ def test_invalid_checkpoint_error_is_sanitized(client: TestClient, authentic_coc
         "image_base64": authentic_coco_sample["image_base64"],
         "annotation": authentic_coco_sample["annotation"],
         "manifest_image_id": authentic_coco_sample["manifest_image_id"],
-        "image_source_type": "MANIFEST_VERIFIED_DATASET_IMAGE",
+        "image_source_type": authentic_coco_sample["image_source_type"],
     }
     resp = client.post("/api/vision/audit", json=payload)
     assert resp.status_code == 500
@@ -122,7 +134,7 @@ def test_corrupted_model_output_handled_safely(client: TestClient, authentic_coc
         "image_base64": authentic_coco_sample["image_base64"],
         "annotation": authentic_coco_sample["annotation"],
         "manifest_image_id": authentic_coco_sample["manifest_image_id"],
-        "image_source_type": "MANIFEST_VERIFIED_DATASET_IMAGE",
+        "image_source_type": authentic_coco_sample["image_source_type"],
     }
     resp = client.post("/api/vision/audit", json=payload)
     assert resp.status_code == 500
@@ -166,7 +178,7 @@ def test_bounded_concurrency_and_simultaneous_requests(client: TestClient, authe
         "image_base64": authentic_coco_sample["image_base64"],
         "annotation": authentic_coco_sample["annotation"],
         "manifest_image_id": authentic_coco_sample["manifest_image_id"],
-        "image_source_type": "MANIFEST_VERIFIED_DATASET_IMAGE",
+        "image_source_type": authentic_coco_sample["image_source_type"],
     }
 
     def call_audit():
