@@ -154,7 +154,7 @@ def clean_extract_and_smoke_test(archive_path: Path, prefix: str) -> dict[str, s
         wheel_dir = extract_dir / "wheels"
         wheel_dir.mkdir()
         build_proc = subprocess.run(
-            [sys.executable, "-m", "pip", "wheel", "--no-deps", "--no-build-isolation", "--wheel-dir", str(wheel_dir), "."],
+            [sys.executable, "-m", "pip", "wheel", "--no-deps", "--wheel-dir", str(wheel_dir), "."],
             cwd=str(target_root), capture_output=True, text=True,
         )
         if build_proc.returncode != 0:
