@@ -1,0 +1,68 @@
+{
+  "study_type": "AI-Assisted Exploratory Qualitative Review of Real-World Discrepancy Candidates",
+  "status": "EXPLORATORY_PILOT_NOT_INDEPENDENTLY_ADJUDICATED",
+  "scientific_disclosure": "The discrepancy assessments below were identified algorithmically and qualitatively reviewed by an AI assistant. NO independent human subject adjudication trial was conducted. Claims of double-blind review, 100% human error recall, and 0% false ACCEPT are explicitly withdrawn.",
+  "cases_count": 5,
+  "cases": [
+    {
+      "case_id": "DISC-COCO-01",
+      "image_id": 460347,
+      "discrepancy_category": "UNANNOTATED_OBJECT_CANDIDATE",
+      "coco_annotation_status": "Omitted in official COCO val2017 polygon instances",
+      "model_prediction_label": "cup",
+      "model_prediction_score": 0.941,
+      "qualitative_visual_observation": "Visual inspection shows a ceramic coffee mug on the table; human annotator omitted it.",
+      "system_audit_verdict": "REVIEW",
+      "system_audit_reason": "UNMATCHED_PREDICTION_HIGH_CONFIDENCE",
+      "independent_human_validation_status": "NOT_VERIFIED"
+    },
+    {
+      "case_id": "DISC-COCO-02",
+      "image_id": 443303,
+      "discrepancy_category": "COARSE_POLYGON_LEAKAGE",
+      "coco_annotation_status": "Loose polygon encompassing background floor",
+      "model_prediction_label": "couch",
+      "model_prediction_score": 0.912,
+      "qualitative_visual_observation": "Human annotator drew a coarse quadrilateral extending into the floor; model segmented the tighter cushion boundary.",
+      "system_audit_verdict": "REVIEW",
+      "system_audit_reason": "LOW_BOUNDARY_AGREEMENT",
+      "independent_human_validation_status": "NOT_VERIFIED"
+    },
+    {
+      "case_id": "DISC-COCO-03",
+      "image_id": 500663,
+      "discrepancy_category": "POTENTIAL_MODEL_HALLUCINATION",
+      "coco_annotation_status": "Correct in COCO (no bird annotated in foliage)",
+      "model_prediction_label": "bird",
+      "model_prediction_score": 0.814,
+      "qualitative_visual_observation": "Complex tree leaves and branches appear to have induced a high-confidence false detection.",
+      "system_audit_verdict": "REVIEW",
+      "system_audit_reason": "UNMATCHED_PREDICTION",
+      "independent_human_validation_status": "NOT_VERIFIED"
+    },
+    {
+      "case_id": "DISC-COCO-04",
+      "image_id": 308394,
+      "discrepancy_category": "BORDER_TRUNCATION_UNCERTAIN",
+      "coco_annotation_status": "Borderline partial object in heavy shadow",
+      "model_prediction_label": "chair",
+      "model_prediction_score": 0.635,
+      "qualitative_visual_observation": "Chair is approximately 80% out of frame at the canvas border in shadow; severe truncation prevents definitive ground-truth assignment.",
+      "system_audit_verdict": "UNCERTAIN",
+      "system_audit_reason": "BORDER_TRUNCATION_UNCERTAIN",
+      "independent_human_validation_status": "NOT_VERIFIED"
+    },
+    {
+      "case_id": "DISC-COCO-05",
+      "image_id": 219578,
+      "discrepancy_category": "TAXONOMY_ALIAS_RESOLVED",
+      "coco_annotation_status": "Annotated as potted plant",
+      "model_prediction_label": "pottedplant",
+      "model_prediction_score": 0.925,
+      "qualitative_visual_observation": "Model outputs Pascal VOC pottedplant; Taxonomy Engine resolves alias to COCO potted plant with IoU=0.84.",
+      "system_audit_verdict": "ACCEPT",
+      "system_audit_reason": "CONCORDANT_SEGMENTATION",
+      "independent_human_validation_status": "CONCORDANT_UNDER_TAXONOMY_V1"
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "test_run_timestamp": "2026-10-31T10:26:12Z",
+  "environment": {
+    "python": "3.12.14",
+    "base_url": "http://127.0.0.1:8008",
+    "browser_version": "156.0.8078.80"
+  },
+  "cases": {
+    "authentic_coco_audit": {
+      "status": "PASS",
+      "verdict": "REVIEW",
+      "reason": "LOW_SPATIAL_OVERLAP",
+      "explanation": "Predicted candidate has insufficient overlap with annotation (IoU=0.242 < 0.40).",
+      "iou": "0.242",
+      "boundary": "0.482",
+      "class_match": "MATCH",
+      "instances_detected": "26 obj",
+      "latency": "4123.2 ms",
+      "receipt_id": "VREC-4440771000B5",
+      "receipt_checksum": "231f070ab1b46c16f0cf68f09083ff6fdab1535fd33b2e91aed5c14c9c498899",
+      "receipt_downloaded_file": "docs/benchmarks/VREC-4440771000B5.json",
+      "receipt_download_integrity_verified": true,
+      "overlay_bytes_length": 675326,
+      "screenshot": "docs/benchmarks/browser_vision_audit_desktop.png"
+    },
+    "class_mismatch": {
+      "status": "PASS",
+      "target_category": "airplane",
+      "verdict": "REVIEW",
+      "class_match": "MISMATCH",
+      "iou": "0.218",
+      "reason": "CLASS_MISMATCH",
+      "negative_accept_rejection_verified": true,
+      "screenshot": "docs/benchmarks/browser_vision_audit_class_mismatch.png"
+    },
+    "controlled_uncertainty": {
+      "status": "PASS",
+      "border_truncation": {
+        "verdict": "UNCERTAIN",
+        "reason": "BORDER_TRUNCATION_UNCERTAIN",
+        "iou": "0.778"
+      },
+      "visual_blur": {
+        "verdict": "UNCERTAIN",
+        "reason": "HIGH_VISUAL_BLUR"
+      },
+      "contract_compliance": "PASS",
+      "screenshot": "docs/benchmarks/browser_vision_audit_uncertainty.png"
+    },
+    "genuine_file_upload_inference": {
+      "status": "PASS",
+      "uploaded_file": "000000397133.jpg",
+      "file_size_bytes": 200576,
+      "verdict": "REVIEW",
+      "reason": "LOW_SPATIAL_OVERLAP",
+      "instances_detected": "26 obj",
+      "iou": "0.218",
+      "receipt_id": "VREC-447574489FA6",
+      "screenshot": "docs/benchmarks/browser_vision_audit_upload.png"
+    },
+    "mobile_responsive": {
+      "status": "PASS",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "scroll_width": 375,
+      "client_width": 375,
+      "overflow_diff_px": 0,
+      "screenshot": "docs/benchmarks/browser_vision_audit_mobile.png"
+    }
+  },
+  "console_errors": [],
+  "verdict": "PASS"
+}

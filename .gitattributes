@@ -13,6 +13,8 @@ native/proofcausality_core/target export-ignore
 # Exclude third-party copyrighted and non-commercial/no-derivatives photographic assets from public source archive.
 # Downstream users can acquire authentic validation photographs using: python scripts/download_coco_subset.py
 data/coco_val2017_subset/images export-ignore
+data/untouched_eval/images export-ignore
+data/untouched_eval/india_images export-ignore
 
 # Exclude developer scratch directories and caches
 scratch export-ignore
