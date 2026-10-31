@@ -5,7 +5,7 @@
 **Date**: October 31, 2026  
 **Software Version**: v0.2.6  
 **Repository**: [https://github.com/sunny-kavixo/proofcausality-ai](https://github.com/sunny-kavixo/proofcausality-ai)  
-**PR Head SHA**: `c764da1be9586d4ee0a2e2fb2600525878bd5737` (PR #8)  
+**PR Head SHA**: `5f39c16ac0e71711b7789fa9ac06d6fe2f319230` (PR #8)  
 **PR Target**: `fix/phase11a-release-reproducibility` (PR #7)  
 **Evaluation Device**: Apple M4 (16 GB Unified Memory), Apple Silicon MPS Acceleration  
 
@@ -28,7 +28,7 @@ This independent scientific audit was conducted to verify every empirical and en
 
 ## 2. Workspace & Preservation Audit
 
-- **Active Branch**: `feat/final-prototype-validation` at commit `c764da1be9586d4ee0a2e2fb2600525878bd5737` (PR #8, branched from PR #7 `124f6e99f48a79310bf6bd892dc024521f34eb9c`).
+- **Active Branch**: `feat/final-prototype-validation` at commit `5f39c16ac0e71711b7789fa9ac06d6fe2f319230` (PR #8, branched from PR #7 `124f6e99f48a79310bf6bd892dc024521f34eb9c`).
 - **Preservation Policy**: All historical branches, commit histories, model weights, Phase 5/8/10/11A evaluation outputs, and release archives remain completely intact. No git rebase, history rewrite, or force-push was performed.
 - **Git Separation**:
   - **PR #7 (Phase 11A)**: Focused on release packaging isolation, clean-install verification, and failure gallery CC-BY attribution.
