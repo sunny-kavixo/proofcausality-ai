@@ -1,0 +1,909 @@
+{
+  "coco_50_images": [
+    {
+      "id": 460347,
+      "file_name": "000000460347.jpg",
+      "width": 427,
+      "height": 640,
+      "license_id": 3,
+      "license_name": "Attribution-NonCommercial-NoDerivs License",
+      "source_url": "http://images.cocodataset.org/val2017/000000460347.jpg",
+      "flickr_url": "http://farm9.staticflickr.com/8203/8262915638_911e6c6ea8_z.jpg",
+      "sha256": "431bf6f6a8153c8da75c77d1259af7c168d434585f26ba296198927a4960a4e3"
+    },
+    {
+      "id": 308394,
+      "file_name": "000000308394.jpg",
+      "width": 640,
+      "height": 428,
+      "license_id": 3,
+      "license_name": "Attribution-NonCommercial-NoDerivs License",
+      "source_url": "http://images.cocodataset.org/val2017/000000308394.jpg",
+      "flickr_url": "http://farm4.staticflickr.com/3152/2818802025_2a91e90799_z.jpg",
+      "sha256": "f95ec5582f5310a2dd6effb247286f48ce479b5c44d94690faf586ab2e435215"
+    },
+    {
+      "id": 456496,
+      "file_name": "000000456496.jpg",
+      "width": 640,
+      "height": 426,
+      "license_id": 4,
+      "license_name": "Attribution License",
+      "source_url": "http://images.cocodataset.org/val2017/000000456496.jpg",
+      "flickr_url": "http://farm4.staticflickr.com/3810/10095484263_8ff0024f65_z.jpg",
+      "sha256": "5ab2ab206221f51dfcdcd1b140afc1af6f2a33af3f6c26c9c11e1a1e716d71e7"
+    },
+    {
+      "id": 565778,
+      "file_name": "000000565778.jpg",
+      "width": 640,
+      "height": 400,
+      "license_id": 4,
+      "license_name": "Attribution License",
+      "source_url": "http://images.cocodataset.org/val2017/000000565778.jpg",
+      "flickr_url": "http://farm6.staticflickr.com/5523/9117236902_bea84134a9_z.jpg",
+      "sha256": "99d451a808c601cb7176fc66de519bdf333c27a528ca425ec11cb3adbc6dfb96"
+    },
+    {
+      "id": 219578,
+      "file_name": "000000219578.jpg",
+      "width": 640,
+      "height": 427,
+      "license_id": 1,
+      "license_name": "Attribution-NonCommercial-ShareAlike License",
+      "source_url": "http://images.cocodataset.org/val2017/000000219578.jpg",
+      "flickr_url": "http://farm5.staticflickr.com/4094/4917146875_e48e614ff2_z.jpg",
+      "sha256": "c812b11f47fec3b967f3e3e00ad42b1005ff9acede996b5d10c32fbe4bd3cbf1"
+    },
+    {
+      "id": 443303,
+      "file_name": "000000443303.jpg",
+      "width": 500,
+      "height": 375,
+      "license_id": 2,
+      "license_name": "Attribution-NonCommercial License",
+      "source_url": "http://images.cocodataset.org/val2017/000000443303.jpg",
+      "flickr_url": "http://farm4.staticflickr.com/3181/2888219798_a8fdeeb54b_z.jpg",
+      "sha256": "9e8d0db88fca8eaca54dcfcd59ed183f6f3472c73137ab9973edcf9c96e8c0ca"
+    },
+    {
+      "id": 500663,
+      "file_name": "000000500663.jpg",
+      "width": 640,
+      "height": 480,
+      "license_id": 4,
+      "license_name": "Attribution License",
+      "source_url": "http://images.cocodataset.org/val2017/000000500663.jpg",
+      "flickr_url": "http://farm3.staticflickr.com/2452/4046745441_5a2f435499_z.jpg",
+      "sha256": "409a0b4438f67db00f69697f9b1728eb75fc511031e6fa176b029410aa9c537d"
+    },
+    {
+      "id": 25560,
+      "file_name": "000000025560.jpg",
+      "width": 640,
+      "height": 480,
+      "license_id": 3,
+      "license_name": "Attribution-NonCommercial-NoDerivs License",
+      "source_url": "http://images.cocodataset.org/val2017/000000025560.jpg",
+      "flickr_url": "http://farm1.staticflickr.com/198/488201322_ef2ebfeccb_z.jpg",
+      "sha256": "14ce4ee59869b1461f30c64c09e1240edec49c820933c90830b6090d4219c416"
+    },
+    {
+      "id": 403817,
+      "file_name": "000000403817.jpg",
+      "width": 500,
+      "height": 375,
+      "license_id": 3,
+      "license_name": "Attribution-NonCommercial-NoDerivs License",
+      "source_url": "http://images.cocodataset.org/val2017/000000403817.jpg",
+      "flickr_url": "http://farm1.staticflickr.com/40/122334986_1c6fd10c4c_z.jpg",
+      "sha256": "09bfb958119e68832744541a844f7bbbfbf64e29f66172b9c3ff2dcfe0073732"
+    },
+    {
+      "id": 239274,
+      "file_name": "000000239274.jpg",
+      "width": 581,
+      "height": 640,
+      "license_id": 3,
+      "license_name": "Attribution-NonCommercial-NoDerivs License",
+      "source_url": "http://images.cocodataset.org/val2017/000000239274.jpg",
+      "flickr_url": "http://farm8.staticflickr.com/7416/10079494584_8dd76f48cb_z.jpg",
+      "sha256": "b509de8e812983a3fc0d0d271281321c2a248a1d57d9722f4dcfd542d500e747"
+    },
+    {
+      "id": 286994,
+      "file_name": "000000286994.jpg",
+      "width": 640,
+      "height": 480,
+      "license_id": 5,
+      "license_name": "Attribution-ShareAlike License",
+      "source_url": "http://images.cocodataset.org/val2017/000000286994.jpg",
+      "flickr_url": "http://farm3.staticflickr.com/2879/9593058971_c198b320ee_z.jpg",
+      "sha256": "8688f9b42ebc4843c3e7c4562a95394abc9940b17d923505b83e5d821059fef0"
+    },
+    {
+      "id": 312421,
+      "file_name": "000000312421.jpg",
+      "width": 640,
+      "height": 427,
+      "license_id": 3,
+      "license_name": "Attribution-NonCommercial-NoDerivs License",
+      "source_url": "http://images.cocodataset.org/val2017/000000312421.jpg",
+      "flickr_url": "http://farm8.staticflickr.com/7417/10072949756_a273bd03da_z.jpg",
+      "sha256": "9ee3cfd727144aa212dcc5826f4f721600c65223ac47af1c4107613913c359ba"
+    },
+    {
+      "id": 185250,
+      "file_name": "000000185250.jpg",
+      "width": 399,
+      "height": 640,
+      "license_id": 1,
+      "license_name": "Attribution-NonCommercial-ShareAlike License",
+      "source_url": "http://images.cocodataset.org/val2017/000000185250.jpg",
+      "flickr_url": "http://farm8.staticflickr.com/7040/6810762896_6429b482b6_z.jpg",
+      "sha256": "6b92c69bab355b6355112014b745db91f09ecd591e0bf7d9f8da5fe40e1e03d7"
+    },
+    {
+      "id": 356427,
+      "file_name": "000000356427.jpg",
+      "width": 640,
+      "height": 427,
+      "license_id": 3,
+      "license_name": "Attribution-NonCommercial-NoDerivs License",
+      "source_url": "http://images.cocodataset.org/val2017/000000356427.jpg",
+      "flickr_url": "http://farm4.staticflickr.com/3053/2634837936_186c01f72b_z.jpg",
+      "sha256": "a56e6d03e3390fae54ef3a1eff49116a31eea935a3caf8636327af7550f074a9"
+    },
+    {
+      "id": 516316,
+      "file_name": "000000516316.jpg",
+      "width": 640,
+      "height": 480,
+      "license_id": 1,
+      "license_name": "Attribution-NonCommercial-ShareAlike License",
+      "source_url": "http://images.cocodataset.org/val2017/000000516316.jpg",
+      "flickr_url": "http://farm6.staticflickr.com/5142/5840536817_38a20b2796_z.jpg",
+      "sha256": "ebdde0bffc398ce6519cd0d2eadab6cdc29defed1f1c9b6e63c9a163319760b8"
+    },
+    {
+      "id": 360661,
+      "file_name": "000000360661.jpg",
+      "width": 640,
+      "height": 480,
+      "license_id": 1,
+      "license_name": "Attribution-NonCommercial-ShareAlike License",
+      "source_url": "http://images.cocodataset.org/val2017/000000360661.jpg",
+      "flickr_url": "http://farm4.staticflickr.com/3670/9709793032_f9ee4f0aa2_z.jpg",
+      "sha256": "712a562e5bb59a69ccff92aae43d6690a3193732c912cfa9c36440eda3386a9d"
+    },
+    {
+      "id": 430961,
+      "file_name": "000000430961.jpg",
+      "width": 450,
+      "height": 319,
+      "license_id": 3,
+      "license_name": "Attribution-NonCommercial-NoDerivs License",
+      "source_url": "http://images.cocodataset.org/val2017/000000430961.jpg",
+      "flickr_url": "http://farm4.staticflickr.com/3455/3180605599_f895f404f0_z.jpg",
+      "sha256": "e46ac019af6b57f473a0535b080529700b488504dbccd6ef4f45db4d230b1d63"
+    },
+    {
+      "id": 577539,
+      "file_name": "000000577539.jpg",
+      "width": 500,
+      "height": 334,
+      "license_id": 4,
+      "license_name": "Attribution License",
+      "source_url": "http://images.cocodataset.org/val2017/000000577539.jpg",
+      "flickr_url": "http://farm4.staticflickr.com/3494/3850219428_10c4b01c88_z.jpg",
+      "sha256": "e47b41db1c064f91364db5b38fad5c49988854a7197225fb4fde903640ee5e72"
+    },
+    {
+      "id": 104612,
+      "file_name": "000000104612.jpg",
+      "width": 640,
+      "height": 480,
+      "license_id": 5,
+      "license_name": "Attribution-ShareAlike License",
+      "source_url": "http://images.cocodataset.org/val2017/000000104612.jpg",
+      "flickr_url": "http://farm3.staticflickr.com/2060/2280818350_cabd27fb73_z.jpg",
+      "sha256": "997ac00cd26aff6a92717247dfb7ce7d5150a7281e61b7db8267833ea251c77d"
+    },
+    {
+      "id": 448365,
+      "file_name": "000000448365.jpg",
+      "width": 640,
+      "height": 428,
+      "license_id": 1,
+      "license_name": "Attribution-NonCommercial-ShareAlike License",
+      "source_url": "http://images.cocodataset.org/val2017/000000448365.jpg",
+      "flickr_url": "http://farm7.staticflickr.com/6079/6052677323_be8098b1a0_z.jpg",
+      "sha256": "71c913c9531c6b3bb12dfefd9f9084817c0c062f3277af63f8090b0a3e670079"
+    },
+    {
+      "id": 486438,
+      "file_name": "000000486438.jpg",
+      "width": 640,
+      "height": 427,
+      "license_id": 4,
+      "license_name": "Attribution License",
+      "source_url": "http://images.cocodataset.org/val2017/000000486438.jpg",
+      "flickr_url": "http://farm8.staticflickr.com/7154/6676693439_47455f5609_z.jpg",
+      "sha256": "959ec6138e1e693067f477cd8f1a7e1eb1b0a30b6187b872ce6d5d068de2359e"
+    },
+    {
+      "id": 369370,
+      "file_name": "000000369370.jpg",
+      "width": 640,
+      "height": 480,
+      "license_id": 2,
+      "license_name": "Attribution-NonCommercial License",
+      "source_url": "http://images.cocodataset.org/val2017/000000369370.jpg",
+      "flickr_url": "http://farm6.staticflickr.com/5145/5678857547_d84fa04ce4_z.jpg",
+      "sha256": "b1816506d44a18124a3d077573513de8b224ec00e2a22385ed661dfb1131023f"
+    },
+    {
+      "id": 502737,
+      "file_name": "000000502737.jpg",
+      "width": 480,
+      "height": 640,
+      "license_id": 4,
+      "license_name": "Attribution License",
+      "source_url": "http://images.cocodataset.org/val2017/000000502737.jpg",
+      "flickr_url": "http://farm2.staticflickr.com/1370/1343129188_df1aebda3f_z.jpg",
+      "sha256": "b8fcea1fecb77c46986dcaf94629b90d8815c863ecfaa2925af8de74cf6fc78e"
+    },
+    {
+      "id": 515579,
+      "file_name": "000000515579.jpg",
+      "width": 500,
+      "height": 332,
+      "license_id": 6,
+      "license_name": "Attribution-NoDerivs License",
+      "source_url": "http://images.cocodataset.org/val2017/000000515579.jpg",
+      "flickr_url": "http://farm4.staticflickr.com/3199/2865434771_dca1c5e149_z.jpg",
+      "sha256": "c601be638b7641469dcb58adf5c14a04d8ebc349f6ca403be5bfd8ef2dfab49e"
+    },
+    {
+      "id": 515445,
+      "file_name": "000000515445.jpg",
+      "width": 640,
+      "height": 480,
+      "license_id": 2,
+      "license_name": "Attribution-NonCommercial License",
+      "source_url": "http://images.cocodataset.org/val2017/000000515445.jpg",
+      "flickr_url": "http://farm1.staticflickr.com/105/301376641_ad9f966666_z.jpg",
+      "sha256": "15d8ad3e4d6cad3aabe60e5401274bb0d83179d126164e24b95e091caaf4ec83"
+    },
+    {
+      "id": 173383,
+      "file_name": "000000173383.jpg",
+      "width": 640,
+      "height": 425,
+      "license_id": 3,
+      "license_name": "Attribution-NonCommercial-NoDerivs License",
+      "source_url": "http://images.cocodataset.org/val2017/000000173383.jpg",
+      "flickr_url": "http://farm8.staticflickr.com/7298/10229885046_3b4ef771c1_z.jpg",
+      "sha256": "b8671b1bd00a7c56686acf080cef5276803741647400f4bc6ee66cdccfe577d9"
+    },
+    {
+      "id": 321214,
+      "file_name": "000000321214.jpg",
+      "width": 640,
+      "height": 480,
+      "license_id": 4,
+      "license_name": "Attribution License",
+      "source_url": "http://images.cocodataset.org/val2017/000000321214.jpg",
+      "flickr_url": "http://farm9.staticflickr.com/8030/8037209348_6491cf571e_z.jpg",
+      "sha256": "5b4d5e12a578b4407a3724c83a8950c5f00b36763bdefdc535363818d057ae9e"
+    },
+    {
+      "id": 355257,
+      "file_name": "000000355257.jpg",
+      "width": 640,
+      "height": 427,
+      "license_id": 3,
+      "license_name": "Attribution-NonCommercial-NoDerivs License",
+      "source_url": "http://images.cocodataset.org/val2017/000000355257.jpg",
+      "flickr_url": "http://farm3.staticflickr.com/2869/8759177830_2ecb0f9160_z.jpg",
+      "sha256": "58332692b23cfa5ae5a42abe2b5b3086a46f8e037b501a4fdb5d17e5413206a8"
+    },
+    {
+      "id": 239347,
+      "file_name": "000000239347.jpg",
+      "width": 640,
+      "height": 480,
+      "license_id": 5,
+      "license_name": "Attribution-ShareAlike License",
+      "source_url": "http://images.cocodataset.org/val2017/000000239347.jpg",
+      "flickr_url": "http://farm8.staticflickr.com/7084/7311947216_1eb6416561_z.jpg",
+      "sha256": "6cc2205b78ab13769a09c779341f60053529fe8506ca579ef27f3e3ee9f22048"
+    },
+    {
+      "id": 473237,
+      "file_name": "000000473237.jpg",
+      "width": 640,
+      "height": 426,
+      "license_id": 4,
+      "license_name": "Attribution License",
+      "source_url": "http://images.cocodataset.org/val2017/000000473237.jpg",
+      "flickr_url": "http://farm9.staticflickr.com/8076/8343979767_679dfefda2_z.jpg",
+      "sha256": "936dab192ed5d35c41bc1f76eb4eef430c43320d90eb208c69e9ae907ad3d55e"
+    },
+    {
+      "id": 78915,
+      "file_name": "000000078915.jpg",
+      "width": 481,
+      "height": 640,
+      "license_id": 1,
+      "license_name": "Attribution-NonCommercial-ShareAlike License",
+      "source_url": "http://images.cocodataset.org/val2017/000000078915.jpg",
+      "flickr_url": "http://farm5.staticflickr.com/4080/4757379654_6f0599d2ae_z.jpg",
+      "sha256": "800d4feb64141487b944c3ccd32554a2dc4095589b8cb4d617066a9d0e7c6c43"
+    },
+    {
+      "id": 96493,
+      "file_name": "000000096493.jpg",
+      "width": 426,
+      "height": 640,
+      "license_id": 4,
+      "license_name": "Attribution License",
+      "source_url": "http://images.cocodataset.org/val2017/000000096493.jpg",
+      "flickr_url": "http://farm4.staticflickr.com/3226/3076742158_8615337d86_z.jpg",
+      "sha256": "cecec146af7564d8229b996b99d25289924c039bf41475b0c533909699b39351"
+    },
+    {
+      "id": 578500,
+      "file_name": "000000578500.jpg",
+      "width": 640,
+      "height": 290,
+      "license_id": 4,
+      "license_name": "Attribution License",
+      "source_url": "http://images.cocodataset.org/val2017/000000578500.jpg",
+      "flickr_url": "http://farm5.staticflickr.com/4042/4376919410_eff5f487aa_z.jpg",
+      "sha256": "7b0c55d345757ae8431fde2b2900ba6d49f27bbf50e19033564555ce5588fd75"
+    },
+    {
+      "id": 428454,
+      "file_name": "000000428454.jpg",
+      "width": 500,
+      "height": 333,
+      "license_id": 1,
+      "license_name": "Attribution-NonCommercial-ShareAlike License",
+      "source_url": "http://images.cocodataset.org/val2017/000000428454.jpg",
+      "flickr_url": "http://farm1.staticflickr.com/102/313453372_1e5a076629_z.jpg",
+      "sha256": "c6da2f84a9be83fc5d1c3cb3d1442d6b1b3a23b38ab6630911e624d005f350e2"
+    },
+    {
+      "id": 261061,
+      "file_name": "000000261061.jpg",
+      "width": 500,
+      "height": 334,
+      "license_id": 4,
+      "license_name": "Attribution License",
+      "source_url": "http://images.cocodataset.org/val2017/000000261061.jpg",
+      "flickr_url": "http://farm3.staticflickr.com/2579/3661648054_10cef105c9_z.jpg",
+      "sha256": "886f87e9e2cea4ea6855ae03b8707b99ef321dc3ad409f7ff9a712b94c569cd9"
+    },
+    {
+      "id": 168330,
+      "file_name": "000000168330.jpg",
+      "width": 640,
+      "height": 390,
+      "license_id": 1,
+      "license_name": "Attribution-NonCommercial-ShareAlike License",
+      "source_url": "http://images.cocodataset.org/val2017/000000168330.jpg",
+      "flickr_url": "http://farm1.staticflickr.com/191/459438121_6c20bfa385_z.jpg",
+      "sha256": "704ded862e1cdf5132739e4564d433bf7cfd55a2c044fb9da2afcfec39aa64a8"
+    },
+    {
+      "id": 524456,
+      "file_name": "000000524456.jpg",
+      "width": 640,
+      "height": 480,
+      "license_id": 1,
+      "license_name": "Attribution-NonCommercial-ShareAlike License",
+      "source_url": "http://images.cocodataset.org/val2017/000000524456.jpg",
+      "flickr_url": "http://farm6.staticflickr.com/5452/9732560828_6edc057764_z.jpg",
+      "sha256": "84d161aa4f1a335ec3971c5d050338e7c13b9e3c90231c0de7e677094a172eae"
+    },
+    {
+      "id": 326541,
+      "file_name": "000000326541.jpg",
+      "width": 640,
+      "height": 360,
+      "license_id": 3,
+      "license_name": "Attribution-NonCommercial-NoDerivs License",
+      "source_url": "http://images.cocodataset.org/val2017/000000326541.jpg",
+      "flickr_url": "http://farm4.staticflickr.com/3125/2671788175_7f29831688_z.jpg",
+      "sha256": "916aca192f5390f4743b74203a27e91c2b6568563a5c624d5089e695ae50da14"
+    },
+    {
+      "id": 213086,
+      "file_name": "000000213086.jpg",
+      "width": 375,
+      "height": 500,
+      "license_id": 3,
+      "license_name": "Attribution-NonCommercial-NoDerivs License",
+      "source_url": "http://images.cocodataset.org/val2017/000000213086.jpg",
+      "flickr_url": "http://farm3.staticflickr.com/2350/2255342131_d42a052f4e_z.jpg",
+      "sha256": "8a265d1aff0b74783807cf908b84e485c88c2f73d92ab470f49cb307a9338417"
+    },
+    {
+      "id": 231339,
+      "file_name": "000000231339.jpg",
+      "width": 480,
+      "height": 640,
+      "license_id": 2,
+      "license_name": "Attribution-NonCommercial License",
+      "source_url": "http://images.cocodataset.org/val2017/000000231339.jpg",
+      "flickr_url": "http://farm4.staticflickr.com/3163/2981304367_fef9cd9d44_z.jpg",
+      "sha256": "c1512cc65ba365778c4064c2f22798db1fccd96f127aeff2cdc0bb09ed1e6dc7"
+    },
+    {
+      "id": 508730,
+      "file_name": "000000508730.jpg",
+      "width": 640,
+      "height": 478,
+      "license_id": 2,
+      "license_name": "Attribution-NonCommercial License",
+      "source_url": "http://images.cocodataset.org/val2017/000000508730.jpg",
+      "flickr_url": "http://farm7.staticflickr.com/6150/5995738326_332a10134e_z.jpg",
+      "sha256": "37bda05df3e3f02ebf2cd388c1611d9fbf49602d12e8b475b578970ceb14c07c"
+    },
+    {
+      "id": 580294,
+      "file_name": "000000580294.jpg",
+      "width": 640,
+      "height": 443,
+      "license_id": 2,
+      "license_name": "Attribution-NonCommercial License",
+      "source_url": "http://images.cocodataset.org/val2017/000000580294.jpg",
+      "flickr_url": "http://farm1.staticflickr.com/179/381168089_d519464f9f_z.jpg",
+      "sha256": "82f40f60da78fe5e2f6c2f94761217a86db641c4012b73b1daffa1d1b16b782b"
+    },
+    {
+      "id": 34873,
+      "file_name": "000000034873.jpg",
+      "width": 640,
+      "height": 480,
+      "license_id": 4,
+      "license_name": "Attribution License",
+      "source_url": "http://images.cocodataset.org/val2017/000000034873.jpg",
+      "flickr_url": "http://farm3.staticflickr.com/2563/3822818427_389d99073f_z.jpg",
+      "sha256": "376dbffac6db0b092cc07b43dfc34886725682d8e641caeff54710ac8f61ffb6"
+    },
+    {
+      "id": 186980,
+      "file_name": "000000186980.jpg",
+      "width": 457,
+      "height": 640,
+      "license_id": 1,
+      "license_name": "Attribution-NonCommercial-ShareAlike License",
+      "source_url": "http://images.cocodataset.org/val2017/000000186980.jpg",
+      "flickr_url": "http://farm9.staticflickr.com/8487/8164909702_0730bc8dcd_z.jpg",
+      "sha256": "72e6c01325528577e18a5b53478c6c3d819ba8ad2470b4d579c86c76ac0afc63"
+    },
+    {
+      "id": 367680,
+      "file_name": "000000367680.jpg",
+      "width": 450,
+      "height": 338,
+      "license_id": 1,
+      "license_name": "Attribution-NonCommercial-ShareAlike License",
+      "source_url": "http://images.cocodataset.org/val2017/000000367680.jpg",
+      "flickr_url": "http://farm1.staticflickr.com/22/34251540_bec994ec35_z.jpg",
+      "sha256": "15a0aa08ef2c7dc21f247375f72459b6ee3f99b57a98482e5251294fc324b231"
+    },
+    {
+      "id": 311295,
+      "file_name": "000000311295.jpg",
+      "width": 640,
+      "height": 427,
+      "license_id": 1,
+      "license_name": "Attribution-NonCommercial-ShareAlike License",
+      "source_url": "http://images.cocodataset.org/val2017/000000311295.jpg",
+      "flickr_url": "http://farm8.staticflickr.com/7151/6416499731_c12f35483a_z.jpg",
+      "sha256": "0c23b57cb7d6d782f2505861db55f76a1d859546a93c9ece6f66deb3af73a3bd"
+    },
+    {
+      "id": 198960,
+      "file_name": "000000198960.jpg",
+      "width": 640,
+      "height": 425,
+      "license_id": 2,
+      "license_name": "Attribution-NonCommercial License",
+      "source_url": "http://images.cocodataset.org/val2017/000000198960.jpg",
+      "flickr_url": "http://farm8.staticflickr.com/7428/9722886305_9f16f81860_z.jpg",
+      "sha256": "e88d099db126af76507bfca5916d4ffa19a8817690c747ddac6ca5b6f4e6c4a4"
+    },
+    {
+      "id": 113403,
+      "file_name": "000000113403.jpg",
+      "width": 640,
+      "height": 451,
+      "license_id": 4,
+      "license_name": "Attribution License",
+      "source_url": "http://images.cocodataset.org/val2017/000000113403.jpg",
+      "flickr_url": "http://farm3.staticflickr.com/2613/3713015524_bac439d1e6_z.jpg",
+      "sha256": "ff974f9495b64648225c9c6fc2d13e642fec69033aa46a524596cb77c5a02224"
+    },
+    {
+      "id": 414170,
+      "file_name": "000000414170.jpg",
+      "width": 425,
+      "height": 640,
+      "license_id": 1,
+      "license_name": "Attribution-NonCommercial-ShareAlike License",
+      "source_url": "http://images.cocodataset.org/val2017/000000414170.jpg",
+      "flickr_url": "http://farm9.staticflickr.com/8241/8662541989_107da95562_z.jpg",
+      "sha256": "63f866d3b8b97d1087131c18b9f80662ccf10bf864e1a20d64ff733ac731e2e1"
+    },
+    {
+      "id": 389381,
+      "file_name": "000000389381.jpg",
+      "width": 640,
+      "height": 543,
+      "license_id": 4,
+      "license_name": "Attribution License",
+      "source_url": "http://images.cocodataset.org/val2017/000000389381.jpg",
+      "flickr_url": "http://farm3.staticflickr.com/2544/4007091102_031486bd66_z.jpg",
+      "sha256": "87f7041b4292e3816f62cc662488aed5e2a33b7952a092a4c00988c4149f0412"
+    }
+  ],
+  "india_context_images": [
+    {
+      "id": "india_01_bikes_parking",
+      "title": "Bikes Street Parking in India",
+      "creator": "Pratyush Sen",
+      "source_url": "https://upload.wikimedia.org/wikipedia/commons/4/46/Bikes_Street_Parking.jpg",
+      "license_name": "Creative Commons CC0 1.0 Universal",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "location": "India (Urban Street)",
+      "scene_type": "DENSE_VEHICLE_PARKING",
+      "annotations": [
+        {
+          "id": "ind_ann_01_01",
+          "category": "motorcycle",
+          "bbox": [
+            180,
+            220,
+            480,
+            560
+          ],
+          "polygon": [
+            [
+              180,
+              260,
+              240,
+              220,
+              360,
+              225,
+              460,
+              300,
+              480,
+              440,
+              420,
+              560,
+              280,
+              560,
+              190,
+              460
+            ]
+          ]
+        },
+        {
+          "id": "ind_ann_01_02",
+          "category": "motorcycle",
+          "bbox": [
+            470,
+            230,
+            720,
+            580
+          ],
+          "polygon": [
+            [
+              470,
+              270,
+              530,
+              230,
+              640,
+              235,
+              710,
+              320,
+              720,
+              480,
+              680,
+              580,
+              540,
+              580,
+              480,
+              460
+            ]
+          ]
+        }
+      ],
+      "file_name": "india_01_bikes_parking.jpg",
+      "file_path": "/Users/sunny/proofcausality-ai/data/untouched_eval/india_images/india_01_bikes_parking.jpg",
+      "width": 800,
+      "height": 600,
+      "sha256": "6e07c632bc486ba6490aae3133fc7422d09064c810dde86ac9bb7b090137d1bf"
+    },
+    {
+      "id": "india_02_bari_jajapur",
+      "title": "Bari-Jajapur Road Crossing",
+      "creator": "Surya Narayan (panoramio)",
+      "source_url": "https://upload.wikimedia.org/wikipedia/commons/e/ea/Bari-Jajapur_Crossing_-_panoramio.jpg",
+      "license_name": "Creative Commons Attribution 3.0 Unported (CC BY 3.0)",
+      "license_url": "https://creativecommons.org/licenses/by/3.0/",
+      "location": "Jajpur, Odisha, India",
+      "scene_type": "RURAL_ROAD_CROSSING",
+      "annotations": [
+        {
+          "id": "ind_ann_02_01",
+          "category": "motorcycle",
+          "bbox": [
+            260,
+            280,
+            390,
+            440
+          ],
+          "polygon": [
+            [
+              260,
+              320,
+              300,
+              280,
+              360,
+              285,
+              390,
+              360,
+              380,
+              440,
+              310,
+              440,
+              265,
+              380
+            ]
+          ]
+        },
+        {
+          "id": "ind_ann_02_02",
+          "category": "person",
+          "bbox": [
+            285,
+            230,
+            350,
+            360
+          ],
+          "polygon": [
+            [
+              300,
+              230,
+              335,
+              230,
+              350,
+              275,
+              345,
+              330,
+              330,
+              360,
+              295,
+              360,
+              285,
+              310,
+              290,
+              260
+            ]
+          ]
+        }
+      ],
+      "file_name": "india_02_bari_jajapur.jpg",
+      "file_path": "/Users/sunny/proofcausality-ai/data/untouched_eval/india_images/india_02_bari_jajapur.jpg",
+      "width": 800,
+      "height": 600,
+      "sha256": "1674f0aa5aeb8e2c7cd55e2f64885697a9a597113fbc59e2a05c33179fcfa16d"
+    },
+    {
+      "id": "india_03_delhi_market",
+      "title": "A Local Market in Delhi",
+      "creator": "Flicka (Wikimedia Commons)",
+      "source_url": "https://upload.wikimedia.org/wikipedia/commons/c/cc/A_Local_Market_in_Delhi.jpg",
+      "license_name": "Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "location": "Delhi, India",
+      "scene_type": "CROWDED_OUTDOOR_MARKET",
+      "annotations": [
+        {
+          "id": "ind_ann_03_01",
+          "category": "person",
+          "bbox": [
+            210,
+            180,
+            340,
+            460
+          ],
+          "polygon": [
+            [
+              240,
+              180,
+              290,
+              180,
+              330,
+              240,
+              340,
+              350,
+              320,
+              460,
+              250,
+              460,
+              215,
+              370,
+              220,
+              260
+            ]
+          ]
+        },
+        {
+          "id": "ind_ann_03_02",
+          "category": "bottle",
+          "bbox": [
+            390,
+            340,
+            450,
+            450
+          ],
+          "polygon": [
+            [
+              405,
+              340,
+              435,
+              340,
+              445,
+              380,
+              450,
+              430,
+              435,
+              450,
+              400,
+              450,
+              390,
+              420,
+              395,
+              370
+            ]
+          ]
+        }
+      ],
+      "file_name": "india_03_delhi_market.jpg",
+      "file_path": "/Users/sunny/proofcausality-ai/data/untouched_eval/india_images/india_03_delhi_market.jpg",
+      "width": 800,
+      "height": 600,
+      "sha256": "24a26e4dddbeae23991c8b9e95978f5650171fcb17ba551f696c9b20f31b7164"
+    },
+    {
+      "id": "india_04_delhi_autorickshaw",
+      "title": "A Rest in the Shade",
+      "creator": "Marc van der Chijs (Flickr / Wikimedia)",
+      "source_url": "https://upload.wikimedia.org/wikipedia/commons/b/b2/A_Rest_in_the_Shade_%282395718219%29.jpg",
+      "license_name": "Creative Commons Attribution-ShareAlike 2.0 Generic (CC BY-SA 2.0)",
+      "license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+      "location": "New Delhi, India",
+      "scene_type": "URBAN_TRANSPORT_TRANSIT",
+      "annotations": [
+        {
+          "id": "ind_ann_04_01",
+          "category": "person",
+          "bbox": [
+            280,
+            240,
+            460,
+            480
+          ],
+          "polygon": [
+            [
+              320,
+              240,
+              390,
+              240,
+              440,
+              300,
+              460,
+              380,
+              440,
+              480,
+              330,
+              480,
+              285,
+              410,
+              290,
+              320
+            ]
+          ]
+        },
+        {
+          "id": "ind_ann_04_02",
+          "category": "car",
+          "bbox": [
+            150,
+            120,
+            680,
+            520
+          ],
+          "polygon": [
+            [
+              240,
+              120,
+              520,
+              120,
+              650,
+              220,
+              680,
+              380,
+              650,
+              520,
+              220,
+              520,
+              150,
+              380,
+              160,
+              240
+            ]
+          ]
+        }
+      ],
+      "file_name": "india_04_delhi_autorickshaw.jpg",
+      "file_path": "/Users/sunny/proofcausality-ai/data/untouched_eval/india_images/india_04_delhi_autorickshaw.jpg",
+      "width": 800,
+      "height": 501,
+      "sha256": "33fb8012444e04ef035fef79685221c2aaebab46a8a248f17a62c8378ddefedb"
+    },
+    {
+      "id": "india_05_bajaj_motorcycle",
+      "title": "Bajaj Motorcycle Urban View",
+      "creator": "Vatsal Soni (Wikimedia Commons)",
+      "source_url": "https://upload.wikimedia.org/wikipedia/commons/1/15/Bajaj-NS400Z.jpg",
+      "license_name": "Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "location": "Ahmedabad, Gujarat, India",
+      "scene_type": "COMMUTER_MOTORCYCLE",
+      "annotations": [
+        {
+          "id": "ind_ann_05_01",
+          "category": "motorcycle",
+          "bbox": [
+            160,
+            160,
+            660,
+            540
+          ],
+          "polygon": [
+            [
+              240,
+              160,
+              520,
+              170,
+              620,
+              250,
+              660,
+              380,
+              640,
+              540,
+              250,
+              540,
+              165,
+              420,
+              175,
+              270
+            ]
+          ]
+        }
+      ],
+      "file_name": "india_05_bajaj_motorcycle.jpg",
+      "file_path": "/Users/sunny/proofcausality-ai/data/untouched_eval/india_images/india_05_bajaj_motorcycle.jpg",
+      "width": 797,
+      "height": 600,
+      "sha256": "fca0da04eaf47f342170212e8944cd2e262e03a006203c116ee061ac8eea872a"
+    }
+  ]
+}

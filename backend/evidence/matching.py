@@ -34,6 +34,7 @@ from scipy.optimize import linear_sum_assignment
 
 from backend.evidence.metrics import calculate_boundary_agreement
 from backend.evidence.rust_accelerator import compute_mask_iou_fast
+from backend.evidence.taxonomy import are_classes_equivalent
 
 
 @dataclass(frozen=True)
@@ -120,7 +121,7 @@ class HungarianInstanceMatcher:
             for j in range(n_pred):
                 p_mask = pred_masks[j]
                 p_label = pred_labels[j].strip().lower()
-                is_cls_match = (ref_cat == p_label)
+                is_cls_match = are_classes_equivalent(ref_cat, p_label)
                 class_match_matrix[i, j] = is_cls_match
 
                 # Fast IoU calculation
@@ -203,7 +204,7 @@ def match_single_annotation_candidate(
     for pred in predictions:
         iou = compute_iou(reference_mask, pred.mask)
         boundary = float(calculate_boundary_agreement(reference_mask, pred.mask))
-        cls_match = (pred.label.strip().lower() == ref_cat)
+        cls_match = are_classes_equivalent(pred.label, ref_cat)
         evaluated.append((pred, iou, boundary, cls_match))
 
     if matching_strategy == "class_aware":

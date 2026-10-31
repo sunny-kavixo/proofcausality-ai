@@ -1,0 +1,125 @@
+[
+  {
+    "case_id": "india_01_bikes_parking",
+    "title": "Bikes Street Parking in India",
+    "location": "India (Urban Street)",
+    "scene_type": "DENSE_VEHICLE_PARKING",
+    "license": "Creative Commons CC0 1.0 Universal",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/4/46/Bikes_Street_Parking.jpg",
+    "sha256": "6e07c632bc486ba6490aae3133fc7422d09064c810dde86ac9bb7b090137d1bf",
+    "predicted_instances_count": 8,
+    "evaluations": [
+      {
+        "annotation_id": "ind_ann_01_01",
+        "category": "motorcycle",
+        "matched_prediction_label": null,
+        "best_iou": 0.0,
+        "matched_iou50": 0
+      },
+      {
+        "annotation_id": "ind_ann_01_02",
+        "category": "motorcycle",
+        "matched_prediction_label": null,
+        "best_iou": 0.0,
+        "matched_iou50": 0
+      }
+    ]
+  },
+  {
+    "case_id": "india_02_bari_jajapur",
+    "title": "Bari-Jajapur Road Crossing",
+    "location": "Jajpur, Odisha, India",
+    "scene_type": "RURAL_ROAD_CROSSING",
+    "license": "Creative Commons Attribution 3.0 Unported (CC BY 3.0)",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/e/ea/Bari-Jajapur_Crossing_-_panoramio.jpg",
+    "sha256": "1674f0aa5aeb8e2c7cd55e2f64885697a9a597113fbc59e2a05c33179fcfa16d",
+    "predicted_instances_count": 28,
+    "evaluations": [
+      {
+        "annotation_id": "ind_ann_02_01",
+        "category": "motorcycle",
+        "matched_prediction_label": "motorbike",
+        "best_iou": 0.0181,
+        "matched_iou50": 0
+      },
+      {
+        "annotation_id": "ind_ann_02_02",
+        "category": "person",
+        "matched_prediction_label": "person",
+        "best_iou": 0.23,
+        "matched_iou50": 0
+      }
+    ]
+  },
+  {
+    "case_id": "india_03_delhi_market",
+    "title": "A Local Market in Delhi",
+    "location": "Delhi, India",
+    "scene_type": "CROWDED_OUTDOOR_MARKET",
+    "license": "Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/c/cc/A_Local_Market_in_Delhi.jpg",
+    "sha256": "24a26e4dddbeae23991c8b9e95978f5650171fcb17ba551f696c9b20f31b7164",
+    "predicted_instances_count": 13,
+    "evaluations": [
+      {
+        "annotation_id": "ind_ann_03_01",
+        "category": "person",
+        "matched_prediction_label": "person",
+        "best_iou": 0.0371,
+        "matched_iou50": 0
+      },
+      {
+        "annotation_id": "ind_ann_03_02",
+        "category": "bottle",
+        "matched_prediction_label": null,
+        "best_iou": 0.0,
+        "matched_iou50": 0
+      }
+    ]
+  },
+  {
+    "case_id": "india_04_delhi_autorickshaw",
+    "title": "A Rest in the Shade",
+    "location": "New Delhi, India",
+    "scene_type": "URBAN_TRANSPORT_TRANSIT",
+    "license": "Creative Commons Attribution-ShareAlike 2.0 Generic (CC BY-SA 2.0)",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/b/b2/A_Rest_in_the_Shade_%282395718219%29.jpg",
+    "sha256": "33fb8012444e04ef035fef79685221c2aaebab46a8a248f17a62c8378ddefedb",
+    "predicted_instances_count": 7,
+    "evaluations": [
+      {
+        "annotation_id": "ind_ann_04_01",
+        "category": "person",
+        "matched_prediction_label": null,
+        "best_iou": 0.0,
+        "matched_iou50": 0
+      },
+      {
+        "annotation_id": "ind_ann_04_02",
+        "category": "car",
+        "matched_prediction_label": null,
+        "best_iou": 0.0,
+        "matched_iou50": 0
+      }
+    ]
+  },
+  {
+    "case_id": "india_05_bajaj_motorcycle",
+    "title": "Bajaj Motorcycle Urban View",
+    "location": "Ahmedabad, Gujarat, India",
+    "scene_type": "COMMUTER_MOTORCYCLE",
+    "license": "Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/1/15/Bajaj-NS400Z.jpg",
+    "sha256": "fca0da04eaf47f342170212e8944cd2e262e03a006203c116ee061ac8eea872a",
+    "predicted_instances_count": 1,
+    "evaluations": [
+      {
+        "annotation_id": "ind_ann_05_01",
+        "category": "motorcycle",
+        "matched_prediction_label": "motorbike",
+        "best_iou": 0.3493,
+        "matched_iou50": 0
+      }
+    ]
+  }
+]
