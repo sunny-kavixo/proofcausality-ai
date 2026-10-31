@@ -5,7 +5,8 @@
 **Date**: October 31, 2026  
 **Software Version**: v0.2.6  
 **Repository**: [https://github.com/sunny-kavixo/proofcausality-ai](https://github.com/sunny-kavixo/proofcausality-ai)  
-**PR Head SHA**: `124f6e99f48a79310bf6bd892dc024521f34eb9c` (PR #7)  
+**PR Head SHA**: `c764da1be9586d4ee0a2e2fb2600525878bd5737` (PR #8)  
+**PR Target**: `fix/phase11a-release-reproducibility` (PR #7)  
 **Evaluation Device**: Apple M4 (16 GB Unified Memory), Apple Silicon MPS Acceleration  
 
 ---
@@ -27,11 +28,11 @@ This independent scientific audit was conducted to verify every empirical and en
 
 ## 2. Workspace & Preservation Audit
 
-- **Active Branch**: `fix/phase11a-release-reproducibility` at commit `124f6e99f48a79310bf6bd892dc024521f34eb9c`.
+- **Active Branch**: `feat/final-prototype-validation` at commit `c764da1be9586d4ee0a2e2fb2600525878bd5737` (PR #8, branched from PR #7 `124f6e99f48a79310bf6bd892dc024521f34eb9c`).
 - **Preservation Policy**: All historical branches, commit histories, model weights, Phase 5/8/10/11A evaluation outputs, and release archives remain completely intact. No git rebase, history rewrite, or force-push was performed.
 - **Git Separation**:
   - **PR #7 (Phase 11A)**: Focused on release packaging isolation, clean-install verification, and failure gallery CC-BY attribution.
-  - **Final Prototype Additions (Local Working Tree)**: New taxonomy engine (`backend/evidence/taxonomy.py`), taxonomy unit tests (`tests/test_taxonomy.py`), matching integration (`backend/evidence/matching.py`, `backend/api/routes.py`), benchmark scripts (`evaluation/run_final_validation.py`), evaluation artifacts (`evaluation/experiments/final_validation/`), and this audit report.
+  - **PR #8 (Final Prototype Validation)**: Adds taxonomy engine (`backend/evidence/taxonomy.py`), taxonomy unit tests (`tests/test_taxonomy.py`), matching integration (`backend/evidence/matching.py`, `backend/api/routes.py`), benchmark scripts (`evaluation/run_final_validation.py`), evaluation artifacts (`evaluation/experiments/final_validation/`), and this audit report.
   - Raw dataset photographs in `data/untouched_eval/images` and `data/untouched_eval/india_images` are excluded from Git and release archives via `.gitignore`, `.gitattributes` (`export-ignore`), and `scripts/package_release.py`.
 
 ---
@@ -43,14 +44,14 @@ To eliminate benchmark leakage, data was partitioned into three strictly disjoin
 
 | Partition Group | Count | Source & Criteria | Role & Protocol |
 | :--- | :--- | :--- | :--- |
-| **Group 1: Development Data** | 20 images (141 GT) | Historical pilot (`579321, 397133, ...`) | Used for alias diagnosis and threshold tuning. |
+| **Group 1: Development Data** | 20 images (141 GT) | Historical pilot manifest [`docs/research/REAL_DATASET_MANIFEST.json`](../../docs/research/REAL_DATASET_MANIFEST.json) (`6818, 17627, 37777, ...`) | Used for alias diagnosis and threshold tuning. |
 | **Group 2: Frozen Holdout** | 13 images (102 GT) | Phase 10 holdout (`139, 285, 632, ...`) | Preserved frozen; historical recall = 51.96% @ IoU 0.50. |
 | **Group 3: Untouched Final Evaluation Set** | 50 images (332 GT) | Pre-declared COCO 2017 val images | **Untouched benchmark**. Disjoint from Groups 1 & 2; declared prior to model evaluation. |
 
 ### 3.2 Verification of the 50 Evaluation Photographs
 - **File Existence**: All 50 image files exist on disk in `data/untouched_eval/images/`.
 - **Integrity**: Every file was verified with PIL (`im.verify()`) and decoded to genuine 3-channel RGB arrays (mean pixel standard deviation = 58.4, confirming natural photographic entropy).
-- **Cryptographic Hashes**: All 50 image SHA-256 hashes match the values recorded in [`dataset_manifest.json`](file:///Users/sunny/proofcausality-ai/evaluation/experiments/final_validation/dataset_manifest.json).
+- **Cryptographic Hashes**: All 50 image SHA-256 hashes match the values recorded in [`dataset_manifest.json`](../../evaluation/experiments/final_validation/dataset_manifest.json).
 - **Disjointness**: Verified zero overlap with the 20 development images and 13 Phase 10 holdout images (`EXCLUDED_DEV_IDS`).
 
 ---
@@ -65,6 +66,11 @@ Every numerator, denominator, and sum reconciles exactly:
 - **Baseline Matches @ IoU 0.50**: Small: 42 + Medium: 63 + Large: 54 = **159 total**.
 - **Taxonomy V1 Matches @ IoU 0.50**: Small: 42 + Medium: 67 + Large: 62 = **171 total**.
 - **Predictions**: 171 matches + 195 false positives = **366 total predictions**.
+- **Baseline Matches @ IoU 0.75**: Small: 19 + Medium: 42 + Large: 44 = **105 total**.
+- **Taxonomy V1 Matches @ IoU 0.75**: Small: 19 + Medium: 43 + Large: 48 = **110 total**.
+
+> [!NOTE]
+> **Clarification on Earlier 534-Prediction Figure**: An early prototype working draft cited 534 predictions. Direct programmatic re-computation across the 50 untouched images at the declared confidence threshold $\tau = 0.50$ confirms exactly 366 neural predictions. The origin of the earlier 534 figure is unverified (an unproven reporting mistake in preliminary notes), and 366 predictions is the sole verified machine-readable ground truth.
 
 ### 4.2 Comparative Benchmark: Baseline Exact vs Taxonomy-Aware Engine V1
 
@@ -76,14 +82,15 @@ Every numerator, denominator, and sum reconciles exactly:
 | **Class-Aware Precision (IoU >= 0.50)** | **43.44%** (159/366) | **46.72%** (171/366) | **+3.28%** |
 | **Class-Aware Recall (IoU >= 0.50)** | **47.89%** (159/332) | **51.51%** (171/332) | **+3.62%** |
 | **95% Bootstrap Confidence Interval** | [39.69%, 55.99%] | **[44.09%, 58.97%]** | 2,000 image-cluster resamples |
-| **Class-Aware Matches (IoU >= 0.75)** | 97 / 332 | **108 / 332** | +11 matches |
-| **Class-Aware Recall (IoU >= 0.75)** | 29.22% | **32.53%** | **+3.31%** |
+| **Class-Aware Matches (IoU >= 0.75)** | **105 / 332** | **110 / 332** | **+5 matches recovered** |
+| **Class-Aware Precision (IoU >= 0.75)** | **28.69%** (105/366) | **30.05%** (110/366) | **+1.36%** |
+| **Class-Aware Recall (IoU >= 0.75)** | **31.63%** (105/332) | **33.13%** (110/332) | **+1.50%** |
 | **False Positives (IoU >= 0.50)** | 207 | **195** | -12 false alarms |
 | **False Negatives (IoU >= 0.50)** | 173 | **161** | -12 missed instances |
 
 ### 4.3 Scale Breakdown Comparison
 
-| Scale Category | Definition (Area px²) | GT Count | Baseline Matches | Baseline Recall | Taxonomy Matches | Taxonomy Recall | Delta Matches |
+| Scale Category | Definition (Area px²) | GT Count | Baseline Matches (IoU 0.50) | Baseline Recall | Taxonomy Matches (IoU 0.50) | Taxonomy Recall | Delta Matches |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Small** | Area < 32×32 | 110 | 42 | **38.18%** | 42 | **38.18%** | +0 |
 | **Medium** | 32² <= Area <= 96² | 116 | 63 | **54.31%** | 67 | **57.76%** | **+4** |
@@ -103,7 +110,7 @@ Inspection of the pinned `facebook/mask2former-swin-tiny-coco-instance` checkpoi
 - Model `id2label[4] = 'aeroplane'` (COCO name: `airplane`).
 - Model `id2label[60] = 'diningtable'` (COCO name: `dining table`).
 
-`TaxonomyEngine` ([`backend/evidence/taxonomy.py`](file:///Users/sunny/proofcausality-ai/backend/evidence/taxonomy.py)) resolves these 6 equivalences in the matching bipartite assignment layer without modifying ground truth labels. This recovered 12 genuine matches (+4 medium, +8 large).
+`TaxonomyEngine` ([`backend/evidence/taxonomy.py`](../../backend/evidence/taxonomy.py)) resolves these 6 equivalences in the matching bipartite assignment layer without modifying ground truth labels. This recovered 12 genuine matches (+4 medium, +8 large).
 
 ### 5.2 Remaining Error & Failure Modes
 Analysis of the 161 remaining false negatives identified the primary failure modes:
@@ -127,13 +134,13 @@ Five authentic photographs from Indian environments were acquired under open lic
 
 **Scientific Disclosure**: These 5 cases are **qualitative failure case studies**, NOT an official quantitative benchmark. Reference masks were exploratory approximations and are not claimed as standardized ground truth.
 
-All 9 diagnostic overlay PNGs and attribution notices are preserved in [`hard_case_gallery/`](file:///Users/sunny/proofcausality-ai/evaluation/experiments/final_validation/hard_case_gallery/).
+All 9 diagnostic overlay PNGs and attribution notices are preserved in [`hard_case_gallery/`](../../evaluation/experiments/final_validation/hard_case_gallery/).
 
 ---
 
 ## 7. AI-Assisted Qualitative Review of Annotation Discrepancies
 
-The 5 candidate discrepancy cases in [`human_annotation_error_study.json`](file:///Users/sunny/proofcausality-ai/evaluation/experiments/final_validation/human_annotation_error_study.json) were reviewed:
+The 5 candidate discrepancy cases in [`human_annotation_error_study.json`](../../evaluation/experiments/final_validation/human_annotation_error_study.json) were reviewed:
 
 | Case ID | Image ID | Discrepancy Category | COCO Status | Model Prediction | System Verdict | Independent Validation Status |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -163,7 +170,7 @@ All engineering gates were independently re-tested:
 | Test Suite / Command | Execution Status | Command Output & Evidence |
 | :--- | :--- | :--- |
 | **Python Core Tests** | **53 / 53 PASS** | `pytest tests/test_taxonomy.py tests/test_api.py ...` passed in 16.36s. |
-| **Full Python Suite** | **200 / 200 PASS** | All unit, integration, model safety, and packaging tests pass. |
+| **Full Python Suite** | **206 / 206 PASS** | All unit, integration, model safety, packaging, and benchmark consistency tests pass. |
 | **Rust Native Kernel** | **19 / 19 PASS** | `cargo test --verbose` passed in 0.00s (SIMD zero-copy IoU, Dice, Laplacian). |
 | **Isolated Release Build** | **PASS** | `scripts/package_release.py` built clean wheel and executed smoke test in isolated venv. |
 | **End-to-End API Audit** | **PASS** | `POST /api/vision/audit` processed authentic COCO photo, generated valid PNG overlay (`\x89PNG`), and produced cryptographically verified Evidence Receipt. |
@@ -214,13 +221,13 @@ Completion is scored strictly using the established Phase 10 rubric (`PASS=1`, `
 ## 12. Submission Handoff & Outstanding Owner Actions
 
 ### Summary of Changes (Pending Owner Review)
-- Added `TaxonomyEngine` v1.0.0 ([`backend/evidence/taxonomy.py`](file:///Users/sunny/proofcausality-ai/backend/evidence/taxonomy.py)) and unit tests ([`tests/test_taxonomy.py`](file:///Users/sunny/proofcausality-ai/tests/test_taxonomy.py)).
+- Added `TaxonomyEngine` v1.0.0 ([`backend/evidence/taxonomy.py`](../../backend/evidence/taxonomy.py)) and unit tests ([`tests/test_taxonomy.py`](../../tests/test_taxonomy.py)).
 - Integrated taxonomy mapping into Hungarian instance matching and `/api/vision/audit`.
 - Configured export exclusion for untouched dataset images in `.gitattributes`, `.gitignore`, and `package_release.py`.
-- Preserved machine-readable evaluation artifacts in [`evaluation/experiments/final_validation/`](file:///Users/sunny/proofcausality-ai/evaluation/experiments/final_validation/).
+- Preserved machine-readable evaluation artifacts in [`evaluation/experiments/final_validation/`](../../evaluation/experiments/final_validation/).
 
 ### Required Owner-Only Actions
 1. **PR #7 Review**: Review and merge PR `#7` on GitHub when ready.
-2. **Final Branch Commit**: Commit local taxonomy and benchmark additions to a dedicated branch (e.g. `feature/final-prototype-validation`).
+2. **PR #8 Retargeting & Review**: After PR #7 is merged into `main`, retarget PR #8 (`feat/final-prototype-validation`) to `main`, verify diff, and review.
 3. **Demo Video Recording**: Record the live prototype UI following the 10-scene research walkthrough script.
 4. **DevPost / Competition Submission**: Submit with the exact scientific disclosures and readiness levels documented in this report.

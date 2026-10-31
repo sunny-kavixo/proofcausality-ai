@@ -1,0 +1,55 @@
+{
+  "test_run_timestamp": "2026-10-31T09:53:04Z",
+  "environment": {
+    "python": "3.12.14",
+    "base_url": "http://127.0.0.1:8008",
+    "browser_version": "156.0.8078.80"
+  },
+  "cases": {
+    "authentic_coco_audit": {
+      "status": "PASS",
+      "verdict": "REVIEW",
+      "reason": "LOW_SPATIAL_OVERLAP",
+      "explanation": "Predicted candidate has insufficient overlap with annotation (IoU=0.242 < 0.40).",
+      "iou": "0.242",
+      "boundary": "0.482",
+      "class_match": "MATCH",
+      "instances_detected": "26 obj",
+      "latency": "3434.8 ms",
+      "receipt_id": "VREC-7B663C7BA2BD",
+      "receipt_checksum": "9bc4729e2c4681253afc25c6df11524f0d5e0be4101ab3fd200028d7b0dde3e9",
+      "receipt_integrity_verified": true,
+      "overlay_bytes_length": 675326,
+      "screenshot": "docs/benchmarks/browser_vision_audit_desktop.png"
+    },
+    "class_mismatch": {
+      "status": "PASS",
+      "target_category": "airplane",
+      "verdict": "REVIEW",
+      "class_match": "MISMATCH",
+      "iou": "0.218",
+      "reason": "CLASS_MISMATCH",
+      "screenshot": "docs/benchmarks/browser_vision_audit_class_mismatch.png"
+    },
+    "controlled_uncertainty": {
+      "status": "PASS",
+      "verdict": "REVIEW",
+      "iou": "0.000",
+      "reason": "LOW_SPATIAL_OVERLAP",
+      "screenshot": "docs/benchmarks/browser_vision_audit_uncertainty.png"
+    },
+    "mobile_responsive": {
+      "status": "PASS",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "scroll_width": 375,
+      "client_width": 375,
+      "overflow_diff_px": 0,
+      "screenshot": "docs/benchmarks/browser_vision_audit_mobile.png"
+    }
+  },
+  "console_errors": [],
+  "verdict": "PASS"
+}
