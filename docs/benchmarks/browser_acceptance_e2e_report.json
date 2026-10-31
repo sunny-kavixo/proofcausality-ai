@@ -1,5 +1,5 @@
 {
-  "test_run_timestamp": "2026-10-31T09:53:04Z",
+  "test_run_timestamp": "2026-10-31T10:26:12Z",
   "environment": {
     "python": "3.12.14",
     "base_url": "http://127.0.0.1:8008",
@@ -15,10 +15,11 @@
       "boundary": "0.482",
       "class_match": "MATCH",
       "instances_detected": "26 obj",
-      "latency": "3434.8 ms",
-      "receipt_id": "VREC-7B663C7BA2BD",
-      "receipt_checksum": "9bc4729e2c4681253afc25c6df11524f0d5e0be4101ab3fd200028d7b0dde3e9",
-      "receipt_integrity_verified": true,
+      "latency": "4123.2 ms",
+      "receipt_id": "VREC-4440771000B5",
+      "receipt_checksum": "231f070ab1b46c16f0cf68f09083ff6fdab1535fd33b2e91aed5c14c9c498899",
+      "receipt_downloaded_file": "docs/benchmarks/VREC-4440771000B5.json",
+      "receipt_download_integrity_verified": true,
       "overlay_bytes_length": 675326,
       "screenshot": "docs/benchmarks/browser_vision_audit_desktop.png"
     },
@@ -29,14 +30,33 @@
       "class_match": "MISMATCH",
       "iou": "0.218",
       "reason": "CLASS_MISMATCH",
+      "negative_accept_rejection_verified": true,
       "screenshot": "docs/benchmarks/browser_vision_audit_class_mismatch.png"
     },
     "controlled_uncertainty": {
       "status": "PASS",
-      "verdict": "REVIEW",
-      "iou": "0.000",
-      "reason": "LOW_SPATIAL_OVERLAP",
+      "border_truncation": {
+        "verdict": "UNCERTAIN",
+        "reason": "BORDER_TRUNCATION_UNCERTAIN",
+        "iou": "0.778"
+      },
+      "visual_blur": {
+        "verdict": "UNCERTAIN",
+        "reason": "HIGH_VISUAL_BLUR"
+      },
+      "contract_compliance": "PASS",
       "screenshot": "docs/benchmarks/browser_vision_audit_uncertainty.png"
+    },
+    "genuine_file_upload_inference": {
+      "status": "PASS",
+      "uploaded_file": "000000397133.jpg",
+      "file_size_bytes": 200576,
+      "verdict": "REVIEW",
+      "reason": "LOW_SPATIAL_OVERLAP",
+      "instances_detected": "26 obj",
+      "iou": "0.218",
+      "receipt_id": "VREC-447574489FA6",
+      "screenshot": "docs/benchmarks/browser_vision_audit_upload.png"
     },
     "mobile_responsive": {
       "status": "PASS",
