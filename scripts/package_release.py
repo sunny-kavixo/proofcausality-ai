@@ -332,7 +332,7 @@ def package_release(version: str | None = None, output_dir: Path | None = None) 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Package ProofCausality AI release archive.")
-    parser.add_argument("--version", type=str, default=None, help="Release version (e.g. 0.2.6)")
+    parser.add_argument("--version", type=str, default=None, help="Release version (e.g. 0.2.7)")
     parser.add_argument("--output-dir", type=Path, default=None, help="Output directory for archives")
     args = parser.parse_args()
 

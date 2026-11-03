@@ -3,7 +3,7 @@
 > **"Prove what happened. Detect what is missing. Capture the evidence that changes the decision."**
 
 [![CI](https://github.com/sunny-kavixo/proofcausality-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/sunny-kavixo/proofcausality-ai/actions)
-[![Release: v0.2.6](https://img.shields.io/badge/Release-v0.2.6-blue.svg)](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.6)
+[![Release: v0.2.7](https://img.shields.io/badge/Release-v0.2.7-blue.svg)](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.7)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Rust Accelerated](https://img.shields.io/badge/Rust-optional%20kernels-orange.svg)](native/proofcausality_core/)
@@ -37,9 +37,9 @@ Potential applications include robotics demonstration quality control, computer-
 
 ---
 
-## Release v0.2.6: Final Release Readiness, Distribution Safety & Integrity Hardening
+## Release v0.2.7: Reproducible Validation, Clean Documentation & CI-Verified Distribution
 
-Release **`v0.2.6`** delivers comprehensive defect remediation, distribution safety, licensing compliance, and scientific rigor across all system layers:
+Release **`v0.2.7`** carries forward the validated prototype with reproducible final evaluation inputs, refreshed browser evidence, corrected test reporting, and CI-verified inference setup. The historical `v0.2.6` archive remains available unchanged.
 
 1. **Server-Authoritative Provenance Verification (P0)**:
    - Eliminates trust-boundary vulnerabilities in `/api/vision/audit`. Client-supplied origin claims are verified against 7 mandatory server-side checks (SHA-256 digest, dimensions, manifest linkage, category integrity, and licensing). Untrusted or unverified uploads are safely downgraded to unverified provenance.
