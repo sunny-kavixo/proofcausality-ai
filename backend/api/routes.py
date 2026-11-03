@@ -1048,6 +1048,7 @@ def reverify_proofloop_media(req: ProofLoopMediaFollowupRequest) -> dict[str, An
             "initial_server_bbox": initial_observation.before_bbox.model_dump(),
             "followup_server_bbox_raw": raw_followup_bbox.model_dump() if raw_followup_bbox else None,
             "followup_server_bbox_initial_frame": normalized_followup_bbox.model_dump() if normalized_followup_bbox else None,
+            "followup_coordinate_transform": measurement["coordinate_transform"],
             "server_derived_displacement_px": displacement_px,
             "observed_image_state_change": image_sha256 != session["initial_measurement"]["image_sha256"],
         },

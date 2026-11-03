@@ -204,6 +204,13 @@ class ProofLoopVerifier:
             "task_id": observation.task_id,
             "primary_object": observation.primary_object,
             "phase": phase,
+            "before_bbox": observation.before_bbox.model_dump(),
+            "after_bbox": observation.after_bbox.model_dump() if observation.after_bbox else None,
+            "target_region": observation.target_region.model_dump(),
+            "canvas_dimensions": {
+                "width": observation.canvas_width,
+                "height": observation.canvas_height,
+            },
             "legacy_action_verdict": action_verdict.value,
             "semantic_verdict": semantic_verdict.value,
             "decision_basis": decision_basis,
