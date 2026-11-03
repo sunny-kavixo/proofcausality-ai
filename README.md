@@ -38,11 +38,11 @@ Potential applications include robotics demonstration quality control, computer-
 
 ---
 
-## Development candidate v0.2.8: ProofLoop Closed-Loop Evidence Verification
+## Release v0.2.8: ProofLoop Closed-Loop Evidence Verification
 
-The published **`v0.2.7`** release remains unchanged. The current signed development commit is version **`0.2.8`** and adds ProofLoop, its controlled benchmark, and the audit/submission materials below. A v0.2.8 GitHub release has not been published yet.
+The published **`v0.2.7`** release remains unchanged. Release **`v0.2.8`** adds ProofLoop, its controlled benchmark, and the audit/submission materials below. See the [v0.2.8 GitHub release](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.8).
 
-Candidate verification adds eleven focused tests to the v0.2.7 baseline: **217 Python tests** and **19 Rust tests** pass locally.
+Release verification added eleven focused tests to the v0.2.7 baseline: **217 Python tests** and **19 Rust tests** passed locally.
 
 ## Release v0.2.7: Reproducible Validation, Clean Documentation & CI-Verified Distribution
 
