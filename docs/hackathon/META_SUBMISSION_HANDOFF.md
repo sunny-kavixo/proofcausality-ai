@@ -1,5 +1,7 @@
 # Meta Global AI Developer Hackathon 2026 — Submission Handoff (v0.2.2)
 
+> **Historical document.** This handoff records the v0.2.2 submission state and is preserved for history. Use [`FINAL_META_SUBMISSION_HANDOFF.md`](FINAL_META_SUBMISSION_HANDOFF.md) for the current v0.2.7 release, ProofLoop capability, and owner-only submission checks.
+
 > **Official Event:** [Meta AI Developer Hackathon (Cerebral Valley)](https://cerebralvalley.ai/e/meta-ai-developer-hackathon)  
 > **Submission Track:** Indie Developer  
 > **Theme:** Push the Frontier  

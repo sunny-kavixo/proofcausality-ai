@@ -30,12 +30,19 @@ Modern deep vision models produce confident probability scores even when visual 
 - **Identifies missing observations**: Detects blur, border contact, area drops, and unobserved post-action states.
 - **Supports uncertainty-aware decisions**: Abstains under perceptual deficits rather than hallucinating success.
 - **Generates reproducible evidence records**: Issues canonical SHA-256 tamper-evident receipts for every verdict.
+- **Closes the evidence loop**: ProofLoop turns an `UNCERTAIN` result into a typed state trace, requests a specific next observation, re-verifies new evidence, and remains insufficient when recovery does not resolve the deficit.
 
 ### Real-World Impact
 Potential applications include robotics demonstration quality control, computer-vision dataset evaluation, annotation auditing, and research into reliable physical AI.
 *(Note: As an experimental research prototype, no measured industrial cost savings or production deployments are claimed without empirical customer telemetry.)*
 
 ---
+
+## Development candidate v0.2.8: ProofLoop Closed-Loop Evidence Verification
+
+The published **`v0.2.7`** release remains unchanged. The current signed development commit is version **`0.2.8`** and adds ProofLoop, its controlled benchmark, and the audit/submission materials below. A v0.2.8 GitHub release has not been published yet.
+
+Candidate verification adds eleven focused tests to the v0.2.7 baseline: **217 Python tests** and **19 Rust tests** pass locally.
 
 ## Release v0.2.7: Reproducible Validation, Clean Documentation & CI-Verified Distribution
 
@@ -56,7 +63,11 @@ Release **`v0.2.7`** carries forward the validated prototype with reproducible f
    - 206 Python regression tests passed.
    - 19 Rust native SIMD kernel tests passed.
    - 5/5 Google Chrome Playwright browser acceptance cases passed (0 console errors).
-   - Fresh 50-image diagnostic MPS evaluation: 332 ground-truth instances and 366 predictions; taxonomy-aware recall **51.51%** (171/332) at IoU 0.50 and **33.13%** (110/332) at IoU 0.75. This is not external scientific validation.
+    - Fresh 50-image diagnostic MPS evaluation: 332 ground-truth instances and 366 predictions; taxonomy-aware recall **51.51%** (171/332) at IoU 0.50 and **33.13%** (110/332) at IoU 0.75. This is not external scientific validation.
+7. **ProofLoop Closed-Loop Evidence Verifier**:
+   - New `/api/proofloop/start` and `/api/proofloop/reverify` endpoints preserve the legacy ActionProof verdicts while exposing `SUPPORTED`, `CONTRADICTED`, and `INSUFFICIENT_EVIDENCE` semantics.
+   - Controlled 10-case benchmark: 7 initial uncertainties, 6 resolved by supplied follow-up features, and 1 intentionally unresolved (**85.71% controlled resolution**). This is a deterministic metadata-fixture result, not a human or causal validation result.
+   - Real `/api/proofloop/media/start` and `/api/proofloop/media/reverify` endpoints decode and hash image bytes server-side, run the pinned Mask2Former model, normalize different-size follow-up boxes, and bind both image hashes and model-output hashes into receipts. A manifest-verified COCO pair produced `SUPPORTED` at **78.013 px** measured displacement; a rest-proof condition correctly remained `INSUFFICIENT_EVIDENCE`.
 
 ---
 
@@ -216,6 +227,7 @@ In robotic manipulation, logistics inspection, and dataset quality auditing, **a
 | **Rust SIMD Core** | `native.proofcausality_core` | Zero-allocation native acceleration | **11.35x batch IoU speedup**, **3.52x blur kernel speedup**; pure Python fallback. |
 | **ReCapture** | `backend.recapture` | Actionable recovery directive generator | Issues targeted physical instructions (e.g. pan camera, hold steady). |
 | **ReceiptStore** | `backend.evidence.receipts` | Tamper-evident evidence receipt store | Issues canonical SHA-256 Evidence Receipts with Provenance Hashes for post-hoc tamper-detection. |
+| **ProofLoop** | `backend.evidence.proofloop` | Closed-loop evidence state machine | Maps legacy decisions to semantic claim states, requests targeted observations, and re-verifies one follow-up without forcing success. |
 
 ---
 

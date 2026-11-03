@@ -1,0 +1,270 @@
+{
+  "benchmark": "ProofLoop real-media different-photo pair",
+  "benchmark_version": "proofloop-media-v1",
+  "status": "PASS",
+  "source_pair": {
+    "before": {
+      "official_image_id": 174482,
+      "filename": "000000174482.jpg",
+      "canonical_source_url": "http://images.cocodataset.org/val2017/000000174482.jpg",
+      "license_status": "KNOWN",
+      "license_name": "Attribution-NoDerivs License",
+      "license_url": "http://creativecommons.org/licenses/by-nd/2.0/",
+      "redistribution_status": "RESTRICTED",
+      "original_sha256": "41fab00aad97dad3eb7d035420b8cc61ed0ca8f4f0b66a4fbc1bd0bba6f8a5b3",
+      "width": 640,
+      "height": 388
+    },
+    "followup": {
+      "official_image_id": 87038,
+      "filename": "000000087038.jpg",
+      "canonical_source_url": "http://images.cocodataset.org/val2017/000000087038.jpg",
+      "license_status": "KNOWN",
+      "license_name": "Attribution-NonCommercial-ShareAlike License",
+      "license_url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+      "redistribution_status": "RESTRICTED",
+      "original_sha256": "c6cfc7e454a432c31ac3c3a997d5f33ccebe120fc6b9465965609ce12995ede9",
+      "width": 640,
+      "height": 480
+    },
+    "before_file": "data/coco_val2017_subset/images/000000174482.jpg",
+    "followup_file": "data/coco_val2017_subset/images/000000087038.jpg",
+    "primary_object": "bicycle",
+    "license_scope": "Manifest-verified COCO records; source-specific attribution and redistribution restrictions apply."
+  },
+  "cases": [
+    {
+      "case_id": "different_photo_supported",
+      "initial_semantic_verdict": "INSUFFICIENT_EVIDENCE",
+      "followup_semantic_verdict": "SUPPORTED",
+      "followup_legacy_verdict": "SUCCESS",
+      "state_trace": [
+        "OBSERVED",
+        "ANALYZED",
+        "UNCERTAIN",
+        "OBSERVATION_REQUESTED",
+        "NEW_EVIDENCE",
+        "REVERIFIED",
+        "FINAL_VERDICT"
+      ],
+      "receipt_valid": true,
+      "initial_image_sha256": "41fab00aad97dad3eb7d035420b8cc61ed0ca8f4f0b66a4fbc1bd0bba6f8a5b3",
+      "followup_image_sha256": "c6cfc7e454a432c31ac3c3a997d5f33ccebe120fc6b9465965609ce12995ede9",
+      "different_input_bytes": true,
+      "initial_server_bbox": {
+        "x_min": 197.0,
+        "y_min": 12.0,
+        "x_max": 494.0,
+        "y_max": 388.0
+      },
+      "followup_server_bbox_raw": {
+        "x_min": 255.0,
+        "y_min": 282.0,
+        "x_max": 312.0,
+        "y_max": 330.0
+      },
+      "followup_server_bbox_initial_frame": {
+        "x_min": 255.0,
+        "y_min": 227.95000000000002,
+        "x_max": 312.0,
+        "y_max": 266.75
+      },
+      "coordinate_transform": {
+        "source_dimensions": {
+          "width": 640,
+          "height": 480
+        },
+        "initial_dimensions": {
+          "width": 640,
+          "height": 388
+        },
+        "scale_x": 1.0,
+        "scale_y": 0.80833333,
+        "raw_server_bbox": {
+          "x_min": 255.0,
+          "y_min": 282.0,
+          "x_max": 312.0,
+          "y_max": 330.0
+        },
+        "normalized_server_bbox": {
+          "x_min": 255.0,
+          "y_min": 227.95000000000002,
+          "x_max": 312.0,
+          "y_max": 266.75
+        }
+      },
+      "server_derived_displacement_px": 78.013,
+      "observed_image_state_change": true,
+      "require_rest_proof": false,
+      "structured_finding": "POSITION_VERIFIED",
+      "provenance_status": "SERVER_DERIVED_MEDIA",
+      "client_measurements_accepted": false,
+      "model": {
+        "name": "facebook/mask2former-swin-tiny-coco-instance",
+        "revision": "22c4a2f15dc88149b8b8d9f4d42c54431fbd66f6",
+        "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
+        "initial_device": "mps",
+        "followup_device": "mps"
+      },
+      "scientific_disclosure": "Different photographs establish independently hashed observations and a measured image-space difference. They do not establish temporal continuity, object identity across frames, or physical causality."
+    },
+    {
+      "case_id": "different_photo_contradicted_by_claim",
+      "initial_semantic_verdict": "INSUFFICIENT_EVIDENCE",
+      "followup_semantic_verdict": "CONTRADICTED",
+      "followup_legacy_verdict": "FAILED",
+      "state_trace": [
+        "OBSERVED",
+        "ANALYZED",
+        "UNCERTAIN",
+        "OBSERVATION_REQUESTED",
+        "NEW_EVIDENCE",
+        "REVERIFIED",
+        "FINAL_VERDICT"
+      ],
+      "receipt_valid": true,
+      "initial_image_sha256": "41fab00aad97dad3eb7d035420b8cc61ed0ca8f4f0b66a4fbc1bd0bba6f8a5b3",
+      "followup_image_sha256": "c6cfc7e454a432c31ac3c3a997d5f33ccebe120fc6b9465965609ce12995ede9",
+      "different_input_bytes": true,
+      "initial_server_bbox": {
+        "x_min": 197.0,
+        "y_min": 12.0,
+        "x_max": 494.0,
+        "y_max": 388.0
+      },
+      "followup_server_bbox_raw": {
+        "x_min": 255.0,
+        "y_min": 282.0,
+        "x_max": 312.0,
+        "y_max": 330.0
+      },
+      "followup_server_bbox_initial_frame": {
+        "x_min": 255.0,
+        "y_min": 227.95000000000002,
+        "x_max": 312.0,
+        "y_max": 266.75
+      },
+      "coordinate_transform": {
+        "source_dimensions": {
+          "width": 640,
+          "height": 480
+        },
+        "initial_dimensions": {
+          "width": 640,
+          "height": 388
+        },
+        "scale_x": 1.0,
+        "scale_y": 0.80833333,
+        "raw_server_bbox": {
+          "x_min": 255.0,
+          "y_min": 282.0,
+          "x_max": 312.0,
+          "y_max": 330.0
+        },
+        "normalized_server_bbox": {
+          "x_min": 255.0,
+          "y_min": 227.95000000000002,
+          "x_max": 312.0,
+          "y_max": 266.75
+        }
+      },
+      "server_derived_displacement_px": 78.013,
+      "observed_image_state_change": true,
+      "require_rest_proof": false,
+      "structured_finding": "CONTRADICTION_DETECTED",
+      "provenance_status": "SERVER_DERIVED_MEDIA",
+      "client_measurements_accepted": false,
+      "model": {
+        "name": "facebook/mask2former-swin-tiny-coco-instance",
+        "revision": "22c4a2f15dc88149b8b8d9f4d42c54431fbd66f6",
+        "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
+        "initial_device": "mps",
+        "followup_device": "mps"
+      },
+      "scientific_disclosure": "Different photographs establish independently hashed observations and a measured image-space difference. They do not establish temporal continuity, object identity across frames, or physical causality."
+    },
+    {
+      "case_id": "different_photo_unresolved_without_rest_evidence",
+      "initial_semantic_verdict": "INSUFFICIENT_EVIDENCE",
+      "followup_semantic_verdict": "INSUFFICIENT_EVIDENCE",
+      "followup_legacy_verdict": "UNCERTAIN",
+      "state_trace": [
+        "OBSERVED",
+        "ANALYZED",
+        "UNCERTAIN",
+        "OBSERVATION_REQUESTED",
+        "NEW_EVIDENCE",
+        "REVERIFIED",
+        "FINAL_VERDICT"
+      ],
+      "receipt_valid": true,
+      "initial_image_sha256": "41fab00aad97dad3eb7d035420b8cc61ed0ca8f4f0b66a4fbc1bd0bba6f8a5b3",
+      "followup_image_sha256": "c6cfc7e454a432c31ac3c3a997d5f33ccebe120fc6b9465965609ce12995ede9",
+      "different_input_bytes": true,
+      "initial_server_bbox": {
+        "x_min": 197.0,
+        "y_min": 12.0,
+        "x_max": 494.0,
+        "y_max": 388.0
+      },
+      "followup_server_bbox_raw": {
+        "x_min": 255.0,
+        "y_min": 282.0,
+        "x_max": 312.0,
+        "y_max": 330.0
+      },
+      "followup_server_bbox_initial_frame": {
+        "x_min": 255.0,
+        "y_min": 227.95000000000002,
+        "x_max": 312.0,
+        "y_max": 266.75
+      },
+      "coordinate_transform": {
+        "source_dimensions": {
+          "width": 640,
+          "height": 480
+        },
+        "initial_dimensions": {
+          "width": 640,
+          "height": 388
+        },
+        "scale_x": 1.0,
+        "scale_y": 0.80833333,
+        "raw_server_bbox": {
+          "x_min": 255.0,
+          "y_min": 282.0,
+          "x_max": 312.0,
+          "y_max": 330.0
+        },
+        "normalized_server_bbox": {
+          "x_min": 255.0,
+          "y_min": 227.95000000000002,
+          "x_max": 312.0,
+          "y_max": 266.75
+        }
+      },
+      "server_derived_displacement_px": 78.013,
+      "observed_image_state_change": true,
+      "require_rest_proof": true,
+      "structured_finding": "POSITION_VERIFIED",
+      "provenance_status": "SERVER_DERIVED_MEDIA",
+      "client_measurements_accepted": false,
+      "model": {
+        "name": "facebook/mask2former-swin-tiny-coco-instance",
+        "revision": "22c4a2f15dc88149b8b8d9f4d42c54431fbd66f6",
+        "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
+        "initial_device": "mps",
+        "followup_device": "mps"
+      },
+      "scientific_disclosure": "Different photographs establish independently hashed observations and a measured image-space difference. They do not establish temporal continuity, object identity across frames, or physical causality."
+    }
+  ],
+  "scientific_scope": {
+    "real_media": true,
+    "different_input_hashes": true,
+    "human_confirmed_labels": false,
+    "temporal_observation": false,
+    "causal_validation": false,
+    "real_world_recovery_accuracy_claim": false
+  }
+}

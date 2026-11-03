@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "scope": "Real licensed COCO image bytes; server-derived local Mask2Former measurements; same-image follow-up negative control.",
+  "application_version": "0.2.8 candidate",
+  "initial_manifest_image_id": 397133,
+  "initial_image_sha256": "09e1d25c75f7879bdaa69c327fece5cabacd53939c8c2ef9e87f1c97a2e478c4",
+  "followup_image_sha256": "09e1d25c75f7879bdaa69c327fece5cabacd53939c8c2ef9e87f1c97a2e478c4",
+  "image_provenance": "VERIFIED_DATASET_IMAGE",
+  "model": "facebook/mask2former-swin-tiny-coco-instance",
+  "model_revision": "22c4a2f15dc88149b8b8d9f4d42c54431fbd66f6",
+  "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
+  "device": "mps",
+  "initial_detected_instances": 26,
+  "initial_matching_label": "bottle",
+  "initial_matching_score": 0.6783,
+  "initial_server_bbox": {
+    "x_min": 125.0,
+    "y_min": 253.0,
+    "x_max": 139.0,
+    "y_max": 274.0
+  },
+  "initial_laplacian_variance": 2083.53,
+  "initial_verdict": "INSUFFICIENT_EVIDENCE",
+  "followup_verdict": "CONTRADICTED",
+  "followup_reason": "Same image produced zero displacement; the relocation claim was not accepted.",
+  "receipt_integrity_verified": true,
+  "client_measurements_accepted": false,
+  "limitations": [
+    "This is not an action-video or independently annotated before/after pair.",
+    "The same image is a negative control for zero displacement, not evidence of temporal causality.",
+    "No real-world recovery-rate claim is made."
+  ]
+}
