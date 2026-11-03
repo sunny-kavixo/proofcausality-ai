@@ -1,4 +1,4 @@
-# FINAL META HACKATHON SUBMISSION HANDOFF — PROOFCAUSALITY AI (v0.2.3)
+# FINAL META HACKATHON SUBMISSION HANDOFF — PROOFCAUSALITY AI (v0.2.7)
 
 **Project Name:** ProofCausality AI  
 **Repository:** [https://github.com/sunny-kavixo/proofcausality-ai](https://github.com/sunny-kavixo/proofcausality-ai)  
@@ -6,8 +6,8 @@
 **Track:** Indie Developer  
 **Theme:** Push the Frontier  
 **Official Portal:** [https://cerebralvalley.ai/e/meta-ai-developer-hackathon](https://cerebralvalley.ai/e/meta-ai-developer-hackathon)  
-**Official Submission Deadline:** **November 4, 2026, 9:00 PM EST** (Nov 5, 2026, 02:00 UTC)  
-**Latest Production Release:** `v0.2.3` ([GitHub Release](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.3))  
+**Participant-dashboard deadline:** **NOT VERIFIED from this local session.** The owner-provided target is **November 5, 2026, 07:30 IST**; confirm the exact time and timezone in the authenticated dashboard before submission.
+**Latest published release:** `v0.2.7` ([GitHub Release](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.7))
 
 ---
 
@@ -46,8 +46,10 @@ ProofCausality AI introduces **Evidence Calculus**, a condition-aware verificati
    - Guarantees that static spatial placement (`POSITION_VERIFIED`) is never conflated with physical rest/release proof (`ACTION_COMPLETED`).
 4. **ReCapture Closed-Loop:**
    - `/api/recapture/evaluate-followup` records before/after state transitions, effort tracking, and resolution status.
-5. **Cryptographic Merkle Evidence Receipts:**
-   - Tamper-evident SHA-256 Merkle Evidence Receipts (`calc_evidence_receipt_*.json`) downloadable for every verification.
+5. **Cryptographic Evidence Receipts:**
+   - Canonical unkeyed SHA-256 payload integrity receipts are downloadable for verification. They are not signatures, HMACs, Merkle proofs, or proof of physical truth.
+6. **ProofLoop Closed-Loop Verifier:**
+   - Typed `OBSERVED → ANALYZED → UNCERTAIN → OBSERVATION_REQUESTED → NEW_EVIDENCE → REVERIFIED → FINAL_VERDICT` trace with explicit `SUPPORTED` / `CONTRADICTED` / `INSUFFICIENT_EVIDENCE` semantics.
 
 ---
 
@@ -96,7 +98,7 @@ Evaluated on 37 benchmark cases (12 curated tabletop geometric metadata pairs + 
 
 ### 1. Installation from Release Archive (Zero-Config)
 ```bash
-# Clone or download release v0.2.3
+# Clone or download release v0.2.7
 git clone https://github.com/sunny-kavixo/proofcausality-ai.git
 cd proofcausality-ai
 
@@ -105,7 +107,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 
-# Run complete test suite (101 tests passed in ~0.5s)
+# Run complete test suite (the v0.2.7 baseline had 206 Python tests; run this command for the current checkout)
 python3 -m pytest -q
 ```
 
@@ -125,7 +127,7 @@ Open [http://127.0.0.1:8000](http://127.0.0.1:8000) to inspect the live interfac
 | **0:30 - 1:15** | ActionProof & Static Position | *"Here is an object relocation action. Notice how ProofCausality distinguishes spatial position from physical rest. Even when the object is sharp in the target region, the engine outputs POSITION_VERIFIED rather than blindly declaring success until rest evidence is observed."* | Run ActionProof verification on Canonical Demonstration Case A. Show predicate breakdown. |
 | **1:15 - 2:00** | Perceptual Deficit & Abstention | *"Now observe a case with severe motion blur. Standard models hallucinate success. Evidence Calculus penalizes the blur deficit with Evidence Debt D(E,T) = 1.0 and abstains with an UNCERTAIN verdict."* | Upload Canonical Demonstration Case C (blurred). Show Debt Meter rising to 1.0 and verdict becoming UNCERTAIN. |
 | **2:00 - 2:35** | ReCapture Closed-Loop | *"Instead of generic advice, ReCapture generates a targeted directive: 'Hold camera steady for 1.5 seconds'. When the steady frame is provided, the follow-up endpoint resolves the deficit, transitioning the decision from UNCERTAIN to SUCCESS."* | Follow ReCapture prompt, submit recaptured frame, show verdict transition to SUCCESS. |
-| **2:35 - 3:00** | Tamper-Evident Receipt & Summary | *"Every decision generates a cryptographic SHA-256 Merkle Evidence Receipt. ProofCausality AI: Prove what happened. Detect what is missing. Capture the evidence that changes the decision."* | Click 'Download Evidence Receipt', display JSON receipt with verified Merkle hash. |
+| **2:35 - 3:00** | Tamper-Evident Receipt & Summary | *"Every decision generates a canonical SHA-256 payload integrity receipt. It makes the decision trace reproducible without pretending to prove physical truth."* | Display the JSON receipt and its verified checksum. |
 
 ---
 
@@ -148,12 +150,12 @@ ProofCausality AI introduces **Evidence Calculus**:
 1. **Tri-State Predicate Logic:** Decomposes actions into 8 observable physical conditions evaluated as `SUPPORTED`, `CONTRADICTED`, or `UNOBSERVABLE`.
 2. **Physics-Constrained Evidence Debt ($D(E,T)$):** Quantifies perceptual and physical deficits, reducing False-Success Rate from 45.45% (naive heuristic) and 13.64% (continuous score thresholding) to **0.00%** at exact matched coverage ($75.68\%$).
 3. **Rust SIMD Core:** High-performance native acceleration delivering an **11.57× speedup** on batch mask IoU ($2348.5\,\mu\text{s} \to 203.0\,\mu\text{s}$) with 1.29 µs CFFI overhead.
-4. **Closed-Loop ReCapture:** Automatically identifies missing evidence and provides operators or robots with exact corrective directives to resolve deficits and transition decisions.
-5. **Tamper-Evident Receipts:** Emits SHA-256 Merkle Evidence Receipts guaranteeing audit reproducibility.
+4. **ProofLoop Closed-Loop ReCapture:** Identifies missing evidence, provides a targeted directive, accepts one new measured observation, and can remain unresolved rather than forcing success. The controlled benchmark resolved 6/7 initial uncertainties; this is not a human study.
+5. **Tamper-Evident Receipts:** Emits canonical unkeyed SHA-256 integrity receipts with explicit metadata-only provenance where applicable.
 
 ---
 
 ## 10. Remaining Owner-Only Actions
 
 1. **Demonstration Video:** Record and upload the 2–3 minute video presentation following the script above to YouTube (public or unlisted).
-2. **Portal Submission:** Paste the submission description, repository link ([https://github.com/sunny-kavixo/proofcausality-ai](https://github.com/sunny-kavixo/proofcausality-ai)), release link ([https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.3](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.3)), and YouTube URL into the Cerebral Valley portal before **November 4, 2026, 9:00 PM EST**.
+2. **Portal Submission:** Paste the submission description, repository link ([https://github.com/sunny-kavixo/proofcausality-ai](https://github.com/sunny-kavixo/proofcausality-ai)), release link ([https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.7](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.7)), and YouTube URL into the authenticated participant dashboard after verifying its exact deadline.

@@ -6,6 +6,7 @@ import uuid
 from typing import Optional
 import numpy as np
 
+from backend import __version__
 from backend.evidence.masks import (
     bbox_to_mask,
     generate_overlay_heatmap,
@@ -148,7 +149,7 @@ class LabelCourtAuditor:
         receipt = generate_receipt(
             report_id=report_id,
             engine_name="LabelCourt Visual Annotation Evidence Auditor",
-            software_version="0.2.3",
+            software_version=__version__,
             inputs_hash=inputs_digest,
             measurements=meas,
             signals=signals,

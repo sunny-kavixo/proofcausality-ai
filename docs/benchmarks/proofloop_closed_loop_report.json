@@ -1,0 +1,370 @@
+{
+  "benchmark": "ProofLoop Closed-Loop Evidence Verifier",
+  "benchmark_version": "proofloop-v1",
+  "scope": "Deterministic measured-feature fixtures; no human or causal validation.",
+  "case_count": 10,
+  "initial_uncertain_cases": 7,
+  "resolved_uncertainty_cases": 6,
+  "resolution_rate": 0.8571428571428571,
+  "results": [
+    {
+      "case_id": "missing_final_state",
+      "description": "No post-action object observation is available.",
+      "initial": {
+        "state": "OBSERVATION_REQUESTED",
+        "state_trace": [
+          "OBSERVED",
+          "ANALYZED",
+          "UNCERTAIN",
+          "OBSERVATION_REQUESTED"
+        ],
+        "legacy_action_verdict": "UNCERTAIN",
+        "semantic_verdict": "INSUFFICIENT_EVIDENCE",
+        "decision_basis": "EVIDENCE_CALCULUS",
+        "evidence_debt": 7.5,
+        "observation_request": {
+          "action_id": "ACT_ZOOM_OUT_CONTAINMENT_PROOFLOOP_BENCH_MISSING_FINAL_STATE_P_FRAME",
+          "name": "Step Back to Capture Full Interaction Canvas",
+          "target_defect": "CANVAS_CONTAINMENT: Object maintains >= 3px margin from canvas borders",
+          "directive": "Object clipped by boundary. Pull camera back 20 cm so both start and end locations are fully visible.",
+          "estimated_human_effort_sec": 4.0,
+          "estimated_camera_latency_sec": 2.0,
+          "expected_risk_reduction": 0.8,
+          "net_utility_score": 0.5,
+          "cost_penalty": 0.3
+        }
+      },
+      "followup": {
+        "state": "FINAL_VERDICT",
+        "state_trace": [
+          "OBSERVED",
+          "ANALYZED",
+          "UNCERTAIN",
+          "OBSERVATION_REQUESTED",
+          "NEW_EVIDENCE",
+          "REVERIFIED",
+          "FINAL_VERDICT"
+        ],
+        "legacy_action_verdict": "SUCCESS",
+        "semantic_verdict": "SUPPORTED",
+        "decision_basis": "EVIDENCE_CALCULUS",
+        "evidence_debt": 0.0,
+        "resolved": true
+      }
+    },
+    {
+      "case_id": "blurred_object",
+      "description": "Final geometry is present but below the sharpness threshold.",
+      "initial": {
+        "state": "OBSERVATION_REQUESTED",
+        "state_trace": [
+          "OBSERVED",
+          "ANALYZED",
+          "UNCERTAIN",
+          "OBSERVATION_REQUESTED"
+        ],
+        "legacy_action_verdict": "UNCERTAIN",
+        "semantic_verdict": "INSUFFICIENT_EVIDENCE",
+        "decision_basis": "EVIDENCE_CALCULUS",
+        "evidence_debt": 2.5,
+        "observation_request": {
+          "action_id": "ACT_HOLD_STEADY_RECAPTURE_PROOFLOOP_BENCH_BLURRED_OBJECT_P_SHARP",
+          "name": "Hold Camera Steady & Re-record",
+          "target_defect": "OBSERVATION_SHARPNESS: Visual sharpness above blur threshold (100.0 var)",
+          "directive": "Camera blur detected. Rest your hands against the table and record 2 steady seconds.",
+          "estimated_human_effort_sec": 3.0,
+          "estimated_camera_latency_sec": 1.5,
+          "expected_risk_reduction": 0.85,
+          "net_utility_score": 0.625,
+          "cost_penalty": 0.225
+        }
+      },
+      "followup": {
+        "state": "FINAL_VERDICT",
+        "state_trace": [
+          "OBSERVED",
+          "ANALYZED",
+          "UNCERTAIN",
+          "OBSERVATION_REQUESTED",
+          "NEW_EVIDENCE",
+          "REVERIFIED",
+          "FINAL_VERDICT"
+        ],
+        "legacy_action_verdict": "SUCCESS",
+        "semantic_verdict": "SUPPORTED",
+        "decision_basis": "EVIDENCE_CALCULUS",
+        "evidence_debt": 0.0,
+        "resolved": true
+      }
+    },
+    {
+      "case_id": "border_clipped_object",
+      "description": "The target is visible at the frame edge, then recaptured with margin.",
+      "initial": {
+        "state": "OBSERVATION_REQUESTED",
+        "state_trace": [
+          "OBSERVED",
+          "ANALYZED",
+          "UNCERTAIN",
+          "OBSERVATION_REQUESTED"
+        ],
+        "legacy_action_verdict": "UNCERTAIN",
+        "semantic_verdict": "INSUFFICIENT_EVIDENCE",
+        "decision_basis": "EVIDENCE_CALCULUS",
+        "evidence_debt": 1.0,
+        "observation_request": {
+          "action_id": "ACT_ZOOM_OUT_CONTAINMENT_PROOFLOOP_BENCH_BORDER_CLIPPED_OBJECT_P_FRAME",
+          "name": "Step Back to Capture Full Interaction Canvas",
+          "target_defect": "CANVAS_CONTAINMENT: Object maintains >= 3px margin from canvas borders",
+          "directive": "Object clipped by boundary. Pull camera back 20 cm so both start and end locations are fully visible.",
+          "estimated_human_effort_sec": 4.0,
+          "estimated_camera_latency_sec": 2.0,
+          "expected_risk_reduction": 0.8,
+          "net_utility_score": 0.5,
+          "cost_penalty": 0.3
+        }
+      },
+      "followup": {
+        "state": "FINAL_VERDICT",
+        "state_trace": [
+          "OBSERVED",
+          "ANALYZED",
+          "UNCERTAIN",
+          "OBSERVATION_REQUESTED",
+          "NEW_EVIDENCE",
+          "REVERIFIED",
+          "FINAL_VERDICT"
+        ],
+        "legacy_action_verdict": "SUCCESS",
+        "semantic_verdict": "SUPPORTED",
+        "decision_basis": "EVIDENCE_CALCULUS",
+        "evidence_debt": 0.0,
+        "resolved": true
+      }
+    },
+    {
+      "case_id": "class_mismatch",
+      "description": "Geometry agrees, but the supplied claim class conflicts with the observation.",
+      "initial": {
+        "state": "FINAL_VERDICT",
+        "state_trace": [
+          "OBSERVED",
+          "ANALYZED",
+          "FINAL_VERDICT"
+        ],
+        "legacy_action_verdict": "FAILED",
+        "semantic_verdict": "CONTRADICTED",
+        "decision_basis": "CLAIM_CLASS_MISMATCH",
+        "evidence_debt": 0.0,
+        "observation_request": null
+      },
+      "followup": null
+    },
+    {
+      "case_id": "partial_occlusion",
+      "description": "A large measured area drop makes the final surface unobservable.",
+      "initial": {
+        "state": "OBSERVATION_REQUESTED",
+        "state_trace": [
+          "OBSERVED",
+          "ANALYZED",
+          "UNCERTAIN",
+          "OBSERVATION_REQUESTED"
+        ],
+        "legacy_action_verdict": "UNCERTAIN",
+        "semantic_verdict": "INSUFFICIENT_EVIDENCE",
+        "decision_basis": "EVIDENCE_CALCULUS",
+        "evidence_debt": 1.0,
+        "observation_request": {
+          "action_id": "ACT_PAN_TO_REVEAL_OCCLUDED_PROOFLOOP_BENCH_PARTIAL_OCCLUSION_P_OCCL",
+          "name": "Pan Camera to Unblock Line-of-Sight",
+          "target_defect": "SURFACE_VISIBILITY: Surface area retention within unoccluded bounds (< 35% drop)",
+          "directive": "The target object is occluded or truncated by the frame edge. Pan camera 15 cm right.",
+          "estimated_human_effort_sec": 5.0,
+          "estimated_camera_latency_sec": 2.0,
+          "expected_risk_reduction": 0.9,
+          "net_utility_score": 0.55,
+          "cost_penalty": 0.35
+        }
+      },
+      "followup": {
+        "state": "FINAL_VERDICT",
+        "state_trace": [
+          "OBSERVED",
+          "ANALYZED",
+          "UNCERTAIN",
+          "OBSERVATION_REQUESTED",
+          "NEW_EVIDENCE",
+          "REVERIFIED",
+          "FINAL_VERDICT"
+        ],
+        "legacy_action_verdict": "SUCCESS",
+        "semantic_verdict": "SUPPORTED",
+        "decision_basis": "EVIDENCE_CALCULUS",
+        "evidence_debt": 0.0,
+        "resolved": true
+      }
+    },
+    {
+      "case_id": "incorrect_annotation",
+      "description": "The claimed destination does not contain the observed object.",
+      "initial": {
+        "state": "FINAL_VERDICT",
+        "state_trace": [
+          "OBSERVED",
+          "ANALYZED",
+          "FINAL_VERDICT"
+        ],
+        "legacy_action_verdict": "FAILED",
+        "semantic_verdict": "CONTRADICTED",
+        "decision_basis": "EVIDENCE_CALCULUS",
+        "evidence_debt": 4.0,
+        "observation_request": null
+      },
+      "followup": null
+    },
+    {
+      "case_id": "ambiguous_model_output",
+      "description": "All geometry is adequate, but upstream detector confidence is below policy threshold.",
+      "initial": {
+        "state": "OBSERVATION_REQUESTED",
+        "state_trace": [
+          "OBSERVED",
+          "ANALYZED",
+          "UNCERTAIN",
+          "OBSERVATION_REQUESTED"
+        ],
+        "legacy_action_verdict": "UNCERTAIN",
+        "semantic_verdict": "INSUFFICIENT_EVIDENCE",
+        "decision_basis": "LOW_MODEL_CONFIDENCE",
+        "evidence_debt": 0.0,
+        "observation_request": null
+      },
+      "followup": {
+        "state": "FINAL_VERDICT",
+        "state_trace": [
+          "OBSERVED",
+          "ANALYZED",
+          "UNCERTAIN",
+          "OBSERVATION_REQUESTED",
+          "NEW_EVIDENCE",
+          "REVERIFIED",
+          "FINAL_VERDICT"
+        ],
+        "legacy_action_verdict": "SUCCESS",
+        "semantic_verdict": "SUPPORTED",
+        "decision_basis": "EVIDENCE_CALCULUS",
+        "evidence_debt": 0.0,
+        "resolved": true
+      }
+    },
+    {
+      "case_id": "successfully_resolved_uncertainty",
+      "description": "A blurred observation is resolved by a sharp follow-up.",
+      "initial": {
+        "state": "OBSERVATION_REQUESTED",
+        "state_trace": [
+          "OBSERVED",
+          "ANALYZED",
+          "UNCERTAIN",
+          "OBSERVATION_REQUESTED"
+        ],
+        "legacy_action_verdict": "UNCERTAIN",
+        "semantic_verdict": "INSUFFICIENT_EVIDENCE",
+        "decision_basis": "EVIDENCE_CALCULUS",
+        "evidence_debt": 2.5,
+        "observation_request": {
+          "action_id": "ACT_HOLD_STEADY_RECAPTURE_PROOFLOOP_BENCH_SUCCESSFULLY_RESOLVED_UNCERTAINTY_P_SHARP",
+          "name": "Hold Camera Steady & Re-record",
+          "target_defect": "OBSERVATION_SHARPNESS: Visual sharpness above blur threshold (100.0 var)",
+          "directive": "Camera blur detected. Rest your hands against the table and record 2 steady seconds.",
+          "estimated_human_effort_sec": 3.0,
+          "estimated_camera_latency_sec": 1.5,
+          "expected_risk_reduction": 0.85,
+          "net_utility_score": 0.625,
+          "cost_penalty": 0.225
+        }
+      },
+      "followup": {
+        "state": "FINAL_VERDICT",
+        "state_trace": [
+          "OBSERVED",
+          "ANALYZED",
+          "UNCERTAIN",
+          "OBSERVATION_REQUESTED",
+          "NEW_EVIDENCE",
+          "REVERIFIED",
+          "FINAL_VERDICT"
+        ],
+        "legacy_action_verdict": "SUCCESS",
+        "semantic_verdict": "SUPPORTED",
+        "decision_basis": "EVIDENCE_CALCULUS",
+        "evidence_debt": 0.0,
+        "resolved": true
+      }
+    },
+    {
+      "case_id": "unresolved_after_recapture",
+      "description": "A follow-up is supplied but remains too blurred to decide.",
+      "initial": {
+        "state": "OBSERVATION_REQUESTED",
+        "state_trace": [
+          "OBSERVED",
+          "ANALYZED",
+          "UNCERTAIN",
+          "OBSERVATION_REQUESTED"
+        ],
+        "legacy_action_verdict": "UNCERTAIN",
+        "semantic_verdict": "INSUFFICIENT_EVIDENCE",
+        "decision_basis": "EVIDENCE_CALCULUS",
+        "evidence_debt": 2.5,
+        "observation_request": {
+          "action_id": "ACT_HOLD_STEADY_RECAPTURE_PROOFLOOP_BENCH_UNRESOLVED_AFTER_RECAPTURE_P_SHARP",
+          "name": "Hold Camera Steady & Re-record",
+          "target_defect": "OBSERVATION_SHARPNESS: Visual sharpness above blur threshold (100.0 var)",
+          "directive": "Camera blur detected. Rest your hands against the table and record 2 steady seconds.",
+          "estimated_human_effort_sec": 3.0,
+          "estimated_camera_latency_sec": 1.5,
+          "expected_risk_reduction": 0.85,
+          "net_utility_score": 0.625,
+          "cost_penalty": 0.225
+        }
+      },
+      "followup": {
+        "state": "FINAL_VERDICT",
+        "state_trace": [
+          "OBSERVED",
+          "ANALYZED",
+          "UNCERTAIN",
+          "OBSERVATION_REQUESTED",
+          "NEW_EVIDENCE",
+          "REVERIFIED",
+          "FINAL_VERDICT"
+        ],
+        "legacy_action_verdict": "UNCERTAIN",
+        "semantic_verdict": "INSUFFICIENT_EVIDENCE",
+        "decision_basis": "EVIDENCE_CALCULUS",
+        "evidence_debt": 2.5,
+        "resolved": false
+      }
+    },
+    {
+      "case_id": "clean_success",
+      "description": "All deterministic evidence predicates are supported on the first observation.",
+      "initial": {
+        "state": "FINAL_VERDICT",
+        "state_trace": [
+          "OBSERVED",
+          "ANALYZED",
+          "FINAL_VERDICT"
+        ],
+        "legacy_action_verdict": "SUCCESS",
+        "semantic_verdict": "SUPPORTED",
+        "decision_basis": "EVIDENCE_CALCULUS",
+        "evidence_debt": 0.0,
+        "observation_request": null
+      },
+      "followup": null
+    }
+  ]
+}

@@ -30,6 +30,7 @@
     <button class="nav-tab" data-tab="tab-labelcourt">LabelCourt Auditor</button>
     <button class="nav-tab" data-tab="tab-actionproof">ActionProof Studio</button>
     <button class="nav-tab" data-tab="tab-recapture">ReCapture Planner</button>
+    <button class="nav-tab" data-tab="tab-proofloop">ProofLoop Verifier <span class="badge" style="background:#F59E0B;color:#000;font-weight:700;font-size:10px;padding:1px 5px;border-radius:4px;margin-left:4px;">NEW</span></button>
     <button class="nav-tab" data-tab="tab-calculus">Evidence Calculus <span class="badge" style="background:#06B6D4;color:#000;font-weight:700;font-size:10px;padding:1px 5px;border-radius:4px;margin-left:4px;">NEW</span></button>
     <button class="nav-tab" data-tab="tab-benchmarks">Scientific Benchmarks</button>
     <button class="nav-tab" data-tab="tab-performance">Rust Performance</button>
@@ -106,7 +107,7 @@
           <div class="diag-table">
             <div class="diag-row">
               <span class="diag-label">Active Version</span>
-              <span class="diag-val font-mono">v0.1.1</span>
+              <span class="diag-val font-mono">v0.2.7</span>
             </div>
             <div class="diag-row">
               <span class="diag-label">API Status</span>
@@ -519,7 +520,74 @@
       </div>
     </section>
 
-    <!-- Tab 5: Scientific Benchmarks -->
+    <!-- Tab 5: ProofLoop Closed-Loop Verifier -->
+    <section id="tab-proofloop" class="tab-pane">
+      <div class="panel-header">
+        <h2>ProofLoop — Closed-Loop Evidence Verifier</h2>
+        <p class="text-muted">Run the real Evidence Calculus policy, inspect the missing observation request, and submit one new measured observation. This panel uses controlled metadata fixtures; it does not claim independent image or video validation.</p>
+      </div>
+
+      <div class="card mb-4" style="border-left: 3px solid #F59E0B;">
+        <div class="p-3">
+          <strong>State machine:</strong>
+          <span class="font-mono">OBSERVED → ANALYZED → UNCERTAIN → OBSERVATION_REQUESTED → NEW_EVIDENCE → REVERIFIED → FINAL_VERDICT</span>
+          <div class="text-sm text-muted mt-1">Legacy ActionProof verdicts remain available as <code>SUCCESS</code>, <code>FAILED</code>, or <code>UNCERTAIN</code>. ProofLoop adds explicit semantic mapping and recovery traceability.</div>
+        </div>
+      </div>
+
+      <div class="grid-2col">
+        <div class="card">
+          <div class="card-header">
+            <h3>Controlled Evidence Scenario</h3>
+            <span class="badge badge-neutral">METADATA-ONLY DEMO</span>
+          </div>
+          <div class="form-group">
+            <label for="proofloop-scenario-select">Select a falsifiable case:</label>
+            <select id="proofloop-scenario-select" class="form-control">
+              <option value="missing_final_state">Missing final state → recoverable</option>
+              <option value="blurred_object">Blurred object → recoverable</option>
+              <option value="border_clipped_object">Border-clipped object → recoverable</option>
+              <option value="partial_occlusion">Partial occlusion → recoverable</option>
+              <option value="ambiguous_model_output">Ambiguous model output → recoverable</option>
+              <option value="unresolved_after_recapture">Unresolved after recapture</option>
+              <option value="class_mismatch">Class mismatch → contradicted</option>
+              <option value="incorrect_annotation">Incorrect destination claim → contradicted</option>
+            </select>
+          </div>
+          <div class="button-row">
+            <button class="btn btn-primary" id="btn-proofloop-start">Analyze Initial Evidence</button>
+            <button class="btn btn-accent" id="btn-proofloop-followup" style="display:none;">Submit New Evidence</button>
+          </div>
+          <div id="proofloop-status" class="text-sm text-muted mt-2">No ProofLoop session started.</div>
+        </div>
+
+        <div class="card">
+          <div class="card-header flex-between">
+            <h3>Decision Trace</h3>
+            <span class="badge" id="proofloop-state-badge">IDLE</span>
+          </div>
+          <div class="metrics-row">
+            <div class="metric-block"><span class="metric-label">Semantic verdict</span><span class="metric-val" id="proofloop-semantic">--</span></div>
+            <div class="metric-block"><span class="metric-label">Legacy verdict</span><span class="metric-val" id="proofloop-legacy">--</span></div>
+            <div class="metric-block"><span class="metric-label">Evidence debt</span><span class="metric-val" id="proofloop-debt">--</span></div>
+          </div>
+          <div class="signals-box mt-3">
+            <h4>State trace</h4>
+            <div id="proofloop-trace" class="font-mono text-sm">--</div>
+            <h4 class="mt-2">Decision basis</h4>
+            <div id="proofloop-basis" class="text-sm text-muted">--</div>
+            <h4 class="mt-2">Next observation</h4>
+            <div id="proofloop-directive" class="text-sm text-warning">--</div>
+          </div>
+          <details id="proofloop-receipt-card" class="mt-3" style="display:none;">
+            <summary>SHA-256 ProofLoop receipt</summary>
+            <pre id="proofloop-receipt-json" style="max-height:180px;overflow-y:auto;background:#0A0D14;padding:8px;border-radius:4px;font-size:11px;font-family:var(--font-mono);color:#A5B4FC;"></pre>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 6: Scientific Benchmarks -->
         <!-- EVIDENCE CALCULUS TAB (Phase 2 Research Architecture) -->
     <section id="tab-calculus" class="tab-pane">
       <div class="panel-header">

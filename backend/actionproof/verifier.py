@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import math
 import uuid
-from typing import Optional
+from typing import Any, Optional
 import numpy as np
 
+from backend import __version__
 from backend.actionproof.relations import compute_centroid_distance, is_contained_in_region
 from backend.evidence.masks import mask_to_bbox
 from backend.evidence.recapture import plan_recapture
@@ -150,7 +151,7 @@ class ActionProofVerifier:
         receipt = generate_receipt(
             report_id=report_id,
             engine_name="ActionProof Physical Action Verification Engine",
-            software_version="0.2.3",
+            software_version=__version__,
             inputs_hash=inputs_digest,
             measurements=meas,
             signals=signals,

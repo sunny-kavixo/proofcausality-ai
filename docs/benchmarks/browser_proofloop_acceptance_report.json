@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "browser": "Google Chrome via Playwright",
+  "viewport": {
+    "width": 1280,
+    "height": 900
+  },
+  "flow": [
+    "open ProofLoop tab",
+    "start initial missing-final-state scenario",
+    "observe INSUFFICIENT_EVIDENCE and OBSERVATION_REQUESTED",
+    "submit follow-up evidence",
+    "observe SUPPORTED and FINAL_VERDICT"
+  ],
+  "initial_semantic_verdict": "INSUFFICIENT_EVIDENCE",
+  "initial_state": "OBSERVATION_REQUESTED",
+  "followup_semantic_verdict": "SUPPORTED",
+  "state_trace": "OBSERVED \u2192 ANALYZED \u2192 UNCERTAIN \u2192 OBSERVATION_REQUESTED \u2192 NEW_EVIDENCE \u2192 REVERIFIED \u2192 FINAL_VERDICT",
+  "console_errors": 0,
+  "screenshot": "docs/benchmarks/browser_proofloop_closed_loop.png",
+  "scope": "Controlled metadata UI flow; no independent media or human validation claim."
+}

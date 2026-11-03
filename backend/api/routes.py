@@ -24,7 +24,7 @@ from pathlib import Path
 import re
 from typing import Any, Optional
 from fastapi import APIRouter, File, HTTPException, Query, UploadFile
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 import numpy as np
 
 logger = logging.getLogger("proofcausality.api")
@@ -87,6 +87,12 @@ from backend.evidence.schemas import (
     VisionAuditVerdict,
 )
 from backend.evidence.recapture import plan_recapture
+from backend.evidence.proofloop import (
+    ProofLoopEvaluation,
+    ProofLoopObservation,
+    ProofLoopState,
+    ProofLoopVerifier,
+)
 from backend.evidence.taxonomy import are_classes_equivalent
 from backend.labelcourt.auditor import LabelCourtAuditor
 from backend.providers.local_segmentation import (
@@ -102,6 +108,10 @@ router = APIRouter(prefix="/api")
 # In-memory receipt store (bounded to 1000 items to prevent memory exhaustion)
 MAX_RECEIPT_STORE_SIZE = 1000
 _receipt_store: collections.OrderedDict[str, EvidenceReceipt] = collections.OrderedDict()
+MAX_PROOFLOOP_SESSION_STORE_SIZE = 256
+_proofloop_sessions: collections.OrderedDict[
+    str, tuple[ProofLoopObservation, ProofLoopEvaluation]
+] = collections.OrderedDict()
 
 
 def store_receipt(receipt: EvidenceReceipt) -> None:
@@ -115,6 +125,7 @@ def store_receipt(receipt: EvidenceReceipt) -> None:
 auditor = LabelCourtAuditor()
 verifier = ActionProofVerifier()
 meta_adapter = MetaAdapter()
+proofloop_verifier = ProofLoopVerifier()
 
 
 class AuditRequest(BaseModel):
@@ -160,6 +171,7 @@ def health() -> dict[str, Any]:
             "ActionProof",
             "EvidenceCore",
             "ReCapture",
+            "ProofLoop",
         ],
         "hardware_acceleration": {
             "rust_native_active": acc_info["rust_accelerator_active"],
@@ -485,7 +497,7 @@ def evaluate_recapture_followup(req: ReCaptureFollowupRequest) -> dict[str, Any]
     receipt = generate_receipt(
         report_id=report_id,
         engine_name="ReCapture Closed-Loop Recovery Engine",
-        software_version="0.2.4",
+        software_version=__version__,
         inputs_hash=inputs_hash,
         measurements={
             "task_id": req.task_id,
@@ -535,6 +547,152 @@ def plan_recapture_endpoint(signals: list[UncertaintySignal]) -> dict[str, Any]:
     if not plan:
         return {"has_plan": False, "plan": None}
     return {"has_plan": True, "plan": plan.model_dump()}
+
+
+# ==============================================================================
+# PROOFLOOP CLOSED-LOOP EVIDENCE VERIFIER
+# ===============================================================================
+
+
+def _store_proofloop_session(
+    session_id: str,
+    observation: ProofLoopObservation,
+    evaluation: ProofLoopEvaluation,
+) -> None:
+    _proofloop_sessions[session_id] = (observation, evaluation)
+    _proofloop_sessions.move_to_end(session_id)
+    while len(_proofloop_sessions) > MAX_PROOFLOOP_SESSION_STORE_SIZE:
+        _proofloop_sessions.popitem(last=False)
+
+
+def _proofloop_receipt(
+    session_id: str,
+    evaluation: ProofLoopEvaluation,
+) -> EvidenceReceipt:
+    """Create a receipt that makes the metadata-only trust boundary explicit."""
+    receipt_measurements = {
+        **evaluation.measurements,
+        "session_id": session_id,
+        "state": evaluation.state.value,
+        "state_trace": [state.value for state in evaluation.state_trace],
+        "critical_unresolved_predicates": evaluation.debt_report.critical_unresolved_predicates,
+        "contradictions": evaluation.debt_report.contradictions,
+    }
+    inputs_hash = calculate_sha256(canonical_json_dump(receipt_measurements))
+    return generate_receipt(
+        report_id=f"PL-{uuid.uuid4().hex[:12].upper()}",
+        engine_name="ProofLoop Closed-Loop Evidence Verifier",
+        software_version=__version__,
+        inputs_hash=inputs_hash,
+        measurements=receipt_measurements,
+        signals=[],
+        verdict=evaluation.semantic_verdict.value,
+        recapture_directive=(
+            evaluation.observation_request.get("directive")
+            if evaluation.observation_request
+            else None
+        ),
+        provenance={
+            "category": "USER_SUPPLIED_METADATA",
+            "verification_method": "EVIDENCE_CALCULUS_FEATURES",
+            "note": (
+                "This ProofLoop API call received measured coordinates and quality metadata, "
+                "not image or video bytes. It does not independently verify the media source."
+            ),
+        },
+    )
+
+
+def _proofloop_response(
+    session_id: str,
+    evaluation: ProofLoopEvaluation,
+    receipt: EvidenceReceipt,
+) -> dict[str, Any]:
+    return {
+        "session_id": session_id,
+        "phase": evaluation.phase,
+        "state": evaluation.state.value,
+        "state_trace": [state.value for state in evaluation.state_trace],
+        "legacy_action_verdict": evaluation.legacy_action_verdict.value,
+        "semantic_verdict": evaluation.semantic_verdict.value,
+        "decision_basis": evaluation.decision_basis,
+        "observation_request": evaluation.observation_request,
+        "debt_report": evaluation.debt_report.model_dump(),
+        "predicates": [predicate.model_dump() for predicate in evaluation.predicates],
+        "measurements": evaluation.measurements,
+        "provenance_status": "METADATA_ONLY",
+        "evidence_receipt_id": receipt.report_id,
+        "evidence_receipt": receipt.model_dump(),
+        "receipt_valid": verify_receipt_integrity(receipt),
+    }
+
+
+@router.post("/proofloop/start")
+def start_proofloop(observation: ProofLoopObservation) -> dict[str, Any]:
+    """Start a ProofLoop evaluation and request targeted evidence when needed."""
+    session_id = f"PLS-{uuid.uuid4().hex[:12].upper()}"
+    evaluation = proofloop_verifier.evaluate(observation, phase="initial")
+    receipt = _proofloop_receipt(session_id, evaluation)
+    _store_proofloop_session(session_id, observation, evaluation)
+    store_receipt(receipt)
+    return _proofloop_response(session_id, evaluation, receipt)
+
+
+class ProofLoopFollowupRequest(BaseModel):
+    session_id: str = Field(..., min_length=8, max_length=64, pattern=r"^PLS-[A-F0-9]+$")
+    after_bbox: Optional[BoundingBox] = None
+    laplacian_variance: Optional[float] = Field(default=None, ge=0.0)
+    area_drop_ratio: Optional[float] = Field(default=None, ge=0.0, le=1.0)
+    has_final_state: Optional[bool] = None
+    claim_class_agreement: Optional[bool] = None
+    model_confidence: Optional[float] = Field(default=None, ge=0.0, le=1.0)
+
+
+@router.post("/proofloop/reverify")
+def reverify_proofloop(req: ProofLoopFollowupRequest) -> dict[str, Any]:
+    """Add one new observation and close or explicitly leave the loop unresolved."""
+    session = _proofloop_sessions.get(req.session_id)
+    if session is None:
+        raise HTTPException(status_code=404, detail="ProofLoop session not found or expired")
+
+    initial_observation, initial_evaluation = session
+    followup = initial_observation.model_copy(update={
+        "after_bbox": req.after_bbox,
+        "laplacian_variance": (
+            req.laplacian_variance
+            if req.laplacian_variance is not None
+            else initial_observation.laplacian_variance
+        ),
+        "area_drop_ratio": (
+            req.area_drop_ratio
+            if req.area_drop_ratio is not None
+            else initial_observation.area_drop_ratio
+        ),
+        "has_final_state": (
+            req.has_final_state
+            if req.has_final_state is not None
+            else initial_observation.has_final_state
+        ),
+        "claim_class_agreement": (
+            req.claim_class_agreement
+            if req.claim_class_agreement is not None
+            else initial_observation.claim_class_agreement
+        ),
+        "model_confidence": (
+            req.model_confidence
+            if req.model_confidence is not None
+            else initial_observation.model_confidence
+        ),
+    })
+    evaluation = proofloop_verifier.evaluate(
+        followup,
+        phase="followup",
+        previous_trace=initial_evaluation.state_trace,
+    )
+    receipt = _proofloop_receipt(req.session_id, evaluation)
+    _store_proofloop_session(req.session_id, followup, evaluation)
+    store_receipt(receipt)
+    return _proofloop_response(req.session_id, evaluation, receipt)
 
 
 @router.get("/receipts/{report_id}")
@@ -1207,4 +1365,3 @@ def audit_vision_annotation(req: VisionAuditRequest) -> VisionAuditResponse:
             "predicted": pred_overlay_b64,
         },
     )
-
