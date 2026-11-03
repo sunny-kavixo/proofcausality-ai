@@ -1,0 +1,163 @@
+{
+  "experiment": "H01_EVIDENCE_DEBT_FAIR_COMPARISON",
+  "scientific_status": "VALIDATED_ON_CONSTRUCTED_BENCHMARK",
+  "benchmark_description": "37 Cases (12 Curated Tabletop Geometric Metadata Cases + 25 Synthetic Benchmark Cases)",
+  "real_world_generalization": "NOT YET TESTED (Requires uncurated in-the-wild physical demonstration recordings)",
+  "sample_size": 37,
+  "true_negatives_count": 22,
+  "defect_breakdown": {
+    "outside_target_region": 9,
+    "motion_blur": 4,
+    "border_clipping": 1,
+    "occlusion": 4,
+    "missing_final_state": 1,
+    "pixel_displacement_anomaly": 3
+  },
+  "results": {
+    "baseline_1_naive_center_distance": {
+      "false_successes": 10,
+      "false_successes_denominator": 22,
+      "false_success_rate": 0.4545,
+      "false_success_rate_wilson_ci_95": [
+        0.2692,
+        0.6534
+      ],
+      "coverage": 1.0,
+      "decided_count": 37,
+      "total_count": 37,
+      "selective_risk": 0.3514,
+      "over_abstention_count": 0,
+      "false_successes_by_defect_type": {
+        "motion_blur": 4,
+        "border_clipping": 1,
+        "occlusion": 4,
+        "missing_final_state": 1
+      },
+      "mean_latency_ms": 0.0
+    },
+    "baseline_2_score_threshold_matched_coverage": {
+      "false_successes": 3,
+      "false_successes_denominator": 22,
+      "false_success_rate": 0.1364,
+      "false_success_rate_wilson_ci_95": [
+        0.0475,
+        0.3333
+      ],
+      "coverage": 0.7568,
+      "decided_count": 28,
+      "total_count": 37,
+      "selective_risk": 0.1429,
+      "over_abstention_count": 0,
+      "false_successes_by_defect_type": {
+        "motion_blur": 1,
+        "occlusion": 1,
+        "missing_final_state": 1
+      },
+      "mean_latency_ms": 0.001
+    },
+    "baseline_3_fixed_boolean_rules": {
+      "false_successes": 1,
+      "false_successes_denominator": 22,
+      "false_success_rate": 0.0455,
+      "false_success_rate_wilson_ci_95": [
+        0.0081,
+        0.218
+      ],
+      "coverage": 0.7568,
+      "decided_count": 28,
+      "total_count": 37,
+      "selective_risk": 0.1429,
+      "over_abstention_count": 0,
+      "false_successes_by_defect_type": {
+        "border_clipping": 1
+      },
+      "mean_latency_ms": 0.0
+    },
+    "method_4_evidence_debt_unit_weight_only": {
+      "false_successes": 0,
+      "false_successes_denominator": 22,
+      "false_success_rate": 0.0,
+      "false_success_rate_wilson_ci_95": [
+        0.0,
+        0.1487
+      ],
+      "coverage": 0.4054,
+      "decided_count": 15,
+      "total_count": 37,
+      "selective_risk": 0.0,
+      "over_abstention_count": 0,
+      "false_successes_by_defect_type": {},
+      "mean_latency_ms": 0.029
+    },
+    "method_5_evidence_calculus_full": {
+      "false_successes": 0,
+      "false_successes_denominator": 22,
+      "false_success_rate": 0.0,
+      "false_success_rate_wilson_ci_95": [
+        0.0,
+        0.1487
+      ],
+      "coverage": 0.7568,
+      "decided_count": 28,
+      "total_count": 37,
+      "selective_risk": 0.1429,
+      "over_abstention_count": 0,
+      "false_successes_by_defect_type": {},
+      "mean_latency_ms": 0.026
+    }
+  },
+  "matched_coverage_comparison": {
+    "matched_coverage_level": "75.68% (28/37 cases decided)",
+    "score_threshold_fs_rate": 0.1364,
+    "score_threshold_fs_count": "3/22",
+    "fixed_rules_fs_rate": 0.0455,
+    "fixed_rules_fs_count": "1/22",
+    "evidence_calculus_fs_rate": 0.0,
+    "evidence_calculus_fs_count": "0/22",
+    "fs_reduction_over_score_threshold": "3 -> 0 (100% elimination at matched coverage)"
+  },
+  "score_threshold_risk_coverage_curve": [
+    {
+      "coverage": 0.4054,
+      "decided_cases": 15,
+      "selective_risk": 0.0,
+      "false_successes": 0,
+      "false_success_rate": 0.0
+    },
+    {
+      "coverage": 0.5405,
+      "decided_cases": 20,
+      "selective_risk": 0.1,
+      "false_successes": 2,
+      "false_success_rate": 0.0909
+    },
+    {
+      "coverage": 0.6757,
+      "decided_cases": 25,
+      "selective_risk": 0.12,
+      "false_successes": 3,
+      "false_success_rate": 0.1364
+    },
+    {
+      "coverage": 0.7568,
+      "decided_cases": 28,
+      "selective_risk": 0.1429,
+      "false_successes": 3,
+      "false_success_rate": 0.1364
+    },
+    {
+      "coverage": 0.8649,
+      "decided_cases": 32,
+      "selective_risk": 0.25,
+      "false_successes": 5,
+      "false_success_rate": 0.2273
+    },
+    {
+      "coverage": 1.0,
+      "decided_cases": 37,
+      "selective_risk": 0.3514,
+      "false_successes": 10,
+      "false_success_rate": 0.4545
+    }
+  ]
+}

@@ -1,0 +1,243 @@
+{
+  "release": "0.2.6",
+  "archive_sha256": "856c968b9b1ac23a49c404b9ff04555c7c8a1cd7f7dd963be7b7bad7bbd19f76",
+  "environment": "existing enriched project virtualenv against exact extracted source archive",
+  "summary": {
+    "passed": 160,
+    "failed": 4,
+    "errors": 24,
+    "total": 188
+  },
+  "root_cause_groups": {
+    "excluded_optional_coco_photos": [
+      "test_manifest_hashes_match_disk_files",
+      "test_tracked_images_outside_pilot_are_identified",
+      "test_missing_model_produces_safe_error_response",
+      "test_invalid_checkpoint_error_is_sanitized",
+      "test_corrupted_model_output_handled_safely",
+      "test_no_success_receipt_issued_after_failed_inference",
+      "test_oversized_base64_payload_rejected",
+      "test_bounded_concurrency_and_simultaneous_requests",
+      "test_valid_manifest_authoritative_verification_direct",
+      "test_valid_manifest_backed_image_accepted",
+      "test_correct_image_with_incorrect_manifest_id_rejected",
+      "test_modified_image_bytes_rejected",
+      "test_valid_jpeg_falsely_claiming_verified_origin_rejected",
+      "test_forged_annotation_id_rejected",
+      "test_modified_reference_mask_rejected",
+      "test_missing_manifest_entry_rejected",
+      "test_get_vision_samples_schema",
+      "test_invalid_image_payloads",
+      "test_provider_unavailable_handling",
+      "test_genuine_vision_audit_execution",
+      "test_controlled_class_mismatch",
+      "test_severe_visual_blur_produces_uncertain",
+      "test_border_truncation_uncertainty",
+      "test_zero_detections_handling",
+      "test_tamper_detection_on_receipt",
+      "test_model_cache_singleton"
+    ],
+    "checkout_only_release_assertions": [
+      "test_gitattributes_export_ignore_rules",
+      "test_release_packaging_archive_safety"
+    ]
+  },
+  "cases": [
+    {
+      "classname": "tests.test_dataset_licensing",
+      "test": "test_manifest_hashes_match_disk_files",
+      "status": "failure",
+      "message": "AssertionError: File 000000397133.jpg must exist on disk\nassert False\n +  where False = <function exists at 0x1027bfec0>('/private/tmp/proofcausality-phase11a-release.Auq7vT/proofcausality-ai-0.2.6/data/coco_val2017_subset/images/000000397133.jpg')\n +    where <function exists at 0x1027bfec0> = <module 'posixpath' (frozen)>.exists\n +      where <module 'posixpath' (frozen)> = os.path",
+      "detail_excerpt": "def test_manifest_hashes_match_disk_files():\n        with open(MANIFEST_PATH, \"r\", encoding=\"utf-8\") as f:\n            data = json.load(f)\n    \n        for entry in data[\"dataset\"]:\n            filename = entry[\"filename\"]\n            img_path = os.path.join(IMAGES_DIR, filename)\n>           assert os.path.exists(img_path), f\"File {filename} must exist on disk\"\nE           AssertionError: File 000000397133.jpg must exist on disk\nE           assert False\nE            +  where False = <function exists at 0x1027bfec0>('/private/tmp/proofcausality-phase11a-release.Auq7vT/proofcausality-ai-0.2.6/data/coco_val2017_subset/images/000000397133.jpg')\nE            +    where <function exists at 0x1027bfec0> = <module 'posixpath' (frozen)>.exists\nE            +      where <module 'posixpath' (frozen)> = os.path\n\ntests/test_dataset_licensing.py:63: AssertionError"
+    },
+    {
+      "classname": "tests.test_dataset_licensing",
+      "test": "test_tracked_images_outside_pilot_are_identified",
+      "status": "failure",
+      "message": "FileNotFoundError: [Errno 2] No such file or directory: '/private/tmp/proofcausality-phase11a-release.Auq7vT/proofcausality-ai-0.2.6/data/coco_val2017_subset/images'",
+      "detail_excerpt": "def test_tracked_images_outside_pilot_are_identified():\n        \"\"\"All 33 images in data/coco_val2017_subset/images/ are accounted for.\"\"\"\n>       all_files = sorted([f for f in os.listdir(IMAGES_DIR) if f.endswith(\".jpg\")])\n                                       ^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/private/tmp/proofcausality-phase11a-release.Auq7vT/proofcausality-ai-0.2.6/data/coco_val2017_subset/images'\n\ntests/test_dataset_licensing.py:78: FileNotFoundError"
+    },
+    {
+      "classname": "tests.test_model_error_safety",
+      "test": "test_missing_model_produces_safe_error_response",
+      "status": "error",
+      "message": "failed on setup with \"assert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x117738380>\n\n    @pytest.fixture(scope=\"module\")\n    def authentic_coco_sample(client: TestClient) -> dict:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_model_error_safety.py:59: AssertionError"
+    },
+    {
+      "classname": "tests.test_model_error_safety",
+      "test": "test_invalid_checkpoint_error_is_sanitized",
+      "status": "error",
+      "message": "failed on setup with \"assert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x117738380>\n\n    @pytest.fixture(scope=\"module\")\n    def authentic_coco_sample(client: TestClient) -> dict:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_model_error_safety.py:59: AssertionError"
+    },
+    {
+      "classname": "tests.test_model_error_safety",
+      "test": "test_corrupted_model_output_handled_safely",
+      "status": "error",
+      "message": "failed on setup with \"assert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x117738380>\n\n    @pytest.fixture(scope=\"module\")\n    def authentic_coco_sample(client: TestClient) -> dict:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_model_error_safety.py:59: AssertionError"
+    },
+    {
+      "classname": "tests.test_model_error_safety",
+      "test": "test_no_success_receipt_issued_after_failed_inference",
+      "status": "error",
+      "message": "failed on setup with \"assert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x117738380>\n\n    @pytest.fixture(scope=\"module\")\n    def authentic_coco_sample(client: TestClient) -> dict:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_model_error_safety.py:59: AssertionError"
+    },
+    {
+      "classname": "tests.test_model_error_safety",
+      "test": "test_oversized_base64_payload_rejected",
+      "status": "error",
+      "message": "failed on setup with \"assert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x117738380>\n\n    @pytest.fixture(scope=\"module\")\n    def authentic_coco_sample(client: TestClient) -> dict:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_model_error_safety.py:59: AssertionError"
+    },
+    {
+      "classname": "tests.test_model_error_safety",
+      "test": "test_bounded_concurrency_and_simultaneous_requests",
+      "status": "error",
+      "message": "failed on setup with \"assert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x117738380>\n\n    @pytest.fixture(scope=\"module\")\n    def authentic_coco_sample(client: TestClient) -> dict:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_model_error_safety.py:59: AssertionError"
+    },
+    {
+      "classname": "tests.test_provenance_trust_boundary",
+      "test": "test_valid_manifest_authoritative_verification_direct",
+      "status": "error",
+      "message": "failed on setup with \"assert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x11773b920>\n\n    @pytest.fixture(scope=\"module\")\n    def authentic_coco_sample(client: TestClient) -> dict:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_provenance_trust_boundary.py:60: AssertionError"
+    },
+    {
+      "classname": "tests.test_provenance_trust_boundary",
+      "test": "test_valid_manifest_backed_image_accepted",
+      "status": "error",
+      "message": "failed on setup with \"assert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x11773b920>\n\n    @pytest.fixture(scope=\"module\")\n    def authentic_coco_sample(client: TestClient) -> dict:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_provenance_trust_boundary.py:60: AssertionError"
+    },
+    {
+      "classname": "tests.test_provenance_trust_boundary",
+      "test": "test_correct_image_with_incorrect_manifest_id_rejected",
+      "status": "error",
+      "message": "failed on setup with \"assert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x11773b920>\n\n    @pytest.fixture(scope=\"module\")\n    def authentic_coco_sample(client: TestClient) -> dict:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_provenance_trust_boundary.py:60: AssertionError"
+    },
+    {
+      "classname": "tests.test_provenance_trust_boundary",
+      "test": "test_modified_image_bytes_rejected",
+      "status": "error",
+      "message": "failed on setup with \"assert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x11773b920>\n\n    @pytest.fixture(scope=\"module\")\n    def authentic_coco_sample(client: TestClient) -> dict:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_provenance_trust_boundary.py:60: AssertionError"
+    },
+    {
+      "classname": "tests.test_provenance_trust_boundary",
+      "test": "test_valid_jpeg_falsely_claiming_verified_origin_rejected",
+      "status": "error",
+      "message": "failed on setup with \"assert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x11773b920>\n\n    @pytest.fixture(scope=\"module\")\n    def authentic_coco_sample(client: TestClient) -> dict:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_provenance_trust_boundary.py:60: AssertionError"
+    },
+    {
+      "classname": "tests.test_provenance_trust_boundary",
+      "test": "test_forged_annotation_id_rejected",
+      "status": "error",
+      "message": "failed on setup with \"assert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x11773b920>\n\n    @pytest.fixture(scope=\"module\")\n    def authentic_coco_sample(client: TestClient) -> dict:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_provenance_trust_boundary.py:60: AssertionError"
+    },
+    {
+      "classname": "tests.test_provenance_trust_boundary",
+      "test": "test_modified_reference_mask_rejected",
+      "status": "error",
+      "message": "failed on setup with \"assert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x11773b920>\n\n    @pytest.fixture(scope=\"module\")\n    def authentic_coco_sample(client: TestClient) -> dict:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_provenance_trust_boundary.py:60: AssertionError"
+    },
+    {
+      "classname": "tests.test_provenance_trust_boundary",
+      "test": "test_missing_manifest_entry_rejected",
+      "status": "error",
+      "message": "failed on setup with \"assert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x11773b920>\n\n    @pytest.fixture(scope=\"module\")\n    def authentic_coco_sample(client: TestClient) -> dict:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_provenance_trust_boundary.py:60: AssertionError"
+    },
+    {
+      "classname": "tests.test_release_packaging",
+      "test": "test_gitattributes_export_ignore_rules",
+      "status": "failure",
+      "message": "AssertionError: .gitattributes must exist at repository root\nassert False\n +  where False = exists()\n +    where exists = PosixPath('/private/tmp/proofcausality-phase11a-release.Auq7vT/proofcausality-ai-0.2.6/.gitattributes').exists",
+      "detail_excerpt": "def test_gitattributes_export_ignore_rules():\n        \"\"\"Verify that .gitattributes strictly enforces exclusion of forbidden distribution assets.\"\"\"\n        gitattributes_path = REPO_ROOT / \".gitattributes\"\n>       assert gitattributes_path.exists(), \".gitattributes must exist at repository root\"\nE       AssertionError: .gitattributes must exist at repository root\nE       assert False\nE        +  where False = exists()\nE        +    where exists = PosixPath('/private/tmp/proofcausality-phase11a-release.Auq7vT/proofcausality-ai-0.2.6/.gitattributes').exists\n\ntests/test_release_packaging.py:58: AssertionError"
+    },
+    {
+      "classname": "tests.test_release_packaging",
+      "test": "test_release_packaging_archive_safety",
+      "status": "failure",
+      "message": "subprocess.CalledProcessError: Command '['git', 'archive', '--worktree-attributes', '--format=tar.gz', '--prefix=proofcausality-ai-0.2.6/', '-o', '/private/var/folders/p2/96n9lgqn09v2jdtnd0l_plvr0000gn/T/pytest-of-sunny/pytest-504/test_release_packaging_archive0/test-release-0.2.6.tar.gz', 'HEAD']' returned non-zero exit status 128.",
+      "detail_excerpt": "to the exception.\n                    exc.stdout, exc.stderr = process.communicate()\n                else:\n                    # POSIX _communicate already populated the output so\n                    # far into the TimeoutExpired exception.\n                    process.wait()\n                raise\n            except:  # Including KeyboardInterrupt, communicate handled that.\n                process.kill()\n                # We don't call process.wait() as .__exit__ does that for us.\n                raise\n            retcode = process.poll()\n            if check and retcode:\n>               raise CalledProcessError(retcode, process.args,\n                                         output=stdout, stderr=stderr)\nE               subprocess.CalledProcessError: Command '['git', 'archive', '--worktree-attributes', '--format=tar.gz', '--prefix=proofcausality-ai-0.2.6/', '-o', '/private/var/folders/p2/96n9lgqn09v2jdtnd0l_plvr0000gn/T/pytest-of-sunny/pytest-504/test_release_packaging_archive0/test-release-0.2.6.tar.gz', 'HEAD']' returned non-zero exit status 128.\n\n/opt/homebrew/Cellar/python@3.12/3.12.14/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py:571: CalledProcessError"
+    },
+    {
+      "classname": "tests.test_vision_audit",
+      "test": "test_get_vision_samples_schema",
+      "status": "error",
+      "message": "failed on setup with \"AssertionError: COCO pilot samples must be available\nassert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x125ca0860>\n\n    @pytest.fixture(scope=\"module\")\n    def pilot_samples(client: TestClient) -> list[dict]:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0, \"COCO pilot samples must be available\"\nE       AssertionError: COCO pilot samples must be available\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_vision_audit.py:57: AssertionError"
+    },
+    {
+      "classname": "tests.test_vision_audit",
+      "test": "test_invalid_image_payloads",
+      "status": "error",
+      "message": "failed on setup with \"AssertionError: COCO pilot samples must be available\nassert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x125ca0860>\n\n    @pytest.fixture(scope=\"module\")\n    def pilot_samples(client: TestClient) -> list[dict]:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0, \"COCO pilot samples must be available\"\nE       AssertionError: COCO pilot samples must be available\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_vision_audit.py:57: AssertionError"
+    },
+    {
+      "classname": "tests.test_vision_audit",
+      "test": "test_provider_unavailable_handling",
+      "status": "error",
+      "message": "failed on setup with \"AssertionError: COCO pilot samples must be available\nassert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x125ca0860>\n\n    @pytest.fixture(scope=\"module\")\n    def pilot_samples(client: TestClient) -> list[dict]:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0, \"COCO pilot samples must be available\"\nE       AssertionError: COCO pilot samples must be available\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_vision_audit.py:57: AssertionError"
+    },
+    {
+      "classname": "tests.test_vision_audit",
+      "test": "test_genuine_vision_audit_execution",
+      "status": "error",
+      "message": "failed on setup with \"AssertionError: COCO pilot samples must be available\nassert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x125ca0860>\n\n    @pytest.fixture(scope=\"module\")\n    def pilot_samples(client: TestClient) -> list[dict]:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0, \"COCO pilot samples must be available\"\nE       AssertionError: COCO pilot samples must be available\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_vision_audit.py:57: AssertionError"
+    },
+    {
+      "classname": "tests.test_vision_audit",
+      "test": "test_controlled_class_mismatch",
+      "status": "error",
+      "message": "failed on setup with \"AssertionError: COCO pilot samples must be available\nassert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x125ca0860>\n\n    @pytest.fixture(scope=\"module\")\n    def pilot_samples(client: TestClient) -> list[dict]:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0, \"COCO pilot samples must be available\"\nE       AssertionError: COCO pilot samples must be available\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_vision_audit.py:57: AssertionError"
+    },
+    {
+      "classname": "tests.test_vision_audit",
+      "test": "test_severe_visual_blur_produces_uncertain",
+      "status": "error",
+      "message": "failed on setup with \"AssertionError: COCO pilot samples must be available\nassert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x125ca0860>\n\n    @pytest.fixture(scope=\"module\")\n    def pilot_samples(client: TestClient) -> list[dict]:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0, \"COCO pilot samples must be available\"\nE       AssertionError: COCO pilot samples must be available\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_vision_audit.py:57: AssertionError"
+    },
+    {
+      "classname": "tests.test_vision_audit",
+      "test": "test_border_truncation_uncertainty",
+      "status": "error",
+      "message": "failed on setup with \"AssertionError: COCO pilot samples must be available\nassert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x125ca0860>\n\n    @pytest.fixture(scope=\"module\")\n    def pilot_samples(client: TestClient) -> list[dict]:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0, \"COCO pilot samples must be available\"\nE       AssertionError: COCO pilot samples must be available\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_vision_audit.py:57: AssertionError"
+    },
+    {
+      "classname": "tests.test_vision_audit",
+      "test": "test_zero_detections_handling",
+      "status": "error",
+      "message": "failed on setup with \"AssertionError: COCO pilot samples must be available\nassert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x125ca0860>\n\n    @pytest.fixture(scope=\"module\")\n    def pilot_samples(client: TestClient) -> list[dict]:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0, \"COCO pilot samples must be available\"\nE       AssertionError: COCO pilot samples must be available\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_vision_audit.py:57: AssertionError"
+    },
+    {
+      "classname": "tests.test_vision_audit",
+      "test": "test_tamper_detection_on_receipt",
+      "status": "error",
+      "message": "failed on setup with \"AssertionError: COCO pilot samples must be available\nassert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x125ca0860>\n\n    @pytest.fixture(scope=\"module\")\n    def pilot_samples(client: TestClient) -> list[dict]:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0, \"COCO pilot samples must be available\"\nE       AssertionError: COCO pilot samples must be available\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_vision_audit.py:57: AssertionError"
+    },
+    {
+      "classname": "tests.test_vision_audit",
+      "test": "test_model_cache_singleton",
+      "status": "error",
+      "message": "failed on setup with \"AssertionError: COCO pilot samples must be available\nassert 0 > 0\n +  where 0 = len([])\"",
+      "detail_excerpt": "client = <starlette.testclient.TestClient object at 0x125ca0860>\n\n    @pytest.fixture(scope=\"module\")\n    def pilot_samples(client: TestClient) -> list[dict]:\n        resp = client.get(\"/api/vision/samples\")\n        assert resp.status_code == 200\n        samples = resp.json()\n>       assert len(samples) > 0, \"COCO pilot samples must be available\"\nE       AssertionError: COCO pilot samples must be available\nE       assert 0 > 0\nE        +  where 0 = len([])\n\ntests/test_vision_audit.py:57: AssertionError"
+    }
+  ]
+}

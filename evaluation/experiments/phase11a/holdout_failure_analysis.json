@@ -1,0 +1,463 @@
+{
+  "scope": "Post hoc diagnostic analysis of the predeclared 13-image developer-controlled holdout; no threshold or model tuning performed.",
+  "global": {
+    "images": 13,
+    "ground_truth": 102,
+    "predictions": 135,
+    "tp_class_aware_iou50": 53,
+    "false_positives": 82,
+    "false_negatives": 49
+  },
+  "by_image": [
+    {
+      "image_id": 139,
+      "ground_truth_instances": 20,
+      "predicted_instances": 15,
+      "matches_aware_0_5": 7,
+      "matches_aware_0_75": 2,
+      "matches_agnostic_0_5": 9,
+      "matches_agnostic_0_75": 4,
+      "false_positives_iou50": 8,
+      "false_negatives_iou50": 13,
+      "width": 640,
+      "height": 426,
+      "megapixels": 0.2726,
+      "recall_iou50": 0.35
+    },
+    {
+      "image_id": 285,
+      "ground_truth_instances": 1,
+      "predicted_instances": 1,
+      "matches_aware_0_5": 1,
+      "matches_aware_0_75": 1,
+      "matches_agnostic_0_5": 1,
+      "matches_agnostic_0_75": 1,
+      "false_positives_iou50": 0,
+      "false_negatives_iou50": 0,
+      "width": 586,
+      "height": 640,
+      "megapixels": 0.375,
+      "recall_iou50": 1.0
+    },
+    {
+      "image_id": 632,
+      "ground_truth_instances": 17,
+      "predicted_instances": 28,
+      "matches_aware_0_5": 1,
+      "matches_aware_0_75": 0,
+      "matches_agnostic_0_5": 4,
+      "matches_agnostic_0_75": 1,
+      "false_positives_iou50": 27,
+      "false_negatives_iou50": 16,
+      "width": 640,
+      "height": 483,
+      "megapixels": 0.3091,
+      "recall_iou50": 0.0588
+    },
+    {
+      "image_id": 724,
+      "ground_truth_instances": 4,
+      "predicted_instances": 3,
+      "matches_aware_0_5": 1,
+      "matches_aware_0_75": 1,
+      "matches_agnostic_0_5": 1,
+      "matches_agnostic_0_75": 1,
+      "false_positives_iou50": 2,
+      "false_negatives_iou50": 3,
+      "width": 375,
+      "height": 500,
+      "megapixels": 0.1875,
+      "recall_iou50": 0.25
+    },
+    {
+      "image_id": 776,
+      "ground_truth_instances": 4,
+      "predicted_instances": 4,
+      "matches_aware_0_5": 3,
+      "matches_aware_0_75": 3,
+      "matches_agnostic_0_5": 3,
+      "matches_agnostic_0_75": 3,
+      "false_positives_iou50": 1,
+      "false_negatives_iou50": 1,
+      "width": 428,
+      "height": 640,
+      "megapixels": 0.2739,
+      "recall_iou50": 0.75
+    },
+    {
+      "image_id": 785,
+      "ground_truth_instances": 2,
+      "predicted_instances": 2,
+      "matches_aware_0_5": 2,
+      "matches_aware_0_75": 1,
+      "matches_agnostic_0_5": 2,
+      "matches_agnostic_0_75": 1,
+      "false_positives_iou50": 0,
+      "false_negatives_iou50": 0,
+      "width": 640,
+      "height": 425,
+      "megapixels": 0.272,
+      "recall_iou50": 1.0
+    },
+    {
+      "image_id": 802,
+      "ground_truth_instances": 2,
+      "predicted_instances": 3,
+      "matches_aware_0_5": 2,
+      "matches_aware_0_75": 2,
+      "matches_agnostic_0_5": 2,
+      "matches_agnostic_0_75": 2,
+      "false_positives_iou50": 1,
+      "false_negatives_iou50": 0,
+      "width": 424,
+      "height": 640,
+      "megapixels": 0.2714,
+      "recall_iou50": 1.0
+    },
+    {
+      "image_id": 872,
+      "ground_truth_instances": 4,
+      "predicted_instances": 6,
+      "matches_aware_0_5": 3,
+      "matches_aware_0_75": 1,
+      "matches_agnostic_0_5": 3,
+      "matches_agnostic_0_75": 1,
+      "false_positives_iou50": 3,
+      "false_negatives_iou50": 1,
+      "width": 621,
+      "height": 640,
+      "megapixels": 0.3974,
+      "recall_iou50": 0.75
+    },
+    {
+      "image_id": 885,
+      "ground_truth_instances": 9,
+      "predicted_instances": 16,
+      "matches_aware_0_5": 7,
+      "matches_aware_0_75": 4,
+      "matches_agnostic_0_5": 7,
+      "matches_agnostic_0_75": 4,
+      "false_positives_iou50": 9,
+      "false_negatives_iou50": 2,
+      "width": 640,
+      "height": 427,
+      "megapixels": 0.2733,
+      "recall_iou50": 0.7778
+    },
+    {
+      "image_id": 1000,
+      "ground_truth_instances": 17,
+      "predicted_instances": 21,
+      "matches_aware_0_5": 14,
+      "matches_aware_0_75": 7,
+      "matches_agnostic_0_5": 14,
+      "matches_agnostic_0_75": 7,
+      "false_positives_iou50": 7,
+      "false_negatives_iou50": 3,
+      "width": 640,
+      "height": 480,
+      "megapixels": 0.3072,
+      "recall_iou50": 0.8235
+    },
+    {
+      "image_id": 1268,
+      "ground_truth_instances": 11,
+      "predicted_instances": 17,
+      "matches_aware_0_5": 6,
+      "matches_aware_0_75": 2,
+      "matches_agnostic_0_5": 7,
+      "matches_agnostic_0_75": 2,
+      "false_positives_iou50": 11,
+      "false_negatives_iou50": 5,
+      "width": 640,
+      "height": 427,
+      "megapixels": 0.2733,
+      "recall_iou50": 0.5455
+    },
+    {
+      "image_id": 1296,
+      "ground_truth_instances": 4,
+      "predicted_instances": 10,
+      "matches_aware_0_5": 2,
+      "matches_aware_0_75": 2,
+      "matches_agnostic_0_5": 2,
+      "matches_agnostic_0_75": 2,
+      "false_positives_iou50": 8,
+      "false_negatives_iou50": 2,
+      "width": 427,
+      "height": 640,
+      "megapixels": 0.2733,
+      "recall_iou50": 0.5
+    },
+    {
+      "image_id": 1353,
+      "ground_truth_instances": 7,
+      "predicted_instances": 9,
+      "matches_aware_0_5": 4,
+      "matches_aware_0_75": 2,
+      "matches_agnostic_0_5": 4,
+      "matches_agnostic_0_75": 2,
+      "false_positives_iou50": 5,
+      "false_negatives_iou50": 3,
+      "width": 375,
+      "height": 500,
+      "megapixels": 0.1875,
+      "recall_iou50": 0.5714
+    }
+  ],
+  "by_category": {
+    "person": {
+      "gt": 37,
+      "matched_iou50": 31,
+      "agnostic_iou50_but_not_class_aware": 0,
+      "mean_best_aware": 0.6915,
+      "mean_best_agnostic": 0.6917,
+      "recall_iou50": 0.8378
+    },
+    "book": {
+      "gt": 15,
+      "matched_iou50": 0,
+      "agnostic_iou50_but_not_class_aware": 0,
+      "mean_best_aware": 0.1121,
+      "mean_best_agnostic": 0.1121,
+      "recall_iou50": 0.0
+    },
+    "chair": {
+      "gt": 6,
+      "matched_iou50": 4,
+      "agnostic_iou50_but_not_class_aware": 0,
+      "mean_best_aware": 0.5281,
+      "mean_best_agnostic": 0.5281,
+      "recall_iou50": 0.6667
+    },
+    "vase": {
+      "gt": 4,
+      "matched_iou50": 2,
+      "agnostic_iou50_but_not_class_aware": 0,
+      "mean_best_aware": 0.5038,
+      "mean_best_agnostic": 0.537,
+      "recall_iou50": 0.5
+    },
+    "backpack": {
+      "gt": 3,
+      "matched_iou50": 0,
+      "agnostic_iou50_but_not_class_aware": 0,
+      "mean_best_aware": 0.133,
+      "mean_best_agnostic": 0.2944,
+      "recall_iou50": 0.0
+    },
+    "boat": {
+      "gt": 3,
+      "matched_iou50": 2,
+      "agnostic_iou50_but_not_class_aware": 0,
+      "mean_best_aware": 0.6034,
+      "mean_best_agnostic": 0.6034,
+      "recall_iou50": 0.6667
+    },
+    "handbag": {
+      "gt": 3,
+      "matched_iou50": 3,
+      "agnostic_iou50_but_not_class_aware": 0,
+      "mean_best_aware": 0.713,
+      "mean_best_agnostic": 0.713,
+      "recall_iou50": 1.0
+    },
+    "potted plant": {
+      "gt": 3,
+      "matched_iou50": 0,
+      "agnostic_iou50_but_not_class_aware": 2,
+      "mean_best_aware": 0.0,
+      "mean_best_agnostic": 0.5299,
+      "recall_iou50": 0.0
+    },
+    "teddy bear": {
+      "gt": 3,
+      "matched_iou50": 3,
+      "agnostic_iou50_but_not_class_aware": 0,
+      "mean_best_aware": 0.8896,
+      "mean_best_agnostic": 0.8896,
+      "recall_iou50": 1.0
+    },
+    "bed": {
+      "gt": 2,
+      "matched_iou50": 0,
+      "agnostic_iou50_but_not_class_aware": 1,
+      "mean_best_aware": 0.0005,
+      "mean_best_agnostic": 0.6438,
+      "recall_iou50": 0.0
+    },
+    "cell phone": {
+      "gt": 2,
+      "matched_iou50": 0,
+      "agnostic_iou50_but_not_class_aware": 0,
+      "mean_best_aware": 0.2681,
+      "mean_best_agnostic": 0.4964,
+      "recall_iou50": 0.0
+    },
+    "clock": {
+      "gt": 2,
+      "matched_iou50": 1,
+      "agnostic_iou50_but_not_class_aware": 0,
+      "mean_best_aware": 0.4015,
+      "mean_best_agnostic": 0.4021,
+      "recall_iou50": 0.5
+    },
+    "refrigerator": {
+      "gt": 2,
+      "matched_iou50": 1,
+      "agnostic_iou50_but_not_class_aware": 0,
+      "mean_best_aware": 0.4626,
+      "mean_best_agnostic": 0.4626,
+      "recall_iou50": 0.5
+    },
+    "stop sign": {
+      "gt": 2,
+      "matched_iou50": 1,
+      "agnostic_iou50_but_not_class_aware": 0,
+      "mean_best_aware": 0.4775,
+      "mean_best_agnostic": 0.4775,
+      "recall_iou50": 0.5
+    },
+    "tennis racket": {
+      "gt": 2,
+      "matched_iou50": 1,
+      "agnostic_iou50_but_not_class_aware": 0,
+      "mean_best_aware": 0.4459,
+      "mean_best_agnostic": 0.5547,
+      "recall_iou50": 0.5
+    },
+    "tv": {
+      "gt": 2,
+      "matched_iou50": 0,
+      "agnostic_iou50_but_not_class_aware": 2,
+      "mean_best_aware": 0.0,
+      "mean_best_agnostic": 0.9502,
+      "recall_iou50": 0.0
+    },
+    "baseball glove": {
+      "gt": 1,
+      "matched_iou50": 1,
+      "agnostic_iou50_but_not_class_aware": 0,
+      "mean_best_aware": 0.6319,
+      "mean_best_agnostic": 0.6319,
+      "recall_iou50": 1.0
+    },
+    "bear": {
+      "gt": 1,
+      "matched_iou50": 1,
+      "agnostic_iou50_but_not_class_aware": 0,
+      "mean_best_aware": 0.943,
+      "mean_best_agnostic": 0.943,
+      "recall_iou50": 1.0
+    },
+    "bird": {
+      "gt": 1,
+      "matched_iou50": 0,
+      "agnostic_iou50_but_not_class_aware": 1,
+      "mean_best_aware": 0.0,
+      "mean_best_agnostic": 0.706,
+      "recall_iou50": 0.0
+    },
+    "car": {
+      "gt": 1,
+      "matched_iou50": 0,
+      "agnostic_iou50_but_not_class_aware": 0,
+      "mean_best_aware": 0.0,
+      "mean_best_agnostic": 0.0,
+      "recall_iou50": 0.0
+    },
+    "dining table": {
+      "gt": 1,
+      "matched_iou50": 0,
+      "agnostic_iou50_but_not_class_aware": 0,
+      "mean_best_aware": 0.0,
+      "mean_best_agnostic": 0.2396,
+      "recall_iou50": 0.0
+    },
+    "microwave": {
+      "gt": 1,
+      "matched_iou50": 0,
+      "agnostic_iou50_but_not_class_aware": 0,
+      "mean_best_aware": 0.0,
+      "mean_best_agnostic": 0.0,
+      "recall_iou50": 0.0
+    },
+    "oven": {
+      "gt": 1,
+      "matched_iou50": 1,
+      "agnostic_iou50_but_not_class_aware": 0,
+      "mean_best_aware": 0.9562,
+      "mean_best_agnostic": 0.9562,
+      "recall_iou50": 1.0
+    },
+    "skis": {
+      "gt": 1,
+      "matched_iou50": 1,
+      "agnostic_iou50_but_not_class_aware": 0,
+      "mean_best_aware": 0.5495,
+      "mean_best_agnostic": 0.5495,
+      "recall_iou50": 1.0
+    },
+    "sports ball": {
+      "gt": 1,
+      "matched_iou50": 0,
+      "agnostic_iou50_but_not_class_aware": 0,
+      "mean_best_aware": 0.4567,
+      "mean_best_agnostic": 0.4567,
+      "recall_iou50": 0.0
+    },
+    "train": {
+      "gt": 1,
+      "matched_iou50": 0,
+      "agnostic_iou50_but_not_class_aware": 0,
+      "mean_best_aware": 0.0,
+      "mean_best_agnostic": 0.0526,
+      "recall_iou50": 0.0
+    },
+    "truck": {
+      "gt": 1,
+      "matched_iou50": 0,
+      "agnostic_iou50_but_not_class_aware": 0,
+      "mean_best_aware": 0.4048,
+      "mean_best_agnostic": 0.4048,
+      "recall_iou50": 0.0
+    }
+  },
+  "confidence_distribution_all_predictions": {
+    "count": 135,
+    "min": 0.5021,
+    "median": 0.8499,
+    "p90": 0.9692,
+    "below_0_6": 25,
+    "below_0_7": 45,
+    "at_least_0_9": 48
+  },
+  "resolution_diagnostic": {
+    "spearman_megapixels_vs_recall_iou50": 0.1114,
+    "two_sided_p_value": 0.7171,
+    "warning": "n=13; exploratory association only, not causal."
+  },
+  "scale_recall_iou50": {
+    "small": {
+      "n": 39,
+      "recall": 0.1538
+    },
+    "medium": {
+      "n": 36,
+      "recall": 0.6944
+    },
+    "large": {
+      "n": 27,
+      "recall": 0.8148
+    }
+  },
+  "class_taxonomy_signal": {
+    "ground_truths_with_agnostic_iou50_but_class_aware_below_iou50": 6,
+    "interpretation": "Includes genuine class errors and naming-taxonomy mismatches (for example COCO names versus model aliases); saved artifacts do not retain matched mask identity, so these causes cannot be separated retrospectively."
+  },
+  "not_measured": {
+    "occlusion": "No frozen occlusion labels exist for these 13 images.",
+    "controlled_resolution_or_crop_experiment": "Not run on the holdout to avoid post hoc tuning and repeated holdout use.",
+    "natural_annotation_error_accuracy": "No independent human adjudication labels exist."
+  }
+}

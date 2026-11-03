@@ -1,0 +1,768 @@
+[
+  {
+    "image_id": 139,
+    "input_sha256": "ffe0f0cec3b2e27aab1967229cdf0a0d7751dcdd5800322f0b8ac0dffb3b8a8d",
+    "output_sha256": "e61f1c9874bbfc5c8b4af87ee3ad26062e225dcc2deeb041fb2d6e00c8d1ec06",
+    "predictions": [
+      {
+        "label": "chair",
+        "score": 0.91477,
+        "area_pixels": 3279
+      },
+      {
+        "label": "chair",
+        "score": 0.921411,
+        "area_pixels": 2521
+      },
+      {
+        "label": "tvmonitor",
+        "score": 0.980016,
+        "area_pixels": 13123
+      },
+      {
+        "label": "vase",
+        "score": 0.943502,
+        "area_pixels": 2125
+      },
+      {
+        "label": "diningtable",
+        "score": 0.866645,
+        "area_pixels": 936
+      },
+      {
+        "label": "chair",
+        "score": 0.888209,
+        "area_pixels": 1513
+      },
+      {
+        "label": "clock",
+        "score": 0.925174,
+        "area_pixels": 234
+      },
+      {
+        "label": "person",
+        "score": 0.871502,
+        "area_pixels": 2726
+      },
+      {
+        "label": "pottedplant",
+        "score": 0.869407,
+        "area_pixels": 550
+      },
+      {
+        "label": "pottedplant",
+        "score": 0.858939,
+        "area_pixels": 1043
+      },
+      {
+        "label": "chair",
+        "score": 0.814473,
+        "area_pixels": 303
+      },
+      {
+        "label": "tvmonitor",
+        "score": 0.823174,
+        "area_pixels": 5913
+      },
+      {
+        "label": "vase",
+        "score": 0.809832,
+        "area_pixels": 169
+      },
+      {
+        "label": "vase",
+        "score": 0.614721,
+        "area_pixels": 459
+      },
+      {
+        "label": "vase",
+        "score": 0.55313,
+        "area_pixels": 244
+      }
+    ]
+  },
+  {
+    "image_id": 285,
+    "input_sha256": "f3a2974ce3686332609124c70e3e6a2e3aca43fccf1cd1bd7c5c03820977f57d",
+    "output_sha256": "84d39ddc922999d1ce0ea568c9b261f35d0cac5f6e0db0e61658aec4494bafb7",
+    "predictions": [
+      {
+        "label": "bear",
+        "score": 0.984165,
+        "area_pixels": 280605
+      }
+    ]
+  },
+  {
+    "image_id": 632,
+    "input_sha256": "a4cd7f45ac1ce27eaafb254b23af7c0b18a064be08870ceaaf03b2147f2ce550",
+    "output_sha256": "ede1ef71e8674e7a4f3e098ae700f8f070131554b1e12d5e53414b90d2b2da5e",
+    "predictions": [
+      {
+        "label": "pottedplant",
+        "score": 0.97459,
+        "area_pixels": 6438
+      },
+      {
+        "label": "pottedplant",
+        "score": 0.949595,
+        "area_pixels": 1972
+      },
+      {
+        "label": "bed",
+        "score": 0.936095,
+        "area_pixels": 62
+      },
+      {
+        "label": "bottle",
+        "score": 0.904274,
+        "area_pixels": 545
+      },
+      {
+        "label": "book",
+        "score": 0.849942,
+        "area_pixels": 134
+      },
+      {
+        "label": "sofa",
+        "score": 0.787193,
+        "area_pixels": 68162
+      },
+      {
+        "label": "book",
+        "score": 0.733547,
+        "area_pixels": 2
+      },
+      {
+        "label": "book",
+        "score": 0.736284,
+        "area_pixels": 6
+      },
+      {
+        "label": "book",
+        "score": 0.635178,
+        "area_pixels": 2074
+      },
+      {
+        "label": "book",
+        "score": 0.690584,
+        "area_pixels": 446
+      },
+      {
+        "label": "book",
+        "score": 0.669142,
+        "area_pixels": 1766
+      },
+      {
+        "label": "book",
+        "score": 0.656339,
+        "area_pixels": 197
+      },
+      {
+        "label": "book",
+        "score": 0.647262,
+        "area_pixels": 750
+      },
+      {
+        "label": "book",
+        "score": 0.627503,
+        "area_pixels": 403
+      },
+      {
+        "label": "book",
+        "score": 0.614658,
+        "area_pixels": 379
+      },
+      {
+        "label": "book",
+        "score": 0.598948,
+        "area_pixels": 7
+      },
+      {
+        "label": "book",
+        "score": 0.570759,
+        "area_pixels": 425
+      },
+      {
+        "label": "book",
+        "score": 0.592909,
+        "area_pixels": 3889
+      },
+      {
+        "label": "book",
+        "score": 0.592806,
+        "area_pixels": 818
+      },
+      {
+        "label": "book",
+        "score": 0.565075,
+        "area_pixels": 271
+      },
+      {
+        "label": "book",
+        "score": 0.542696,
+        "area_pixels": 515
+      },
+      {
+        "label": "book",
+        "score": 0.551828,
+        "area_pixels": 468
+      },
+      {
+        "label": "book",
+        "score": 0.585076,
+        "area_pixels": 811
+      },
+      {
+        "label": "vase",
+        "score": 0.576202,
+        "area_pixels": 571
+      },
+      {
+        "label": "book",
+        "score": 0.52213,
+        "area_pixels": 612
+      },
+      {
+        "label": "vase",
+        "score": 0.521419,
+        "area_pixels": 1121
+      },
+      {
+        "label": "book",
+        "score": 0.502116,
+        "area_pixels": 430
+      },
+      {
+        "label": "chair",
+        "score": 0.5042,
+        "area_pixels": 5500
+      }
+    ]
+  },
+  {
+    "image_id": 724,
+    "input_sha256": "5c0e559c75d3969c8e3e297b61f61063f78045c9d4802b526ba616361f3823fd",
+    "output_sha256": "3e1017ef89ef41d8b8e23614890bbf48956b456a07e219f1ce36bf39b601ff65",
+    "predictions": [
+      {
+        "label": "stop sign",
+        "score": 0.988032,
+        "area_pixels": 15936
+      },
+      {
+        "label": "car",
+        "score": 0.699846,
+        "area_pixels": 31
+      },
+      {
+        "label": "truck",
+        "score": 0.64622,
+        "area_pixels": 1004
+      }
+    ]
+  },
+  {
+    "image_id": 776,
+    "input_sha256": "1dd31e9059c491992be2f562624eb4093e17aee08b4f7baf5ff9ea24543b0a33",
+    "output_sha256": "914998a80f2062e5f6a9d8db8c6ffbeb2eb6290a0937f6fafd5cebf7c0eaf4ec",
+    "predictions": [
+      {
+        "label": "teddy bear",
+        "score": 0.976887,
+        "area_pixels": 93002
+      },
+      {
+        "label": "teddy bear",
+        "score": 0.956404,
+        "area_pixels": 71694
+      },
+      {
+        "label": "teddy bear",
+        "score": 0.915408,
+        "area_pixels": 67819
+      },
+      {
+        "label": "sofa",
+        "score": 0.823408,
+        "area_pixels": 11051
+      }
+    ]
+  },
+  {
+    "image_id": 785,
+    "input_sha256": "83981537a7baeafbeb9c8cb67b3484dc26433f574b3685d021fa537e277e4726",
+    "output_sha256": "fb3943fc9e41112375c0ef3a1aac36292df03c9621289a21ee6e46f38b44cf91",
+    "predictions": [
+      {
+        "label": "person",
+        "score": 0.960796,
+        "area_pixels": 30086
+      },
+      {
+        "label": "skis",
+        "score": 0.93253,
+        "area_pixels": 3744
+      }
+    ]
+  },
+  {
+    "image_id": 802,
+    "input_sha256": "d5b79e7fa716f85ca86f46e5f518da9b6c5e26414925624d76e6476861aec495",
+    "output_sha256": "b53f0304f2ae87366276eb30ffb7539d485be6653807d79165f201e1c968d02d",
+    "predictions": [
+      {
+        "label": "refrigerator",
+        "score": 0.976565,
+        "area_pixels": 53565
+      },
+      {
+        "label": "oven",
+        "score": 0.977678,
+        "area_pixels": 25914
+      },
+      {
+        "label": "refrigerator",
+        "score": 0.790686,
+        "area_pixels": 23176
+      }
+    ]
+  },
+  {
+    "image_id": 872,
+    "input_sha256": "c2aa138ee3a59b057a7ba6fc5a6a18e62af531aa7dab78a7bfd33c1cd7e55eb6",
+    "output_sha256": "1d72e5bbf22da1c03894448eb2852c4df28278768007f3d7259874a7bd7c296b",
+    "predictions": [
+      {
+        "label": "person",
+        "score": 0.935592,
+        "area_pixels": 43177
+      },
+      {
+        "label": "person",
+        "score": 0.887483,
+        "area_pixels": 21728
+      },
+      {
+        "label": "baseball glove",
+        "score": 0.955209,
+        "area_pixels": 1053
+      },
+      {
+        "label": "sports ball",
+        "score": 0.813753,
+        "area_pixels": 439
+      },
+      {
+        "label": "person",
+        "score": 0.598085,
+        "area_pixels": 5236
+      },
+      {
+        "label": "baseball bat",
+        "score": 0.569692,
+        "area_pixels": 793
+      }
+    ]
+  },
+  {
+    "image_id": 885,
+    "input_sha256": "1c67b783f78b18ddb5dd20aaba4d4aacaf98e5277051688a96da096afa9cdf1f",
+    "output_sha256": "506d16031dd615a57ce126dd67e33166a3ce1d43a8f690a63c2a229da20148de",
+    "predictions": [
+      {
+        "label": "person",
+        "score": 0.968425,
+        "area_pixels": 11163
+      },
+      {
+        "label": "tennis racket",
+        "score": 0.98439,
+        "area_pixels": 1753
+      },
+      {
+        "label": "person",
+        "score": 0.969628,
+        "area_pixels": 6966
+      },
+      {
+        "label": "person",
+        "score": 0.96946,
+        "area_pixels": 6656
+      },
+      {
+        "label": "person",
+        "score": 0.896085,
+        "area_pixels": 857
+      },
+      {
+        "label": "person",
+        "score": 0.879334,
+        "area_pixels": 932
+      },
+      {
+        "label": "person",
+        "score": 0.855943,
+        "area_pixels": 828
+      },
+      {
+        "label": "person",
+        "score": 0.865214,
+        "area_pixels": 865
+      },
+      {
+        "label": "person",
+        "score": 0.830639,
+        "area_pixels": 448
+      },
+      {
+        "label": "sports ball",
+        "score": 0.825591,
+        "area_pixels": 1146
+      },
+      {
+        "label": "person",
+        "score": 0.769117,
+        "area_pixels": 400
+      },
+      {
+        "label": "person",
+        "score": 0.788442,
+        "area_pixels": 515
+      },
+      {
+        "label": "person",
+        "score": 0.666557,
+        "area_pixels": 474
+      },
+      {
+        "label": "person",
+        "score": 0.664636,
+        "area_pixels": 440
+      },
+      {
+        "label": "person",
+        "score": 0.597459,
+        "area_pixels": 8
+      },
+      {
+        "label": "person",
+        "score": 0.563221,
+        "area_pixels": 394
+      }
+    ]
+  },
+  {
+    "image_id": 1000,
+    "input_sha256": "24bb77a31928404e45a0454b06f6a0bd54a8db103590c9d7917288a1e0269f05",
+    "output_sha256": "b13c5d6492ee0dc82d06956cae3eee510485cd7a702a25460f4865cade7b7973",
+    "predictions": [
+      {
+        "label": "person",
+        "score": 0.969985,
+        "area_pixels": 23161
+      },
+      {
+        "label": "person",
+        "score": 0.953839,
+        "area_pixels": 15598
+      },
+      {
+        "label": "person",
+        "score": 0.945772,
+        "area_pixels": 10007
+      },
+      {
+        "label": "person",
+        "score": 0.94182,
+        "area_pixels": 14927
+      },
+      {
+        "label": "person",
+        "score": 0.954597,
+        "area_pixels": 9806
+      },
+      {
+        "label": "person",
+        "score": 0.962903,
+        "area_pixels": 18332
+      },
+      {
+        "label": "person",
+        "score": 0.932151,
+        "area_pixels": 8379
+      },
+      {
+        "label": "person",
+        "score": 0.893809,
+        "area_pixels": 4681
+      },
+      {
+        "label": "tennis racket",
+        "score": 0.916336,
+        "area_pixels": 853
+      },
+      {
+        "label": "handbag",
+        "score": 0.924849,
+        "area_pixels": 2394
+      },
+      {
+        "label": "person",
+        "score": 0.899947,
+        "area_pixels": 9151
+      },
+      {
+        "label": "sports ball",
+        "score": 0.867266,
+        "area_pixels": 193
+      },
+      {
+        "label": "person",
+        "score": 0.908395,
+        "area_pixels": 3531
+      },
+      {
+        "label": "person",
+        "score": 0.900689,
+        "area_pixels": 1149
+      },
+      {
+        "label": "person",
+        "score": 0.843948,
+        "area_pixels": 1101
+      },
+      {
+        "label": "handbag",
+        "score": 0.84509,
+        "area_pixels": 1858
+      },
+      {
+        "label": "handbag",
+        "score": 0.798236,
+        "area_pixels": 597
+      },
+      {
+        "label": "tennis racket",
+        "score": 0.665279,
+        "area_pixels": 217
+      },
+      {
+        "label": "backpack",
+        "score": 0.666886,
+        "area_pixels": 349
+      },
+      {
+        "label": "handbag",
+        "score": 0.637147,
+        "area_pixels": 1389
+      },
+      {
+        "label": "tennis racket",
+        "score": 0.564842,
+        "area_pixels": 267
+      }
+    ]
+  },
+  {
+    "image_id": 1268,
+    "input_sha256": "8e85a2e71ee512fe748a3a3be9bb40b8591e8c501c0f3896efcb5be5999ec236",
+    "output_sha256": "99cca2039ba3915e2a1b297d1293aa11923af867de20b1584c5c079b16888439",
+    "predictions": [
+      {
+        "label": "person",
+        "score": 0.893789,
+        "area_pixels": 20592
+      },
+      {
+        "label": "person",
+        "score": 0.980105,
+        "area_pixels": 3350
+      },
+      {
+        "label": "person",
+        "score": 0.972505,
+        "area_pixels": 1237
+      },
+      {
+        "label": "person",
+        "score": 0.968852,
+        "area_pixels": 1534
+      },
+      {
+        "label": "handbag",
+        "score": 0.95145,
+        "area_pixels": 10580
+      },
+      {
+        "label": "boat",
+        "score": 0.908819,
+        "area_pixels": 1225
+      },
+      {
+        "label": "cell phone",
+        "score": 0.854184,
+        "area_pixels": 726
+      },
+      {
+        "label": "boat",
+        "score": 0.850338,
+        "area_pixels": 550
+      },
+      {
+        "label": "handbag",
+        "score": 0.793283,
+        "area_pixels": 14
+      },
+      {
+        "label": "handbag",
+        "score": 0.760806,
+        "area_pixels": 497
+      },
+      {
+        "label": "boat",
+        "score": 0.652237,
+        "area_pixels": 12
+      },
+      {
+        "label": "backpack",
+        "score": 0.659707,
+        "area_pixels": 10
+      },
+      {
+        "label": "boat",
+        "score": 0.59096,
+        "area_pixels": 415
+      },
+      {
+        "label": "backpack",
+        "score": 0.562611,
+        "area_pixels": 1288
+      },
+      {
+        "label": "handbag",
+        "score": 0.558246,
+        "area_pixels": 5052
+      },
+      {
+        "label": "backpack",
+        "score": 0.533451,
+        "area_pixels": 870
+      },
+      {
+        "label": "boat",
+        "score": 0.515007,
+        "area_pixels": 2370
+      }
+    ]
+  },
+  {
+    "image_id": 1296,
+    "input_sha256": "34a98da7c11bc8811e6eec445145bb16f3d5f4338945ba116edcc1fe554d181b",
+    "output_sha256": "0ab49ac718353d9313364ce1b9fbb0e82e5fd9d24faf883a2f01713a8c88f72d",
+    "predictions": [
+      {
+        "label": "person",
+        "score": 0.97429,
+        "area_pixels": 187519
+      },
+      {
+        "label": "person",
+        "score": 0.947875,
+        "area_pixels": 13871
+      },
+      {
+        "label": "cell phone",
+        "score": 0.959341,
+        "area_pixels": 401
+      },
+      {
+        "label": "person",
+        "score": 0.942069,
+        "area_pixels": 6517
+      },
+      {
+        "label": "person",
+        "score": 0.828078,
+        "area_pixels": 5344
+      },
+      {
+        "label": "person",
+        "score": 0.800272,
+        "area_pixels": 4
+      },
+      {
+        "label": "person",
+        "score": 0.745658,
+        "area_pixels": 5561
+      },
+      {
+        "label": "person",
+        "score": 0.704634,
+        "area_pixels": 17075
+      },
+      {
+        "label": "person",
+        "score": 0.698221,
+        "area_pixels": 10066
+      },
+      {
+        "label": "book",
+        "score": 0.591519,
+        "area_pixels": 14051
+      }
+    ]
+  },
+  {
+    "image_id": 1353,
+    "input_sha256": "1cccef217a1e5eec2acc74d7c08a105da3ef6fdb8514e221cdea9b0b373b60ea",
+    "output_sha256": "c9e4f553dd640919ee05d77c9ea62cb06451c2ba8ca8fd07721385f2b28d2986",
+    "predictions": [
+      {
+        "label": "person",
+        "score": 0.909268,
+        "area_pixels": 5012
+      },
+      {
+        "label": "person",
+        "score": 0.956396,
+        "area_pixels": 2145
+      },
+      {
+        "label": "person",
+        "score": 0.910507,
+        "area_pixels": 4852
+      },
+      {
+        "label": "person",
+        "score": 0.902961,
+        "area_pixels": 1745
+      },
+      {
+        "label": "person",
+        "score": 0.890354,
+        "area_pixels": 667
+      },
+      {
+        "label": "person",
+        "score": 0.872873,
+        "area_pixels": 1539
+      },
+      {
+        "label": "chair",
+        "score": 0.856899,
+        "area_pixels": 6892
+      },
+      {
+        "label": "person",
+        "score": 0.690403,
+        "area_pixels": 9985
+      },
+      {
+        "label": "person",
+        "score": 0.667652,
+        "area_pixels": 3334
+      }
+    ]
+  }
+]

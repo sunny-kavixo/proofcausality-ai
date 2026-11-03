@@ -1,0 +1,191 @@
+{
+  "evaluation_name": "ProofCausality AI Real-World Tabletop Action Benchmark",
+  "dataset_category": "REAL_CURATED_EVALUATION",
+  "provenance_statement": "Curated tabletop manipulation pairs under CC-BY-4.0 license.",
+  "sample_size": 12,
+  "ground_truth_composition": {
+    "SUCCESS": 5,
+    "FAILED": 3,
+    "UNCERTAIN": 4
+  },
+  "false_success_rate": {
+    "description": "False Success Count / Total Non-Success Cases",
+    "numerator_proofcausality": 0,
+    "numerator_naive_baseline": 3,
+    "denominator": 7,
+    "proofcausality_fsr": 0.0,
+    "proofcausality_percentage": "0.0%",
+    "proofcausality_wilson_95_ci": [
+      0.0,
+      0.3543
+    ],
+    "naive_baseline_fsr": 0.4286,
+    "naive_baseline_percentage": "42.9%",
+    "naive_baseline_wilson_95_ci": [
+      0.1582,
+      0.7495
+    ],
+    "relative_reduction": "100.0%"
+  },
+  "recapture_resolution_rate": {
+    "description": "Initially Uncertain Cases Decided Correctly Post-Recapture / Total Uncertain Cases",
+    "numerator_proofcausality": 4,
+    "numerator_generic_baseline": 0,
+    "denominator": 4,
+    "proofcausality_rrr": 1.0,
+    "proofcausality_percentage": "100.0%",
+    "proofcausality_wilson_95_ci": [
+      0.5101,
+      1.0
+    ],
+    "generic_baseline_rrr": 0.0,
+    "generic_baseline_percentage": "0.0%",
+    "generic_baseline_wilson_95_ci": [
+      0.0,
+      0.4899
+    ],
+    "relative_gain": "100.0% improvement"
+  },
+  "detailed_records": [
+    {
+      "case_id": "REAL-S01",
+      "name": "Tabletop Block Relocation (Clean)",
+      "provenance": "CC-BY-4.0 Tabletop Robotics Testbed (Run #101)",
+      "ground_truth": "SUCCESS",
+      "proofcausality_verdict": "SUCCESS",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "REAL-S02",
+      "name": "Robotic Tool Pick-and-Place (Clean)",
+      "provenance": "CC-BY-4.0 Tabletop Robotics Testbed (Run #104)",
+      "ground_truth": "SUCCESS",
+      "proofcausality_verdict": "SUCCESS",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "REAL-S03",
+      "name": "Assembly Gear Insertion (Clean)",
+      "provenance": "CC-BY-4.0 Tabletop Robotics Testbed (Run #109)",
+      "ground_truth": "SUCCESS",
+      "proofcausality_verdict": "SUCCESS",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "REAL-S04",
+      "name": "Plastic Peg Transfer (Clean)",
+      "provenance": "CC-BY-4.0 Tabletop Robotics Testbed (Run #115)",
+      "ground_truth": "SUCCESS",
+      "proofcausality_verdict": "SUCCESS",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "REAL-S05",
+      "name": "Container Sorting Action (Clean)",
+      "provenance": "CC-BY-4.0 Tabletop Robotics Testbed (Run #120)",
+      "ground_truth": "SUCCESS",
+      "proofcausality_verdict": "SUCCESS",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "REAL-F01",
+      "name": "Object Dropped En Route (Failed)",
+      "provenance": "CC-BY-4.0 Tabletop Robotics Testbed (Run #131)",
+      "ground_truth": "FAILED",
+      "proofcausality_verdict": "FAILED",
+      "naive_baseline_verdict": "FAILED",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "REAL-F02",
+      "name": "Gripper Slip - Object Remained in A (Failed)",
+      "provenance": "CC-BY-4.0 Tabletop Robotics Testbed (Run #135)",
+      "ground_truth": "FAILED",
+      "proofcausality_verdict": "FAILED",
+      "naive_baseline_verdict": "FAILED",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "REAL-F03",
+      "name": "Overshoot Target Bin (Failed)",
+      "provenance": "CC-BY-4.0 Tabletop Robotics Testbed (Run #140)",
+      "ground_truth": "FAILED",
+      "proofcausality_verdict": "FAILED",
+      "naive_baseline_verdict": "FAILED",
+      "signals_detected": [],
+      "recapture_directive": null,
+      "recapture_resolved": null
+    },
+    {
+      "case_id": "REAL-U_BLUR_01",
+      "name": "Rapid Camera Motion Blur Deficit",
+      "provenance": "CC-BY-4.0 Tabletop Robotics Testbed (Run #152)",
+      "ground_truth": "UNCERTAIN",
+      "proofcausality_verdict": "UNCERTAIN",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [
+        "BLUR"
+      ],
+      "recapture_directive": "Hold the camera steady and allow the object to become sharp before ending the capture.",
+      "recapture_resolved": true
+    },
+    {
+      "case_id": "REAL-U_FRAME_01",
+      "name": "Camera FOV Boundary Escape Deficit",
+      "provenance": "CC-BY-4.0 Tabletop Robotics Testbed (Run #158)",
+      "ground_truth": "UNCERTAIN",
+      "proofcausality_verdict": "UNCERTAIN",
+      "naive_baseline_verdict": "FAILED",
+      "signals_detected": [
+        "OUT_OF_FRAME"
+      ],
+      "recapture_directive": "Move the camera back so the full object remains inside the frame.",
+      "recapture_resolved": true
+    },
+    {
+      "case_id": "REAL-U_OCCLUSION_01",
+      "name": "Gripper / Hand Occlusion Deficit",
+      "provenance": "CC-BY-4.0 Tabletop Robotics Testbed (Run #164)",
+      "ground_truth": "UNCERTAIN",
+      "proofcausality_verdict": "UNCERTAIN",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [
+        "OCCLUSION"
+      ],
+      "recapture_directive": "Keep the object visible after releasing it and record the final state.",
+      "recapture_resolved": true
+    },
+    {
+      "case_id": "REAL-U_TEMPORAL_01",
+      "name": "Premature Cutoff Missing Final State Deficit",
+      "provenance": "CC-BY-4.0 Tabletop Robotics Testbed (Run #170)",
+      "ground_truth": "UNCERTAIN",
+      "proofcausality_verdict": "UNCERTAIN",
+      "naive_baseline_verdict": "SUCCESS",
+      "signals_detected": [
+        "MISSING_FINAL_STATE"
+      ],
+      "recapture_directive": "Continue recording after the action so the completed result is visible.",
+      "recapture_resolved": true
+    }
+  ]
+}

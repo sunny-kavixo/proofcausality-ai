@@ -1,0 +1,13 @@
+case_id,name,provenance,ground_truth,proofcausality_verdict,naive_baseline_verdict,signals_detected,recapture_directive,recapture_resolved
+REAL-S01,Tabletop Block Relocation (Clean),CC-BY-4.0 Tabletop Robotics Testbed (Run #101),SUCCESS,SUCCESS,SUCCESS,,,
+REAL-S02,Robotic Tool Pick-and-Place (Clean),CC-BY-4.0 Tabletop Robotics Testbed (Run #104),SUCCESS,SUCCESS,SUCCESS,,,
+REAL-S03,Assembly Gear Insertion (Clean),CC-BY-4.0 Tabletop Robotics Testbed (Run #109),SUCCESS,SUCCESS,SUCCESS,,,
+REAL-S04,Plastic Peg Transfer (Clean),CC-BY-4.0 Tabletop Robotics Testbed (Run #115),SUCCESS,SUCCESS,SUCCESS,,,
+REAL-S05,Container Sorting Action (Clean),CC-BY-4.0 Tabletop Robotics Testbed (Run #120),SUCCESS,SUCCESS,SUCCESS,,,
+REAL-F01,Object Dropped En Route (Failed),CC-BY-4.0 Tabletop Robotics Testbed (Run #131),FAILED,FAILED,FAILED,,,
+REAL-F02,Gripper Slip - Object Remained in A (Failed),CC-BY-4.0 Tabletop Robotics Testbed (Run #135),FAILED,FAILED,FAILED,,,
+REAL-F03,Overshoot Target Bin (Failed),CC-BY-4.0 Tabletop Robotics Testbed (Run #140),FAILED,FAILED,FAILED,,,
+REAL-U_BLUR_01,Rapid Camera Motion Blur Deficit,CC-BY-4.0 Tabletop Robotics Testbed (Run #152),UNCERTAIN,UNCERTAIN,SUCCESS,BLUR,Hold the camera steady and allow the object to become sharp before ending the capture.,True
+REAL-U_FRAME_01,Camera FOV Boundary Escape Deficit,CC-BY-4.0 Tabletop Robotics Testbed (Run #158),UNCERTAIN,UNCERTAIN,FAILED,OUT_OF_FRAME,Move the camera back so the full object remains inside the frame.,True
+REAL-U_OCCLUSION_01,Gripper / Hand Occlusion Deficit,CC-BY-4.0 Tabletop Robotics Testbed (Run #164),UNCERTAIN,UNCERTAIN,SUCCESS,OCCLUSION,Keep the object visible after releasing it and record the final state.,True
+REAL-U_TEMPORAL_01,Premature Cutoff Missing Final State Deficit,CC-BY-4.0 Tabletop Robotics Testbed (Run #170),UNCERTAIN,UNCERTAIN,SUCCESS,MISSING_FINAL_STATE,Continue recording after the action so the completed result is visible.,True

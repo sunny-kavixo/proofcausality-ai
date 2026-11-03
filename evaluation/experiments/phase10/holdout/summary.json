@@ -1,0 +1,71 @@
+{
+  "status": "PASS",
+  "generated_at_utc": "2026-10-30T06:18:37Z",
+  "source_commit": "4e2503a360411a70214e71a45fe8014846e8780a",
+  "selection_rule": "All 13 locally preserved COCO val2017 images not in the historical pilot, sorted by image ID; declared before ground-truth inspection.",
+  "image_ids": [
+    139,
+    285,
+    632,
+    724,
+    776,
+    785,
+    802,
+    872,
+    885,
+    1000,
+    1268,
+    1296,
+    1353
+  ],
+  "unique_images": 13,
+  "ground_truth_polygon_instances": 102,
+  "predicted_instances": 135,
+  "metrics": {
+    "best_iou_mean_class_aware": 0.4659,
+    "best_iou_median_class_aware": 0.5482,
+    "best_iou_mean_class_agnostic": 0.5353,
+    "best_iou_median_class_agnostic": 0.6246,
+    "best_iou_class_aware_image_grouped_ci95": [
+      0.3378,
+      0.6288
+    ],
+    "boundary_f1_tolerance_2px_on_class_aware_iou50_matches": 0.5745,
+    "precision_aware_iou05": 0.3926,
+    "recall_aware_iou05": 0.5196,
+    "false_positive_instances_aware_iou05": 82,
+    "false_negative_instances_aware_iou05": 49,
+    "precision_aware_iou075": 0.2074,
+    "recall_aware_iou075": 0.2745,
+    "false_positive_instances_aware_iou075": 107,
+    "false_negative_instances_aware_iou075": 74,
+    "precision_agnostic_iou05": 0.437,
+    "recall_agnostic_iou05": 0.5784,
+    "false_positive_instances_agnostic_iou05": 76,
+    "false_negative_instances_agnostic_iou05": 43,
+    "precision_agnostic_iou075": 0.2296,
+    "recall_agnostic_iou075": 0.3039,
+    "false_positive_instances_agnostic_iou075": 104,
+    "false_negative_instances_agnostic_iou075": 71,
+    "class_aware_recall_iou50_small": 0.1538,
+    "ground_truth_instances_small": 39,
+    "class_aware_recall_iou50_medium": 0.6944,
+    "ground_truth_instances_medium": 36,
+    "class_aware_recall_iou50_large": 0.8148,
+    "ground_truth_instances_large": 27
+  },
+  "runtime": {
+    "wall_seconds": 9.78,
+    "platform": "macOS-27.0.1-arm64-arm-64bit",
+    "python": "3.12.14",
+    "latency_ms_p50": 151.498,
+    "latency_ms_p95": 278.429
+  },
+  "methodology": [
+    "Unprompted predictions are generated before annotations are read for each image.",
+    "Precision/recall use greedy one-to-one matching by descending mask IoU, class-aware or class-agnostic as named.",
+    "These are custom instance metrics, not official COCO AP/AP50/AP75.",
+    "Crowd/RLE-only ground truths are excluded because this evaluator supports polygon masks only.",
+    "The 13-image holdout is independent of the historical 20 images but was already present in the developer-controlled workspace; it is not external validation."
+  ]
+}

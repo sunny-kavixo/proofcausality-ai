@@ -1,0 +1,7 @@
+{
+  "modified_without_rehash_rejected": true,
+  "attacker_recomputed_unkeyed_hash_accepted": true,
+  "path_traversal_status": 404,
+  "oversized_base64_status": 413,
+  "unknown_receipt_status": 404
+}

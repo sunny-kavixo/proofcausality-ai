@@ -1,0 +1,119 @@
+[
+  {
+    "image_id": 139,
+    "ground_truth_instances": 20,
+    "predicted_instances": 15,
+    "matches_aware_0_5": 7,
+    "matches_aware_0_75": 2,
+    "matches_agnostic_0_5": 9,
+    "matches_agnostic_0_75": 4
+  },
+  {
+    "image_id": 285,
+    "ground_truth_instances": 1,
+    "predicted_instances": 1,
+    "matches_aware_0_5": 1,
+    "matches_aware_0_75": 1,
+    "matches_agnostic_0_5": 1,
+    "matches_agnostic_0_75": 1
+  },
+  {
+    "image_id": 632,
+    "ground_truth_instances": 17,
+    "predicted_instances": 28,
+    "matches_aware_0_5": 1,
+    "matches_aware_0_75": 0,
+    "matches_agnostic_0_5": 4,
+    "matches_agnostic_0_75": 1
+  },
+  {
+    "image_id": 724,
+    "ground_truth_instances": 4,
+    "predicted_instances": 3,
+    "matches_aware_0_5": 1,
+    "matches_aware_0_75": 1,
+    "matches_agnostic_0_5": 1,
+    "matches_agnostic_0_75": 1
+  },
+  {
+    "image_id": 776,
+    "ground_truth_instances": 4,
+    "predicted_instances": 4,
+    "matches_aware_0_5": 3,
+    "matches_aware_0_75": 3,
+    "matches_agnostic_0_5": 3,
+    "matches_agnostic_0_75": 3
+  },
+  {
+    "image_id": 785,
+    "ground_truth_instances": 2,
+    "predicted_instances": 2,
+    "matches_aware_0_5": 2,
+    "matches_aware_0_75": 1,
+    "matches_agnostic_0_5": 2,
+    "matches_agnostic_0_75": 1
+  },
+  {
+    "image_id": 802,
+    "ground_truth_instances": 2,
+    "predicted_instances": 3,
+    "matches_aware_0_5": 2,
+    "matches_aware_0_75": 2,
+    "matches_agnostic_0_5": 2,
+    "matches_agnostic_0_75": 2
+  },
+  {
+    "image_id": 872,
+    "ground_truth_instances": 4,
+    "predicted_instances": 6,
+    "matches_aware_0_5": 3,
+    "matches_aware_0_75": 1,
+    "matches_agnostic_0_5": 3,
+    "matches_agnostic_0_75": 1
+  },
+  {
+    "image_id": 885,
+    "ground_truth_instances": 9,
+    "predicted_instances": 16,
+    "matches_aware_0_5": 7,
+    "matches_aware_0_75": 4,
+    "matches_agnostic_0_5": 7,
+    "matches_agnostic_0_75": 4
+  },
+  {
+    "image_id": 1000,
+    "ground_truth_instances": 17,
+    "predicted_instances": 21,
+    "matches_aware_0_5": 14,
+    "matches_aware_0_75": 7,
+    "matches_agnostic_0_5": 14,
+    "matches_agnostic_0_75": 7
+  },
+  {
+    "image_id": 1268,
+    "ground_truth_instances": 11,
+    "predicted_instances": 17,
+    "matches_aware_0_5": 6,
+    "matches_aware_0_75": 2,
+    "matches_agnostic_0_5": 7,
+    "matches_agnostic_0_75": 2
+  },
+  {
+    "image_id": 1296,
+    "ground_truth_instances": 4,
+    "predicted_instances": 10,
+    "matches_aware_0_5": 2,
+    "matches_aware_0_75": 2,
+    "matches_agnostic_0_5": 2,
+    "matches_agnostic_0_75": 2
+  },
+  {
+    "image_id": 1353,
+    "ground_truth_instances": 7,
+    "predicted_instances": 9,
+    "matches_aware_0_5": 4,
+    "matches_aware_0_75": 2,
+    "matches_agnostic_0_5": 4,
+    "matches_agnostic_0_75": 2
+  }
+]

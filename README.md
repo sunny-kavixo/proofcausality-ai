@@ -12,6 +12,8 @@
 
 ProofCausality AI investigates reliable visual evidence verification for annotation-quality workflows and physical-action assessment.
 
+> **Research status:** This is an experimental local prototype, not a production system and not an independently validated causality or annotation-error detector. The reported `0.9825` F1 is from controlled, reference-derived annotation corruptions. The natural-photo holdout contains 13 developer-controlled COCO images and is diagnostic, not external validation. See the Phase 10 and Phase 11A audit reports for scope and failure analysis.
+
 Built for the **Meta Global AI Developer Hackathon 2026** (Track: *Indie Developer*, Theme: *Push the Frontier*).
 
 ---
@@ -309,7 +311,7 @@ cd proofcausality-ai
 # Create virtual environment
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+python -m pip install '.[test]'
 ```
 
 ### 3. Build Native Rust Acceleration Core (Optional)
@@ -326,9 +328,18 @@ pytest
 ```
 The exact count is reported by the current test runner and CI.
 
+COCO photographs are deliberately excluded from source distributions. Core tests run without them; genuine-photo integration tests report explicit skips. To acquire the 20-image pilot, first obtain the official COCO `instances_val2017.json`, inspect the dry run, and then opt in to writes:
+
+```bash
+python scripts/download_coco_subset.py --annotations-json /path/to/instances_val2017.json
+python scripts/download_coco_subset.py --annotations-json /path/to/instances_val2017.json --write
+```
+
+The downloader uses HTTPS, records observed SHA-256 hashes and exact per-image license metadata, and refuses to replace generated manifests unless `--replace` is explicitly supplied. Third-party images and model weights are not covered by this repository's MIT license.
+
 ### 5. Reproduce genuine local inference
 
-Install the optional local model stack, cache the 190 MB safetensors checkpoint, then run:
+Install the optional local model stack (`python -m pip install '.[inference]'`), cache the approximately 190 MB safetensors checkpoint, then run:
 
 ```bash
 python3 -m evaluation.benchmarks.genuine_model_benchmark
