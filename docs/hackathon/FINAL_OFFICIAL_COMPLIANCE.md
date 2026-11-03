@@ -16,7 +16,7 @@
 | **Event Name** | Meta Global AI Developer Hackathon | Documented across all project artifacts | **PASS** |
 | **Hosts** | Meta & Cerebral Valley | Verified official links and hosts | **PASS** |
 | **Event Format** | Virtual, Worldwide (free to enter if selected) | Completely remote/cloud/local software delivery | **PASS** |
-| **Participant-dashboard Deadline** | **NOT VERIFIED from this local session**; owner-provided target: Nov 5, 2026, 07:30 IST | Must be confirmed by the owner in the authenticated dashboard | **BLOCKED (OWNER CHECK)** |
+| **Submission Deadline** | Public event page currently states **Nov 4, 2026, 9:00 PM ET**, equivalent to **Nov 5, 2026, 07:30 IST** after the 2026 EST change; authenticated participant dashboard was not accessed | Owner must confirm the dashboard shows the same deadline and timezone | **PARTIAL (PUBLIC PAGE PASS; DASHBOARD UNCHECKED)** |
 | **Judging Window** | November 4 – November 8, 2026 | Scheduled | **PASS** |
 | **Closing Ceremony** | November 9, 2026 (Live finals and winners announced) | Scheduled | **PASS** |
 

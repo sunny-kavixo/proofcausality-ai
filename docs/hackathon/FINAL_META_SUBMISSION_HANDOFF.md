@@ -6,7 +6,7 @@
 **Track:** Indie Developer  
 **Theme:** Push the Frontier  
 **Official Portal:** [https://cerebralvalley.ai/e/meta-ai-developer-hackathon](https://cerebralvalley.ai/e/meta-ai-developer-hackathon)  
-**Participant-dashboard deadline:** **NOT VERIFIED from this local session.** The owner-provided target is **November 5, 2026, 07:30 IST**; confirm the exact time and timezone in the authenticated dashboard before submission.
+**Submission deadline:** The current public event page states **November 4, 2026, 9:00 PM ET**, equivalent to **November 5, 2026, 07:30 IST** after the 2026 EST change. The authenticated participant dashboard was not accessed; confirm it before submission.
 **Latest published release:** `v0.2.7` ([GitHub Release](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.7))
 
 ---
