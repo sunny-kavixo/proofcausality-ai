@@ -1,13 +1,13 @@
-# Final Repository Audit — v0.2.7 + ProofLoop
+# Final Repository Audit — v0.2.8 candidate + ProofLoop
 
 **Audit date:** 2026-11-03
-**Audited commit at start:** `6f9ba97d8e5a558e1427ac78c158275887b04acb`
+**Current audited commit:** `361d96a01ad29744293916efc5c1305d325979ec` (built on preserved start commit `6f9ba97`)
 **Scope:** Git-tracked repository files, runtime paths, tests, release evidence, and the ProofLoop change set.
 
 ## Executive result
 
 - Working tree at audit start: clean on `main`, aligned with `origin/main`.
-- Tracked inventory: **316 files**, with byte counts and SHA-256 hashes in [`FILE_INVENTORY.json`](FILE_INVENTORY.json).
+- Tracked inventory: **333 files**, with byte counts and SHA-256 hashes in [`FILE_INVENTORY.json`](FILE_INVENTORY.json).
 - Historical tags, signed commits, release archives, datasets, and ignored local assets were preserved.
 - No open P0 defect was found in the audited runtime paths.
 - ProofLoop is implemented as a deterministic policy layer over Evidence Calculus; it does not claim a new trained model or physical causality.

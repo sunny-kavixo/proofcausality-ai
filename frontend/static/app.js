@@ -1,4 +1,4 @@
-// ProofCausality AI — Frontend Interaction Engine v0.2.7
+// ProofCausality AI — Frontend Interaction Engine v0.2.8 candidate
 let currentDataset = 'real';
 let realBenchmarkData = null;
 let syntheticBenchmarkData = null;

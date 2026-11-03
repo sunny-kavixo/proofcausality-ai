@@ -1,6 +1,6 @@
 # ProofLoop Closed-Loop Evidence Verifier
 
-**Status:** Implemented as a deterministic policy layer in v0.2.7 development work. The benchmark below is a controlled metadata experiment; it is not human validation, perception validation, or proof of physical causality.
+**Status:** Implemented as a deterministic policy layer in the v0.2.8 development candidate built on v0.2.7. The benchmark below is a controlled metadata experiment; it is not human validation, perception validation, or proof of physical causality.
 
 ## User-visible mechanism
 

@@ -38,6 +38,10 @@ Potential applications include robotics demonstration quality control, computer-
 
 ---
 
+## Development candidate v0.2.8: ProofLoop Closed-Loop Evidence Verification
+
+The published **`v0.2.7`** release remains unchanged. The current signed development commit is version **`0.2.8`** and adds ProofLoop, its controlled benchmark, and the audit/submission materials below. A v0.2.8 GitHub release has not been published yet.
+
 ## Release v0.2.7: Reproducible Validation, Clean Documentation & CI-Verified Distribution
 
 Release **`v0.2.7`** carries forward the validated prototype with reproducible final evaluation inputs, refreshed browser evidence, corrected test reporting, and CI-verified inference setup. The historical `v0.2.6` archive remains available unchanged.

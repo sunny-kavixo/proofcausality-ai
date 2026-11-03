@@ -58,7 +58,7 @@ def download_atomic(url: str, destination: Path) -> None:
     with tempfile.NamedTemporaryFile(dir=destination.parent, delete=False) as temp:
         temp_path = Path(temp.name)
         try:
-            request = urllib.request.Request(url, headers={"User-Agent": "ProofCausality-AI/0.2.7"})
+            request = urllib.request.Request(url, headers={"User-Agent": "ProofCausality-AI/0.2.8"})
             with urllib.request.urlopen(request, timeout=60) as response:
                 shutil.copyfileobj(response, temp)
         except Exception:
