@@ -13,6 +13,8 @@
 | ProofLoop | Explicit closed-loop state trace, semantic mapping, and targeted follow-up request | Measured on 10 controlled feature fixtures; 6/7 initial uncertainties resolved, 1/7 unresolved |
 | ProofLoop + recovery | Re-evaluates new evidence rather than treating the directive as success | Same controlled benchmark; resolution is based on supplied metadata, not a human response study |
 
+The real-media path has been tested in two modes: a same-image negative control that was rejected as `CONTRADICTED` due to zero displacement, and a genuinely different manifest-verified COCO pair (`174482` → `87038`) with different dimensions and hashes. The different-photo experiment measured 78.013 px displacement after server-side coordinate normalization and produced `SUPPORTED`, `CONTRADICTED`, and `INSUFFICIENT_EVIDENCE` under three pre-declared policy conditions. These are real-photo observation results, not temporal recovery or causal validation.
+
 ## Interpretation
 
 ProofLoop does not replace Mask2Former, SAM, or LabelCourt. Perception supplies observations; Evidence Calculus measures observable deficits; ProofLoop decides whether another observation is warranted and records the transition. The differentiating mechanism is evidence closure and abstention semantics, not a new foundation model.
@@ -25,6 +27,8 @@ The 51.51% COCO recall is a limitation of the current local perception provider,
 .venv/bin/python -m pytest tests/test_proofloop.py -q
 .venv/bin/python -m evaluation.benchmark_proofloop \
   --output docs/benchmarks/proofloop_closed_loop_report.json
+.venv/bin/python -m evaluation.benchmark_proofloop_media \
+  --output docs/benchmarks/proofloop_real_media_different_photo_report.json
 ```
 
 ## Missing comparisons

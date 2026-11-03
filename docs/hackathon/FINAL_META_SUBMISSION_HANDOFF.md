@@ -150,7 +150,7 @@ ProofCausality AI introduces **Evidence Calculus**:
 1. **Tri-State Predicate Logic:** Decomposes actions into 8 observable physical conditions evaluated as `SUPPORTED`, `CONTRADICTED`, or `UNOBSERVABLE`.
 2. **Physics-Constrained Evidence Debt ($D(E,T)$):** Quantifies perceptual and physical deficits, reducing False-Success Rate from 45.45% (naive heuristic) and 13.64% (continuous score thresholding) to **0.00%** at exact matched coverage ($75.68\%$).
 3. **Rust SIMD Core:** High-performance native acceleration delivering an **11.57× speedup** on batch mask IoU ($2348.5\,\mu\text{s} \to 203.0\,\mu\text{s}$) with 1.29 µs CFFI overhead.
-4. **ProofLoop Closed-Loop ReCapture:** Identifies missing evidence, provides a targeted directive, accepts one new measured observation, and can remain unresolved rather than forcing success. The controlled benchmark resolved 6/7 initial uncertainties; this is not a human study.
+4. **ProofLoop Closed-Loop ReCapture:** Identifies missing evidence, provides a targeted directive, accepts one new server-measured observation, and can remain unresolved rather than forcing success. The controlled benchmark resolved 6/7 initial uncertainties; a real manifest-verified COCO pair produced 78.013 px server-derived displacement with valid hash-bound receipts. Neither result is a human study or causal validation.
 5. **Tamper-Evident Receipts:** Emits canonical unkeyed SHA-256 integrity receipts with explicit metadata-only provenance where applicable.
 
 ---

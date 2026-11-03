@@ -63,6 +63,13 @@ class EvidenceBudgetPlanner:
                 "base_efficacy": 0.99,
                 "directive": "Automated perception is uncertain. Tap the exact center of the object to disambiguate.",
             },
+            "CAPTURE_FINAL_STATE": {
+                "name": "Capture a Stationary Final-State View",
+                "human_effort_sec": 2.0,
+                "camera_latency_sec": 1.5,
+                "base_efficacy": 0.95,
+                "directive": "Continue recording after the action and submit one sharp frame showing the object fully at rest in the target region.",
+            },
         }
 
     def plan_recovery_action(
@@ -114,6 +121,8 @@ class EvidenceBudgetPlanner:
                 actions.append(self._build_action("CAPTURE_CROSS_VIEW", p, risk_reduction=0.92))
             elif p.predicate_type == PredicateType.OBJECT_IDENTIFICATION:
                 actions.append(self._build_action("HUMAN_VERIFICATION_CHECK", p, risk_reduction=0.98))
+            elif p.predicate_type == PredicateType.FINAL_STATE_OBSERVED:
+                actions.append(self._build_action("CAPTURE_FINAL_STATE", p, risk_reduction=0.95))
             elif p.predicate_type == PredicateType.PHYSICS_NO_CONTRADICTION:
                 # Contradiction requires explicit multi-angle cross-verification
                 actions.append(self._build_action("CAPTURE_CROSS_VIEW", p, risk_reduction=0.95))

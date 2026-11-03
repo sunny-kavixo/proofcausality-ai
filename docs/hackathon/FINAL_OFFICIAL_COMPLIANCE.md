@@ -30,7 +30,7 @@
 * **Judging Alignment:**
   1. *Creativity:* Novel Evidence Calculus theory, Evidence Debt quantification, and closed-loop ReCapture guidance.
   2. *Technical Ambition:* Full-stack integration combining high-performance Rust SIMD numerical kernels, FastAPI REST backend, directed acyclic graph (DAG) dependency evaluation, and interactive frontend.
-  3. *Whether it Works:* v0.2.7 evidence includes 206 baseline Python tests, 19 Rust tests, 5/5 Chrome acceptance cases, real image inference, deterministic overlays, and SHA-256 payload-integrity receipts. ProofLoop adds a separately labeled controlled metadata benchmark.
+  3. *Whether it Works:* v0.2.7 evidence includes 206 baseline Python tests, 19 Rust tests, 5/5 Chrome acceptance cases, real image inference, deterministic overlays, and SHA-256 payload-integrity receipts. The v0.2.8 candidate adds a server-derived real-media ProofLoop pair experiment, plus separately labeled controlled metadata results.
 * **Status:** **PASS**
 
 ### Selected Theme: Push the Frontier

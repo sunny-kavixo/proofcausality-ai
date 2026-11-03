@@ -128,6 +128,7 @@
           </div>
         </div>
       </div>
+
     </section>
 
     <!-- Tab: Neural Vision Audit (Real Mask2Former Integration) -->
@@ -524,7 +525,7 @@
     <section id="tab-proofloop" class="tab-pane">
       <div class="panel-header">
         <h2>ProofLoop — Closed-Loop Evidence Verifier</h2>
-        <p class="text-muted">Run the real Evidence Calculus policy, inspect the missing observation request, and submit one new measured observation. This panel uses controlled metadata fixtures; it does not claim independent image or video validation.</p>
+        <p class="text-muted">Run the real Evidence Calculus policy, inspect the missing observation request, and submit one new observation. The controlled panel is metadata-only; the media panel below derives measurements from real image pixels on the server.</p>
       </div>
 
       <div class="card mb-4" style="border-left: 3px solid #F59E0B;">
@@ -584,6 +585,30 @@
             <pre id="proofloop-receipt-json" style="max-height:180px;overflow-y:auto;background:#0A0D14;padding:8px;border-radius:4px;font-size:11px;font-family:var(--font-mono);color:#A5B4FC;"></pre>
           </details>
         </div>
+      </div>
+
+      <div class="card mt-4" style="border-left: 3px solid #10B981;">
+        <div class="card-header flex-between">
+          <h3>Real Media ProofLoop</h3>
+          <span class="badge badge-success">SERVER-DERIVED MASK2FORMER</span>
+        </div>
+        <p class="text-sm text-muted">Select two authentic licensed COCO pilot photographs. The server hashes both images, runs the pinned local Mask2Former model, derives object boxes from its masks, and binds those hashes and model outputs into the receipt. Client-supplied measurements are ignored.</p>
+        <div class="grid-2col">
+          <div class="form-group">
+            <label for="proofloop-media-before">Initial real photograph:</label>
+            <select id="proofloop-media-before" class="form-control"><option value="">Loading verified media...</option></select>
+          </div>
+          <div class="form-group">
+            <label for="proofloop-media-followup">Follow-up real photograph:</label>
+            <select id="proofloop-media-followup" class="form-control"><option value="">Loading verified media...</option></select>
+          </div>
+        </div>
+        <div class="button-row">
+          <button class="btn btn-primary" id="btn-proofloop-media-start">Analyze Real Initial Photo</button>
+          <button class="btn btn-accent" id="btn-proofloop-media-followup" style="display:none;">Reverify Real Follow-up Photo</button>
+        </div>
+        <div id="proofloop-media-status" class="text-sm text-muted mt-2">No real-media session started.</div>
+        <div id="proofloop-media-hashes" class="font-mono text-sm mt-2" style="word-break:break-all;"></div>
       </div>
     </section>
 

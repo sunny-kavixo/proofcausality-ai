@@ -42,7 +42,7 @@ Potential applications include robotics demonstration quality control, computer-
 
 The published **`v0.2.7`** release remains unchanged. The current signed development commit is version **`0.2.8`** and adds ProofLoop, its controlled benchmark, and the audit/submission materials below. A v0.2.8 GitHub release has not been published yet.
 
-Candidate verification adds eight focused tests to the v0.2.7 baseline: **214 Python tests** and **19 Rust tests** pass locally.
+Candidate verification adds ten focused tests to the v0.2.7 baseline: **216 Python tests** and **19 Rust tests** pass locally.
 
 ## Release v0.2.7: Reproducible Validation, Clean Documentation & CI-Verified Distribution
 
@@ -67,6 +67,7 @@ Release **`v0.2.7`** carries forward the validated prototype with reproducible f
 7. **ProofLoop Closed-Loop Evidence Verifier**:
    - New `/api/proofloop/start` and `/api/proofloop/reverify` endpoints preserve the legacy ActionProof verdicts while exposing `SUPPORTED`, `CONTRADICTED`, and `INSUFFICIENT_EVIDENCE` semantics.
    - Controlled 10-case benchmark: 7 initial uncertainties, 6 resolved by supplied follow-up features, and 1 intentionally unresolved (**85.71% controlled resolution**). This is a deterministic metadata-fixture result, not a human or causal validation result.
+   - Real `/api/proofloop/media/start` and `/api/proofloop/media/reverify` endpoints decode and hash image bytes server-side, run the pinned Mask2Former model, normalize different-size follow-up boxes, and bind both image hashes and model-output hashes into receipts. A manifest-verified COCO pair produced `SUPPORTED` at **78.013 px** measured displacement; a rest-proof condition correctly remained `INSUFFICIENT_EVIDENCE`.
 
 ---
 

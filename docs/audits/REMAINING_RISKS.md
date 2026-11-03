@@ -5,7 +5,7 @@
 | ID | Priority | Risk | Current status | Mitigation/evidence |
 |---|---:|---|---|---|
 | R-01 | P1 | No authentication or durable multi-tenant receipt storage | BLOCKED for production | Keep deployment local; production certification remains not granted |
-| R-02 | P1 | ProofLoop feature API accepts metadata rather than independently verified media | DISCLOSED | Receipt provenance is `METADATA_ONLY`; use existing vision route for real image inference |
+| R-02 | P1 | Metadata ProofLoop endpoints accept features; media endpoints require image bytes but do not establish temporal continuity | DISCLOSED | Metadata receipts say `METADATA_ONLY`; media receipts say `SERVER_DERIVED_MEDIA` and bind hashes |
 | R-03 | P1 | Live Meta provider request not authorized or executed | BLOCKED | Offline adapter and parser tests only; no key or billable call used |
 | R-04 | P1 | Human annotation and recapture study absent | NOT COMPLETED | Ready-to-run protocol, CSV sheet, and analysis runner added |
 | R-05 | P1 | Authentic temporal video experiment absent | BLOCKED | Temporal protocol added; no causal claim made |

@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "application_version": "0.2.8 candidate",
+  "browser": "Google Chrome via Playwright",
+  "viewport": {
+    "width": 1280,
+    "height": 900
+  },
+  "selected_before_sample_index": 2,
+  "selected_followup_sample_index": 3,
+  "flow": [
+    "load verified COCO bicycle photo 174482",
+    "server-side Mask2Former initial inference",
+    "observe INSUFFICIENT_EVIDENCE and OBSERVATION_REQUESTED",
+    "load different verified COCO bicycle photo 87038",
+    "server-side Mask2Former follow-up inference with dimension normalization",
+    "observe SUPPORTED and FINAL_VERDICT"
+  ],
+  "initial_semantic_verdict": "INSUFFICIENT_EVIDENCE",
+  "followup_semantic_verdict": "SUPPORTED",
+  "final_state": "FINAL_VERDICT",
+  "state_trace": "OBSERVED \u2192 ANALYZED \u2192 UNCERTAIN \u2192 OBSERVATION_REQUESTED \u2192 NEW_EVIDENCE \u2192 REVERIFIED \u2192 FINAL_VERDICT",
+  "hashes_visible": true,
+  "console_errors": 0,
+  "screenshot": "docs/benchmarks/browser_proofloop_real_media.png",
+  "scope": "Two different manifest-verified licensed COCO photos. This demonstrates server-derived observation and measured image-space change, not temporal action validation or causal attribution."
+}

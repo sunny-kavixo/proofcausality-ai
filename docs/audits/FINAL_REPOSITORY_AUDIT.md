@@ -36,7 +36,7 @@ The inventory is an automated complete listing of tracked paths. Text source and
 | LabelCourt | `backend/labelcourt/*` | Annotation audit endpoint/UI | `tests/test_labelcourt.py`, real-image reports | Controlled corruption results must not be called independent human validation |
 | ActionProof | `backend/actionproof/*` | Action endpoint/UI, legacy callers | `tests/test_actionproof.py` | 2D before/after evidence is not temporal causality proof |
 | Evidence Calculus | `backend/evidence/calculus/*` | Calculus API/UI, ProofLoop | calculus, graph, planner, canonical demonstration tests | Deterministic feature policy; thresholds are not learned calibration |
-| ProofLoop | `backend/evidence/proofloop.py`, `/api/proofloop/*` | New UI/API and benchmark | `tests/test_proofloop.py`, `evaluation/benchmark_proofloop.py` | Metadata-only endpoint explicitly reports provenance boundary |
+| ProofLoop | `backend/evidence/proofloop.py`, `/api/proofloop/*` | Metadata and server-derived media state machine | `tests/test_proofloop.py`, `evaluation/benchmark_proofloop.py`, `evaluation/benchmark_proofloop_media.py` | Metadata and media paths are explicitly separated; media binds image/model hashes but does not prove temporal causality |
 | ReCapture | `backend/evidence/recapture.py`, existing follow-up route | ActionProof/calculus/UI | `tests/test_recapture.py`, API tests | Field effectiveness remains unmeasured |
 | Local segmentation | `backend/providers/local_segmentation.py` | `/api/vision/audit`, genuine COCO run | model smoke report, real vision reports | Diagnostic recall is modest; no production accuracy claim |
 | Meta adapter | `backend/providers/meta_adapter.py` | Optional remote provider surface | `tests/test_meta_adapter.py`, security tests | Live authenticated request not performed; adapter remains blocked |
@@ -57,7 +57,7 @@ The prior server-authoritative provenance repair, strict image validation, recei
 
 1. The FastAPI prototype has no user authentication, authorization, durable receipt database, or externally validated rate-limit policy. It must not be deployed as an internet-facing production service.
 2. Model checkpoints and hosted-provider responses are trust boundaries. The local model revision/hash checks are present, but live Meta inference has not been authorized or executed in this environment.
-3. ProofLoop accepts measured feature metadata. It intentionally does not authenticate image/video bytes and labels its receipt `USER_SUPPLIED_METADATA` / `METADATA_ONLY`.
+3. Metadata ProofLoop accepts measured features and labels receipts `USER_SUPPLIED_METADATA` / `METADATA_ONLY`; the media ProofLoop accepts image bytes, derives measurements server-side, and labels receipts `SERVER_DERIVED_MEDIA`. Neither path establishes temporal continuity or physical causality.
 4. Independent human annotation/recapture effectiveness and temporal causal validation are not available.
 
 ### P2 — correctness/scientific limitations

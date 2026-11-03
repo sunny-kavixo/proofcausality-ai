@@ -40,6 +40,8 @@ function initTabs() {
 // ProofLoop Closed-Loop Verifier
 let proofLoopSessionId = null;
 let proofLoopInitialPayload = null;
+let proofLoopMediaSessionId = null;
+let proofLoopMediaSamples = [];
 
 const PROOFLOOP_SCENARIOS = {
   missing_final_state: { after_bbox: null, has_final_state: false, laplacian_variance: 250.0, area_drop_ratio: 0.0 },
@@ -75,6 +77,112 @@ function initProofLoop() {
   const followup = document.getElementById('btn-proofloop-followup');
   if (start) start.addEventListener('click', startProofLoop);
   if (followup) followup.addEventListener('click', submitProofLoopFollowup);
+  const mediaStart = document.getElementById('btn-proofloop-media-start');
+  const mediaFollowup = document.getElementById('btn-proofloop-media-followup');
+  if (mediaStart) mediaStart.addEventListener('click', startProofLoopMedia);
+  if (mediaFollowup) mediaFollowup.addEventListener('click', reverifyProofLoopMedia);
+  loadProofLoopMediaSamples();
+}
+
+async function loadProofLoopMediaSamples() {
+  const before = document.getElementById('proofloop-media-before');
+  const followup = document.getElementById('proofloop-media-followup');
+  if (!before || !followup) return;
+  try {
+    const response = await fetch('/api/vision/samples');
+    if (!response.ok) throw new Error(`sample request returned ${response.status}`);
+    proofLoopMediaSamples = await response.json();
+    [before, followup].forEach(select => {
+      select.innerHTML = '';
+      proofLoopMediaSamples.forEach((sample, index) => {
+        const option = document.createElement('option');
+        option.value = String(index);
+        option.innerText = `${sample.file_name} — ${sample.annotation.category_name} (${sample.image_width}x${sample.image_height})`;
+        select.appendChild(option);
+      });
+    });
+    if (proofLoopMediaSamples.length === 0) {
+      before.innerHTML = '<option value="">No verified media available</option>';
+      followup.innerHTML = '<option value="">No verified media available</option>';
+    } else {
+      // The pilot contains a genuinely different, same-label bicycle pair:
+      // 174482 (640x388) -> 87038 (640x480). Different dimensions exercise
+      // the server-side coordinate normalization rather than reusing one file.
+      if (proofLoopMediaSamples[2]) before.value = '2';
+      if (proofLoopMediaSamples[3]) followup.value = '3';
+    }
+  } catch (error) {
+    before.innerHTML = '<option value="">Verified media unavailable</option>';
+    followup.innerHTML = '<option value="">Verified media unavailable</option>';
+    const status = document.getElementById('proofloop-media-status');
+    if (status) status.innerText = 'Could not load verified media samples.';
+  }
+}
+
+function selectedProofLoopMediaSample(selectId) {
+  const select = document.getElementById(selectId);
+  const index = select ? Number.parseInt(select.value, 10) : Number.NaN;
+  return Number.isInteger(index) ? proofLoopMediaSamples[index] : null;
+}
+
+async function startProofLoopMedia() {
+  const sample = selectedProofLoopMediaSample('proofloop-media-before');
+  if (!sample) return;
+  const status = document.getElementById('proofloop-media-status');
+  if (status) status.innerText = 'Hashing initial photo and running server-side Mask2Former...';
+  try {
+    const response = await fetch('/api/proofloop/media/start', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        task_id: `MEDIA_UI_${sample.manifest_image_id}`,
+        primary_object: sample.annotation.category_name,
+        target_region: sample.annotation.bbox,
+        image_base64: sample.image_base64,
+        image_source_type: 'MANIFEST_VERIFIED_DATASET_IMAGE',
+        manifest_image_id: sample.manifest_image_id,
+      }),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.detail || 'real-media ProofLoop start failed');
+    proofLoopMediaSessionId = data.session_id;
+    renderProofLoop(data);
+    const followup = document.getElementById('btn-proofloop-media-followup');
+    if (followup) followup.style.display = 'inline-flex';
+    if (status) status.innerText = `Verified initial media · ${data.session_id} · ${data.semantic_verdict}`;
+    const hashes = document.getElementById('proofloop-media-hashes');
+    if (hashes) hashes.innerText = `Initial image SHA-256: ${data.media_evidence.initial.image_sha256}`;
+  } catch (error) {
+    if (status) status.innerText = `Real-media start failed: ${error.message}`;
+  }
+}
+
+async function reverifyProofLoopMedia() {
+  if (!proofLoopMediaSessionId) return;
+  const sample = selectedProofLoopMediaSample('proofloop-media-followup');
+  if (!sample) return;
+  const status = document.getElementById('proofloop-media-status');
+  if (status) status.innerText = 'Hashing follow-up photo and recomputing server-side measurements...';
+  try {
+    const response = await fetch('/api/proofloop/media/reverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        session_id: proofLoopMediaSessionId,
+        image_base64: sample.image_base64,
+        image_source_type: 'MANIFEST_VERIFIED_DATASET_IMAGE',
+        manifest_image_id: sample.manifest_image_id,
+      }),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.detail || 'real-media ProofLoop reverify failed');
+    renderProofLoop(data);
+    if (status) status.innerText = `Verified follow-up media · ${data.session_id} · ${data.semantic_verdict}`;
+    const hashes = document.getElementById('proofloop-media-hashes');
+    if (hashes) hashes.innerText = `Initial SHA-256: ${data.media_evidence.initial.image_sha256}\nFollow-up SHA-256: ${data.media_evidence.followup.image_sha256}`;
+  } catch (error) {
+    if (status) status.innerText = `Real-media follow-up failed: ${error.message}`;
+  }
 }
 
 function renderProofLoop(data) {

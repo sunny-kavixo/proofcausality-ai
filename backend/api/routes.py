@@ -24,7 +24,7 @@ from pathlib import Path
 import re
 from typing import Any, Optional
 from fastapi import APIRouter, File, HTTPException, Query, UploadFile
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 import numpy as np
 
 logger = logging.getLogger("proofcausality.api")
@@ -46,6 +46,7 @@ def sanitize_error_message(exc: Exception) -> str:
 
 import time
 from backend.actionproof.verifier import ActionProofVerifier
+from backend.actionproof.relations import compute_centroid_distance
 from backend.evidence.advanced_metrics import wilson_score_interval
 from backend.evidence.dataset_manifest import verify_authoritative_provenance
 from backend.evidence.image_processing import (
@@ -112,6 +113,7 @@ MAX_PROOFLOOP_SESSION_STORE_SIZE = 256
 _proofloop_sessions: collections.OrderedDict[
     str, tuple[ProofLoopObservation, ProofLoopEvaluation]
 ] = collections.OrderedDict()
+_proofloop_media_sessions: collections.OrderedDict[str, dict[str, Any]] = collections.OrderedDict()
 
 
 def store_receipt(receipt: EvidenceReceipt) -> None:
@@ -568,10 +570,14 @@ def _store_proofloop_session(
 def _proofloop_receipt(
     session_id: str,
     evaluation: ProofLoopEvaluation,
+    *,
+    provenance: Optional[dict[str, Any]] = None,
+    additional_measurements: Optional[dict[str, Any]] = None,
 ) -> EvidenceReceipt:
     """Create a receipt that makes the metadata-only trust boundary explicit."""
     receipt_measurements = {
         **evaluation.measurements,
+        **(additional_measurements or {}),
         "session_id": session_id,
         "state": evaluation.state.value,
         "state_trace": [state.value for state in evaluation.state_trace],
@@ -592,7 +598,7 @@ def _proofloop_receipt(
             if evaluation.observation_request
             else None
         ),
-        provenance={
+        provenance=provenance or {
             "category": "USER_SUPPLIED_METADATA",
             "verification_method": "EVIDENCE_CALCULUS_FEATURES",
             "note": (
@@ -607,6 +613,10 @@ def _proofloop_response(
     session_id: str,
     evaluation: ProofLoopEvaluation,
     receipt: EvidenceReceipt,
+    *,
+    provenance_status: str = "METADATA_ONLY",
+    provenance: Optional[dict[str, Any]] = None,
+    media_evidence: Optional[dict[str, Any]] = None,
 ) -> dict[str, Any]:
     return {
         "session_id": session_id,
@@ -620,7 +630,9 @@ def _proofloop_response(
         "debt_report": evaluation.debt_report.model_dump(),
         "predicates": [predicate.model_dump() for predicate in evaluation.predicates],
         "measurements": evaluation.measurements,
-        "provenance_status": "METADATA_ONLY",
+        "provenance_status": provenance_status,
+        "provenance": provenance or receipt.provenance,
+        "media_evidence": media_evidence,
         "evidence_receipt_id": receipt.report_id,
         "evidence_receipt": receipt.model_dump(),
         "receipt_valid": verify_receipt_integrity(receipt),
@@ -693,6 +705,376 @@ def reverify_proofloop(req: ProofLoopFollowupRequest) -> dict[str, Any]:
     _store_proofloop_session(req.session_id, followup, evaluation)
     store_receipt(receipt)
     return _proofloop_response(req.session_id, evaluation, receipt)
+
+
+class ProofLoopMediaStartRequest(BaseModel):
+    """Start ProofLoop from an actual image decoded and measured by the server."""
+
+    task_id: str = Field(..., min_length=1, max_length=128)
+    primary_object: str = Field(..., min_length=1, max_length=128)
+    target_region: BoundingBox
+    image_base64: str
+    image_source_type: str = Field(
+        "USER_UPLOADED_IMAGE",
+        pattern=r"^(USER_UPLOADED_IMAGE|MANIFEST_VERIFIED_DATASET_IMAGE)$",
+    )
+    manifest_image_id: Optional[int] = Field(default=None, gt=0)
+    confidence_threshold: float = Field(0.50, ge=0.10, le=0.95)
+    require_rest_proof: bool = False
+    model_config = ConfigDict(extra="forbid")
+
+
+class ProofLoopMediaFollowupRequest(BaseModel):
+    """Supply one real follow-up image; all measurements are server-derived."""
+
+    session_id: str = Field(..., min_length=8, max_length=64, pattern=r"^PLM-[A-F0-9]+$")
+    image_base64: str
+    image_source_type: str = Field(
+        "USER_UPLOADED_IMAGE",
+        pattern=r"^(USER_UPLOADED_IMAGE|MANIFEST_VERIFIED_DATASET_IMAGE)$",
+    )
+    manifest_image_id: Optional[int] = Field(default=None, gt=0)
+    model_config = ConfigDict(extra="forbid")
+
+
+def _decode_media_image(image_base64: str) -> tuple[np.ndarray, bytes, str, int, int]:
+    """Decode one media payload and return server-authoritative image identity."""
+    encoded = image_base64.strip()
+    if len(encoded) > 20 * 1024 * 1024:
+        raise HTTPException(status_code=413, detail="Image payload exceeds maximum allowed size limit of 20MB base64.")
+    if "," in encoded:
+        encoded = encoded.split(",", 1)[1]
+    try:
+        raw_bytes = base64.b64decode(encoded, validate=True)
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=f"Invalid base64 image data: {sanitize_error_message(exc)}") from exc
+    try:
+        rgb_arr, image_sha256, width, height = validate_and_decode_image(raw_bytes)
+    except ImageValidationError as exc:
+        raise HTTPException(status_code=400, detail=sanitize_error_message(exc)) from exc
+    return rgb_arr, raw_bytes, image_sha256, width, height
+
+
+def _bbox_from_prediction(prediction: InstancePrediction) -> BoundingBox:
+    rows, cols = np.where(prediction.mask)
+    if len(rows) == 0:
+        raise ValueError("server prediction mask is empty")
+    return BoundingBox(
+        x_min=float(np.min(cols)),
+        y_min=float(np.min(rows)),
+        x_max=float(np.max(cols) + 1),
+        y_max=float(np.max(rows) + 1),
+    )
+
+
+def _scale_bbox_to_canvas(
+    bbox: BoundingBox,
+    *,
+    source_width: int,
+    source_height: int,
+    target_width: int,
+    target_height: int,
+) -> BoundingBox:
+    """Map a server-derived bbox into the initial observation coordinate frame."""
+    scale_x = target_width / source_width
+    scale_y = target_height / source_height
+    return BoundingBox(
+        x_min=bbox.x_min * scale_x,
+        y_min=bbox.y_min * scale_y,
+        x_max=bbox.x_max * scale_x,
+        y_max=bbox.y_max * scale_y,
+    )
+
+
+def _measure_media_observation(
+    *,
+    rgb_arr: np.ndarray,
+    raw_bytes: bytes,
+    image_sha256: str,
+    width: int,
+    height: int,
+    primary_object: str,
+    confidence_threshold: float,
+    image_source_type: str,
+    manifest_image_id: Optional[int],
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Run pinned local Mask2Former and return only server-derived measurements."""
+    provenance_result = verify_authoritative_provenance(
+        image_bytes=raw_bytes,
+        image_sha256=image_sha256,
+        width=width,
+        height=height,
+        claimed_source_type=image_source_type,
+        manifest_image_id=manifest_image_id,
+        annotation=None,
+    )
+    if provenance_result.failure_reason is not None:
+        raise HTTPException(
+            status_code=422,
+            detail=f"Media provenance verification failed: {sanitize_error_message(provenance_result.failure_reason)}",
+        )
+
+    gray = np.dot(rgb_arr[..., :3].astype(np.float32), [0.2989, 0.5870, 0.1140]).astype(np.uint8)
+    laplacian_variance = float(compute_laplacian_variance_fast(gray))
+    try:
+        provider = get_local_mask2former_provider()
+        predictions, execution = provider.predict_from_rgb(
+            rgb_arr=rgb_arr,
+            threshold=confidence_threshold,
+            raw_bytes=raw_bytes,
+        )
+    except Exception as exc:
+        correlation_id = f"PLM-INF-{uuid.uuid4().hex[:12].upper()}"
+        logger.error("ProofLoop media inference failed [correlation_id=%s]: %s", correlation_id, exc, exc_info=True)
+        raise HTTPException(
+            status_code=503,
+            detail=f"ProofLoop media inference unavailable (Request ID: {correlation_id}): {sanitize_error_message(exc)}",
+        ) from exc
+
+    matching_predictions = [
+        prediction
+        for prediction in predictions
+        if are_classes_equivalent(prediction.label, primary_object)
+    ]
+    best_prediction = max(matching_predictions, key=lambda prediction: prediction.score) if matching_predictions else None
+    bbox = _bbox_from_prediction(best_prediction) if best_prediction is not None else None
+    measurement = {
+        "image_sha256": image_sha256,
+        "image_dimensions": {"width": width, "height": height},
+        "laplacian_variance": round(laplacian_variance, 2),
+        "detected_instances_count": len(predictions),
+        "matching_category": primary_object,
+        "matching_prediction": {
+            "instance_id": best_prediction.instance_id,
+            "label": best_prediction.label,
+            "label_id": best_prediction.label_id,
+            "score": round(best_prediction.score, 4),
+            "bbox": bbox.model_dump(),
+        } if best_prediction is not None else None,
+        "model_execution": execution.to_dict(),
+    }
+    provenance = {
+        "category": provenance_result.category,
+        "image_source_type": provenance_result.image_source_type,
+        "source_image_hash": image_sha256,
+        "is_independently_verified": provenance_result.is_verified,
+        "manifest_image_id": provenance_result.manifest_image_id,
+        "canonical_source_url": provenance_result.canonical_source_url,
+        "license_status": provenance_result.license_status,
+        "license_name": provenance_result.license_name,
+        "license_url": provenance_result.license_url,
+        "redistribution_status": provenance_result.redistribution_status,
+        "verification_method": provenance_result.verification_method,
+        "model_name": execution.model_identifier,
+        "model_revision": execution.model_revision,
+        "checkpoint_sha256": execution.checkpoint_sha256,
+        "output_sha256": execution.output_sha256,
+        "device": execution.device,
+        "inference_mode": execution.inference_mode,
+    }
+    return measurement, provenance
+
+
+def _store_proofloop_media_session(session_id: str, session: dict[str, Any]) -> None:
+    _proofloop_media_sessions[session_id] = session
+    _proofloop_media_sessions.move_to_end(session_id)
+    while len(_proofloop_media_sessions) > MAX_PROOFLOOP_SESSION_STORE_SIZE:
+        _proofloop_media_sessions.popitem(last=False)
+
+
+@router.post("/proofloop/media/start")
+def start_proofloop_media(req: ProofLoopMediaStartRequest) -> dict[str, Any]:
+    """Start ProofLoop from a real image; no client bbox or metric is trusted."""
+    rgb_arr, raw_bytes, image_sha256, width, height = _decode_media_image(req.image_base64)
+    measurement, provenance = _measure_media_observation(
+        rgb_arr=rgb_arr,
+        raw_bytes=raw_bytes,
+        image_sha256=image_sha256,
+        width=width,
+        height=height,
+        primary_object=req.primary_object,
+        confidence_threshold=req.confidence_threshold,
+        image_source_type=req.image_source_type,
+        manifest_image_id=req.manifest_image_id,
+    )
+    matching = measurement["matching_prediction"]
+    if matching is None:
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                f"Mask2Former produced no server-side '{req.primary_object}' instance at the configured "
+                f"confidence threshold; no trusted before measurement was created."
+            ),
+        )
+
+    observation = ProofLoopObservation(
+        task_id=req.task_id,
+        primary_object=req.primary_object,
+        before_bbox=BoundingBox(**matching["bbox"]),
+        after_bbox=None,
+        target_region=req.target_region,
+        initial_region=BoundingBox(**matching["bbox"]),
+        canvas_width=width,
+        canvas_height=height,
+        laplacian_variance=measurement["laplacian_variance"],
+        area_drop_ratio=0.0,
+        has_final_state=False,
+        require_rest_proof=req.require_rest_proof,
+        claim_class_agreement=True,
+        model_confidence=matching["score"],
+    )
+    evaluation = proofloop_verifier.evaluate(observation, phase="initial")
+    session_id = f"PLM-{uuid.uuid4().hex[:12].upper()}"
+    media_provenance = {
+        "category": "SERVER_DERIVED_MEDIA",
+        "verification_method": "SERVER_DECODE_HASH_MASK2FORMER",
+        "client_measurements_accepted": False,
+        "initial": provenance,
+    }
+    receipt = _proofloop_receipt(
+        session_id,
+        evaluation,
+        provenance=media_provenance,
+        additional_measurements={
+            "media_mode": "SERVER_DERIVED_MASK2FORMER",
+            "initial_image_sha256": image_sha256,
+            "initial_model_output_sha256": provenance["output_sha256"],
+        },
+    )
+    _store_proofloop_media_session(session_id, {
+        "observation": observation,
+        "evaluation": evaluation,
+        "initial_measurement": measurement,
+        "initial_provenance": provenance,
+        "media_provenance": media_provenance,
+        "confidence_threshold": req.confidence_threshold,
+    })
+    store_receipt(receipt)
+    return _proofloop_response(
+        session_id,
+        evaluation,
+        receipt,
+        provenance_status="SERVER_DERIVED_MEDIA",
+        provenance=media_provenance,
+        media_evidence={
+            "mode": "SERVER_DERIVED_MASK2FORMER",
+            "initial": measurement,
+            "client_measurements_accepted": False,
+        },
+    )
+
+
+@router.post("/proofloop/media/reverify")
+def reverify_proofloop_media(req: ProofLoopMediaFollowupRequest) -> dict[str, Any]:
+    """Run Mask2Former on a real follow-up image and recompute ProofLoop."""
+    session = _proofloop_media_sessions.get(req.session_id)
+    if session is None:
+        raise HTTPException(status_code=404, detail="ProofLoop media session not found or expired")
+
+    rgb_arr, raw_bytes, image_sha256, width, height = _decode_media_image(req.image_base64)
+    initial_observation: ProofLoopObservation = session["observation"]
+    measurement, provenance = _measure_media_observation(
+        rgb_arr=rgb_arr,
+        raw_bytes=raw_bytes,
+        image_sha256=image_sha256,
+        width=width,
+        height=height,
+        primary_object=initial_observation.primary_object,
+        confidence_threshold=session["confidence_threshold"],
+        image_source_type=req.image_source_type,
+        manifest_image_id=req.manifest_image_id,
+    )
+    matching = measurement["matching_prediction"]
+    raw_followup_bbox = BoundingBox(**matching["bbox"]) if matching is not None else None
+    normalized_followup_bbox = (
+        _scale_bbox_to_canvas(
+            raw_followup_bbox,
+            source_width=width,
+            source_height=height,
+            target_width=initial_observation.canvas_width,
+            target_height=initial_observation.canvas_height,
+        )
+        if raw_followup_bbox is not None
+        else None
+    )
+    measurement["coordinate_transform"] = {
+        "source_dimensions": {"width": width, "height": height},
+        "initial_dimensions": {
+            "width": initial_observation.canvas_width,
+            "height": initial_observation.canvas_height,
+        },
+        "scale_x": round(initial_observation.canvas_width / width, 8),
+        "scale_y": round(initial_observation.canvas_height / height, 8),
+        "raw_server_bbox": raw_followup_bbox.model_dump() if raw_followup_bbox else None,
+        "normalized_server_bbox": normalized_followup_bbox.model_dump() if normalized_followup_bbox else None,
+    }
+    followup = initial_observation.model_copy(update={
+        "after_bbox": normalized_followup_bbox,
+        "laplacian_variance": measurement["laplacian_variance"],
+        "area_drop_ratio": 0.0,
+        "has_final_state": matching is not None,
+        "claim_class_agreement": True if matching is not None else None,
+        "model_confidence": matching["score"] if matching is not None else 0.0,
+    })
+    evaluation = proofloop_verifier.evaluate(
+        followup,
+        phase="followup",
+        previous_trace=session["evaluation"].state_trace,
+    )
+    displacement_px = (
+        round(compute_centroid_distance(initial_observation.before_bbox, normalized_followup_bbox), 3)
+        if normalized_followup_bbox is not None
+        else None
+    )
+    measurement["server_derived_displacement_px"] = displacement_px
+    measurement["observed_image_state_change"] = image_sha256 != session["initial_measurement"]["image_sha256"]
+    media_provenance = {
+        **session["media_provenance"],
+        "followup": provenance,
+        "initial_image_sha256": session["initial_measurement"]["image_sha256"],
+        "followup_image_sha256": image_sha256,
+        "client_measurements_accepted": False,
+    }
+    receipt = _proofloop_receipt(
+        req.session_id,
+        evaluation,
+        provenance=media_provenance,
+        additional_measurements={
+            "media_mode": "SERVER_DERIVED_MASK2FORMER",
+            "initial_image_sha256": session["initial_measurement"]["image_sha256"],
+            "followup_image_sha256": image_sha256,
+            "initial_model_output_sha256": session["initial_provenance"]["output_sha256"],
+            "followup_model_output_sha256": provenance["output_sha256"],
+            "initial_server_bbox": initial_observation.before_bbox.model_dump(),
+            "followup_server_bbox_raw": raw_followup_bbox.model_dump() if raw_followup_bbox else None,
+            "followup_server_bbox_initial_frame": normalized_followup_bbox.model_dump() if normalized_followup_bbox else None,
+            "server_derived_displacement_px": displacement_px,
+            "observed_image_state_change": image_sha256 != session["initial_measurement"]["image_sha256"],
+        },
+    )
+    session.update({
+        "observation": followup,
+        "evaluation": evaluation,
+        "followup_measurement": measurement,
+        "followup_provenance": provenance,
+        "media_provenance": media_provenance,
+    })
+    _store_proofloop_media_session(req.session_id, session)
+    store_receipt(receipt)
+    return _proofloop_response(
+        req.session_id,
+        evaluation,
+        receipt,
+        provenance_status="SERVER_DERIVED_MEDIA",
+        provenance=media_provenance,
+        media_evidence={
+            "mode": "SERVER_DERIVED_MASK2FORMER",
+            "initial": session["initial_measurement"],
+            "followup": measurement,
+            "client_measurements_accepted": False,
+            "input_image_hashes_bound_to_receipt": True,
+        },
+    )
 
 
 @router.get("/receipts/{report_id}")

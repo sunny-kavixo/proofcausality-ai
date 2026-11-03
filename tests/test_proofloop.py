@@ -1,6 +1,10 @@
-from fastapi.testclient import TestClient
+import base64
+import io
 import math
 import pytest
+import numpy as np
+from PIL import Image
+from fastapi.testclient import TestClient
 
 from backend.app import app
 from backend.evidence.proofloop import (
@@ -11,10 +15,57 @@ from backend.evidence.proofloop import (
     semantic_verdict_for,
 )
 from backend.evidence.schemas import ActionVerdict, BoundingBox
+from backend.providers.local_segmentation import InferenceExecution, InstancePrediction
 from evaluation.benchmark_proofloop import run_benchmark
 
 
 client = TestClient(app)
+
+
+def _image_b64(seed: int, width: int = 160, height: int = 160) -> str:
+    arr = np.zeros((height, width, 3), dtype=np.uint8)
+    arr[::2, ::2] = (255, seed % 255, 80)
+    arr[1::2, 1::2] = (20, 120, 240)
+    buffer = io.BytesIO()
+    Image.fromarray(arr).save(buffer, format="PNG")
+    return base64.b64encode(buffer.getvalue()).decode("ascii")
+
+
+class _FakeMediaProvider:
+    def __init__(self):
+        self.calls = 0
+
+    def predict_from_rgb(self, rgb_arr, threshold=0.5, raw_bytes=None):
+        self.calls += 1
+        x_offset = 10 if self.calls == 1 else max(100, rgb_arr.shape[1] - 60)
+        y_offset = 10 if self.calls == 1 else 100
+        mask = np.zeros(rgb_arr.shape[:2], dtype=bool)
+        mask[y_offset:y_offset + 20, x_offset:x_offset + 20] = True
+        prediction = InstancePrediction(
+            instance_id=self.calls,
+            label_id=39,
+            label="bottle",
+            score=0.91,
+            mask=mask,
+        )
+        execution = InferenceExecution(
+            provider="test-fake-server-provider",
+            model_identifier="test-mask2former",
+            model_revision="test-revision",
+            inference_mode="UNPROMPTED_INSTANCE_SEGMENTATION",
+            device="cpu",
+            input_sha256="a" * 64,
+            input_width=rgb_arr.shape[1],
+            input_height=rgb_arr.shape[0],
+            prompt=None,
+            checkpoint_sha256="b" * 64,
+            checkpoint_size_bytes=1,
+            output_sha256=f"{self.calls}" * 64,
+            latency_ms=1.0,
+            execution_status="SUCCEEDED",
+            runtime={"python": "test"},
+        )
+        return [prediction], execution
 
 
 def _box(x_min: float, y_min: float, x_max: float, y_max: float) -> dict[str, float]:
@@ -142,6 +193,93 @@ def test_api_reverify_can_remain_insufficient_after_new_evidence():
     assert data["semantic_verdict"] == "INSUFFICIENT_EVIDENCE"
     assert data["state_trace"][-3:] == ["NEW_EVIDENCE", "REVERIFIED", "FINAL_VERDICT"]
     assert data["observation_request"] is not None
+
+
+def test_media_api_derives_measurements_and_binds_both_image_hashes(monkeypatch):
+    from backend.api import routes
+
+    fake_provider = _FakeMediaProvider()
+    monkeypatch.setattr(routes, "get_local_mask2former_provider", lambda: fake_provider)
+
+    initial = client.post(
+        "/api/proofloop/media/start",
+        json={
+            "task_id": "MEDIA_TEST_001",
+            "primary_object": "bottle",
+            "target_region": _box(90, 90, 140, 140),
+            "image_base64": _image_b64(1),
+            "image_source_type": "USER_UPLOADED_IMAGE",
+        },
+    )
+    assert initial.status_code == 200, initial.text
+    initial_data = initial.json()
+    assert initial_data["provenance_status"] == "SERVER_DERIVED_MEDIA"
+    assert initial_data["semantic_verdict"] == "INSUFFICIENT_EVIDENCE"
+    assert initial_data["media_evidence"]["client_measurements_accepted"] is False
+    assert initial_data["media_evidence"]["initial"]["matching_prediction"]["bbox"] == _box(10, 10, 30, 30)
+    initial_hash = initial_data["media_evidence"]["initial"]["image_sha256"]
+    assert initial_hash != ""
+    assert initial_data["evidence_receipt"]["provenance"]["initial"]["source_image_hash"] == initial_hash
+
+    followup = client.post(
+        "/api/proofloop/media/reverify",
+        json={
+            "session_id": initial_data["session_id"],
+            "image_base64": _image_b64(2, width=320, height=160),
+            "image_source_type": "USER_UPLOADED_IMAGE",
+        },
+    )
+    assert followup.status_code == 200, followup.text
+    followup_data = followup.json()
+    assert followup_data["semantic_verdict"] == "SUPPORTED"
+    assert followup_data["state_trace"][-3:] == ["NEW_EVIDENCE", "REVERIFIED", "FINAL_VERDICT"]
+    assert followup_data["media_evidence"]["client_measurements_accepted"] is False
+    assert followup_data["media_evidence"]["followup"]["matching_prediction"]["bbox"] == _box(260, 100, 280, 120)
+    assert followup_data["media_evidence"]["followup"]["coordinate_transform"]["normalized_server_bbox"] == _box(130, 100, 140, 120)
+    assert followup_data["media_evidence"]["input_image_hashes_bound_to_receipt"] is True
+    assert followup_data["evidence_receipt"]["provenance"]["followup"]["source_image_hash"] == followup_data["media_evidence"]["followup"]["image_sha256"]
+    assert initial_hash != followup_data["media_evidence"]["followup"]["image_sha256"]
+    assert fake_provider.calls == 2
+    receipt_response = client.get(f"/api/receipts/{followup_data['evidence_receipt_id']}")
+    assert receipt_response.status_code == 200
+    assert receipt_response.json()["cryptographic_integrity_verified"] is True
+
+
+def test_media_api_rejects_client_measurement_fields():
+    response = client.post(
+        "/api/proofloop/media/start",
+        json={
+            "task_id": "MEDIA_EXTRA_FIELDS",
+            "primary_object": "bottle",
+            "target_region": _box(90, 90, 140, 140),
+            "image_base64": _image_b64(1),
+            "image_source_type": "USER_UPLOADED_IMAGE",
+            "before_bbox": _box(1, 1, 2, 2),
+            "laplacian_variance": 999999.0,
+            "model_confidence": 1.0,
+        },
+    )
+    assert response.status_code == 422
+    assert "extra_forbidden" in response.text
+
+
+def test_media_api_rejects_manifest_hash_mismatch(monkeypatch):
+    from backend.api import routes
+
+    monkeypatch.setattr(routes, "get_local_mask2former_provider", lambda: _FakeMediaProvider())
+    response = client.post(
+        "/api/proofloop/media/start",
+        json={
+            "task_id": "MEDIA_BAD_MANIFEST",
+            "primary_object": "bottle",
+            "target_region": _box(0, 0, 160, 160),
+            "image_base64": _image_b64(1),
+            "image_source_type": "MANIFEST_VERIFIED_DATASET_IMAGE",
+            "manifest_image_id": 397133,
+        },
+    )
+    assert response.status_code == 422
+    assert "provenance" in response.json()["detail"].lower()
 
 
 def test_closed_loop_benchmark_covers_resolution_and_abstention():
