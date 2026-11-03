@@ -67,6 +67,8 @@ def verify_archive_contents(archive_path: Path, prefix: str) -> dict[str, list[s
         ".venv/",
         ".git/",
         "data/coco_val2017_subset/images/",
+        "data/untouched_eval/images/",
+        "data/untouched_eval/india_images/",
         "native/proofcausality_core/target/",
         ".DS_Store",
         ".env",

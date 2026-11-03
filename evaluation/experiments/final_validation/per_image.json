@@ -1,0 +1,402 @@
+[
+  {
+    "image_id": 460347,
+    "file_name": "000000460347.jpg",
+    "ground_truth_instances": 7,
+    "predicted_instances": 5,
+    "matches_aware_iou50": 5,
+    "matches_aware_iou75": 4
+  },
+  {
+    "image_id": 308394,
+    "file_name": "000000308394.jpg",
+    "ground_truth_instances": 4,
+    "predicted_instances": 5,
+    "matches_aware_iou50": 1,
+    "matches_aware_iou75": 1
+  },
+  {
+    "image_id": 456496,
+    "file_name": "000000456496.jpg",
+    "ground_truth_instances": 5,
+    "predicted_instances": 7,
+    "matches_aware_iou50": 5,
+    "matches_aware_iou75": 4
+  },
+  {
+    "image_id": 565778,
+    "file_name": "000000565778.jpg",
+    "ground_truth_instances": 7,
+    "predicted_instances": 4,
+    "matches_aware_iou50": 1,
+    "matches_aware_iou75": 1
+  },
+  {
+    "image_id": 219578,
+    "file_name": "000000219578.jpg",
+    "ground_truth_instances": 4,
+    "predicted_instances": 3,
+    "matches_aware_iou50": 0,
+    "matches_aware_iou75": 0
+  },
+  {
+    "image_id": 443303,
+    "file_name": "000000443303.jpg",
+    "ground_truth_instances": 3,
+    "predicted_instances": 4,
+    "matches_aware_iou50": 2,
+    "matches_aware_iou75": 2
+  },
+  {
+    "image_id": 500663,
+    "file_name": "000000500663.jpg",
+    "ground_truth_instances": 3,
+    "predicted_instances": 3,
+    "matches_aware_iou50": 2,
+    "matches_aware_iou75": 0
+  },
+  {
+    "image_id": 25560,
+    "file_name": "000000025560.jpg",
+    "ground_truth_instances": 4,
+    "predicted_instances": 4,
+    "matches_aware_iou50": 4,
+    "matches_aware_iou75": 3
+  },
+  {
+    "image_id": 403817,
+    "file_name": "000000403817.jpg",
+    "ground_truth_instances": 3,
+    "predicted_instances": 6,
+    "matches_aware_iou50": 2,
+    "matches_aware_iou75": 2
+  },
+  {
+    "image_id": 239274,
+    "file_name": "000000239274.jpg",
+    "ground_truth_instances": 14,
+    "predicted_instances": 11,
+    "matches_aware_iou50": 8,
+    "matches_aware_iou75": 1
+  },
+  {
+    "image_id": 286994,
+    "file_name": "000000286994.jpg",
+    "ground_truth_instances": 9,
+    "predicted_instances": 9,
+    "matches_aware_iou50": 9,
+    "matches_aware_iou75": 6
+  },
+  {
+    "image_id": 312421,
+    "file_name": "000000312421.jpg",
+    "ground_truth_instances": 12,
+    "predicted_instances": 12,
+    "matches_aware_iou50": 8,
+    "matches_aware_iou75": 5
+  },
+  {
+    "image_id": 185250,
+    "file_name": "000000185250.jpg",
+    "ground_truth_instances": 5,
+    "predicted_instances": 5,
+    "matches_aware_iou50": 4,
+    "matches_aware_iou75": 3
+  },
+  {
+    "image_id": 356427,
+    "file_name": "000000356427.jpg",
+    "ground_truth_instances": 8,
+    "predicted_instances": 12,
+    "matches_aware_iou50": 4,
+    "matches_aware_iou75": 3
+  },
+  {
+    "image_id": 516316,
+    "file_name": "000000516316.jpg",
+    "ground_truth_instances": 11,
+    "predicted_instances": 2,
+    "matches_aware_iou50": 2,
+    "matches_aware_iou75": 2
+  },
+  {
+    "image_id": 360661,
+    "file_name": "000000360661.jpg",
+    "ground_truth_instances": 7,
+    "predicted_instances": 7,
+    "matches_aware_iou50": 7,
+    "matches_aware_iou75": 5
+  },
+  {
+    "image_id": 430961,
+    "file_name": "000000430961.jpg",
+    "ground_truth_instances": 4,
+    "predicted_instances": 17,
+    "matches_aware_iou50": 4,
+    "matches_aware_iou75": 4
+  },
+  {
+    "image_id": 577539,
+    "file_name": "000000577539.jpg",
+    "ground_truth_instances": 5,
+    "predicted_instances": 4,
+    "matches_aware_iou50": 1,
+    "matches_aware_iou75": 0
+  },
+  {
+    "image_id": 104612,
+    "file_name": "000000104612.jpg",
+    "ground_truth_instances": 12,
+    "predicted_instances": 17,
+    "matches_aware_iou50": 7,
+    "matches_aware_iou75": 3
+  },
+  {
+    "image_id": 448365,
+    "file_name": "000000448365.jpg",
+    "ground_truth_instances": 3,
+    "predicted_instances": 3,
+    "matches_aware_iou50": 2,
+    "matches_aware_iou75": 2
+  },
+  {
+    "image_id": 486438,
+    "file_name": "000000486438.jpg",
+    "ground_truth_instances": 9,
+    "predicted_instances": 10,
+    "matches_aware_iou50": 3,
+    "matches_aware_iou75": 3
+  },
+  {
+    "image_id": 369370,
+    "file_name": "000000369370.jpg",
+    "ground_truth_instances": 7,
+    "predicted_instances": 5,
+    "matches_aware_iou50": 1,
+    "matches_aware_iou75": 1
+  },
+  {
+    "image_id": 502737,
+    "file_name": "000000502737.jpg",
+    "ground_truth_instances": 4,
+    "predicted_instances": 6,
+    "matches_aware_iou50": 3,
+    "matches_aware_iou75": 3
+  },
+  {
+    "image_id": 515579,
+    "file_name": "000000515579.jpg",
+    "ground_truth_instances": 7,
+    "predicted_instances": 5,
+    "matches_aware_iou50": 5,
+    "matches_aware_iou75": 3
+  },
+  {
+    "image_id": 515445,
+    "file_name": "000000515445.jpg",
+    "ground_truth_instances": 7,
+    "predicted_instances": 7,
+    "matches_aware_iou50": 6,
+    "matches_aware_iou75": 4
+  },
+  {
+    "image_id": 173383,
+    "file_name": "000000173383.jpg",
+    "ground_truth_instances": 4,
+    "predicted_instances": 5,
+    "matches_aware_iou50": 1,
+    "matches_aware_iou75": 1
+  },
+  {
+    "image_id": 321214,
+    "file_name": "000000321214.jpg",
+    "ground_truth_instances": 3,
+    "predicted_instances": 7,
+    "matches_aware_iou50": 2,
+    "matches_aware_iou75": 1
+  },
+  {
+    "image_id": 355257,
+    "file_name": "000000355257.jpg",
+    "ground_truth_instances": 3,
+    "predicted_instances": 7,
+    "matches_aware_iou50": 1,
+    "matches_aware_iou75": 1
+  },
+  {
+    "image_id": 239347,
+    "file_name": "000000239347.jpg",
+    "ground_truth_instances": 4,
+    "predicted_instances": 4,
+    "matches_aware_iou50": 1,
+    "matches_aware_iou75": 0
+  },
+  {
+    "image_id": 473237,
+    "file_name": "000000473237.jpg",
+    "ground_truth_instances": 3,
+    "predicted_instances": 4,
+    "matches_aware_iou50": 2,
+    "matches_aware_iou75": 1
+  },
+  {
+    "image_id": 78915,
+    "file_name": "000000078915.jpg",
+    "ground_truth_instances": 12,
+    "predicted_instances": 24,
+    "matches_aware_iou50": 10,
+    "matches_aware_iou75": 8
+  },
+  {
+    "image_id": 96493,
+    "file_name": "000000096493.jpg",
+    "ground_truth_instances": 3,
+    "predicted_instances": 3,
+    "matches_aware_iou50": 0,
+    "matches_aware_iou75": 0
+  },
+  {
+    "image_id": 578500,
+    "file_name": "000000578500.jpg",
+    "ground_truth_instances": 14,
+    "predicted_instances": 20,
+    "matches_aware_iou50": 3,
+    "matches_aware_iou75": 1
+  },
+  {
+    "image_id": 428454,
+    "file_name": "000000428454.jpg",
+    "ground_truth_instances": 5,
+    "predicted_instances": 3,
+    "matches_aware_iou50": 3,
+    "matches_aware_iou75": 2
+  },
+  {
+    "image_id": 261061,
+    "file_name": "000000261061.jpg",
+    "ground_truth_instances": 5,
+    "predicted_instances": 5,
+    "matches_aware_iou50": 3,
+    "matches_aware_iou75": 2
+  },
+  {
+    "image_id": 168330,
+    "file_name": "000000168330.jpg",
+    "ground_truth_instances": 7,
+    "predicted_instances": 5,
+    "matches_aware_iou50": 5,
+    "matches_aware_iou75": 4
+  },
+  {
+    "image_id": 524456,
+    "file_name": "000000524456.jpg",
+    "ground_truth_instances": 6,
+    "predicted_instances": 5,
+    "matches_aware_iou50": 3,
+    "matches_aware_iou75": 0
+  },
+  {
+    "image_id": 326541,
+    "file_name": "000000326541.jpg",
+    "ground_truth_instances": 9,
+    "predicted_instances": 7,
+    "matches_aware_iou50": 4,
+    "matches_aware_iou75": 1
+  },
+  {
+    "image_id": 213086,
+    "file_name": "000000213086.jpg",
+    "ground_truth_instances": 5,
+    "predicted_instances": 5,
+    "matches_aware_iou50": 2,
+    "matches_aware_iou75": 2
+  },
+  {
+    "image_id": 231339,
+    "file_name": "000000231339.jpg",
+    "ground_truth_instances": 3,
+    "predicted_instances": 9,
+    "matches_aware_iou50": 2,
+    "matches_aware_iou75": 2
+  },
+  {
+    "image_id": 508730,
+    "file_name": "000000508730.jpg",
+    "ground_truth_instances": 6,
+    "predicted_instances": 4,
+    "matches_aware_iou50": 3,
+    "matches_aware_iou75": 2
+  },
+  {
+    "image_id": 580294,
+    "file_name": "000000580294.jpg",
+    "ground_truth_instances": 9,
+    "predicted_instances": 7,
+    "matches_aware_iou50": 1,
+    "matches_aware_iou75": 1
+  },
+  {
+    "image_id": 34873,
+    "file_name": "000000034873.jpg",
+    "ground_truth_instances": 9,
+    "predicted_instances": 9,
+    "matches_aware_iou50": 4,
+    "matches_aware_iou75": 3
+  },
+  {
+    "image_id": 186980,
+    "file_name": "000000186980.jpg",
+    "ground_truth_instances": 14,
+    "predicted_instances": 14,
+    "matches_aware_iou50": 5,
+    "matches_aware_iou75": 4
+  },
+  {
+    "image_id": 367680,
+    "file_name": "000000367680.jpg",
+    "ground_truth_instances": 14,
+    "predicted_instances": 18,
+    "matches_aware_iou50": 6,
+    "matches_aware_iou75": 3
+  },
+  {
+    "image_id": 311295,
+    "file_name": "000000311295.jpg",
+    "ground_truth_instances": 10,
+    "predicted_instances": 9,
+    "matches_aware_iou50": 5,
+    "matches_aware_iou75": 1
+  },
+  {
+    "image_id": 198960,
+    "file_name": "000000198960.jpg",
+    "ground_truth_instances": 3,
+    "predicted_instances": 4,
+    "matches_aware_iou50": 3,
+    "matches_aware_iou75": 2
+  },
+  {
+    "image_id": 113403,
+    "file_name": "000000113403.jpg",
+    "ground_truth_instances": 4,
+    "predicted_instances": 3,
+    "matches_aware_iou50": 0,
+    "matches_aware_iou75": 0
+  },
+  {
+    "image_id": 414170,
+    "file_name": "000000414170.jpg",
+    "ground_truth_instances": 7,
+    "predicted_instances": 7,
+    "matches_aware_iou50": 4,
+    "matches_aware_iou75": 3
+  },
+  {
+    "image_id": 389381,
+    "file_name": "000000389381.jpg",
+    "ground_truth_instances": 6,
+    "predicted_instances": 5,
+    "matches_aware_iou50": 2,
+    "matches_aware_iou75": 0
+  }
+]

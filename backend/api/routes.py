@@ -87,6 +87,7 @@ from backend.evidence.schemas import (
     VisionAuditVerdict,
 )
 from backend.evidence.recapture import plan_recapture
+from backend.evidence.taxonomy import are_classes_equivalent
 from backend.labelcourt.auditor import LabelCourtAuditor
 from backend.providers.local_segmentation import (
     InstancePrediction,
@@ -967,7 +968,7 @@ def audit_vision_annotation(req: VisionAuditRequest) -> VisionAuditResponse:
     for pred in predictions:
         iou = float(compute_mask_iou_fast(reference_mask, pred.mask))
         boundary = float(calculate_boundary_agreement(reference_mask, pred.mask))
-        is_cls_match = (pred.label.strip().lower() == req.annotation.category_name.strip().lower())
+        is_cls_match = are_classes_equivalent(pred.label, req.annotation.category_name)
 
         cand_indices = np.where(pred.mask)
         if len(cand_indices[0]) > 0:

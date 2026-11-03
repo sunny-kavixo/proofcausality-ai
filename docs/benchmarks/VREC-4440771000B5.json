@@ -1,0 +1,46 @@
+{
+  "report_id": "VREC-4440771000B5",
+  "timestamp": "2026-10-31T10:26:18.809569+00:00",
+  "software_version": "0.2.6",
+  "engine_name": "LabelCourt Real Vision Inference Auditor",
+  "inputs_hash": "70cdc91ab5b09b120e9ac3be4784a75f87d344f7953363f98ffc84d58540723e",
+  "measurements": {
+    "iou": 0.242,
+    "boundary_agreement": 0.4825,
+    "class_match": true,
+    "laplacian_variance": 2083.53,
+    "touches_border": false,
+    "detected_instances_count": 26,
+    "best_confidence": 0.519
+  },
+  "uncertainty_signals": [],
+  "verdict": "REVIEW",
+  "recapture_directive": null,
+  "provenance": {
+    "source_image_hash": "09e1d25c75f7879bdaa69c327fece5cabacd53939c8c2ef9e87f1c97a2e478c4",
+    "image_source_type": "MANIFEST_VERIFIED_DATASET_IMAGE",
+    "provenance_category": "VERIFIED_DATASET_IMAGE",
+    "is_independently_verified": true,
+    "canonical_source_url": "http://images.cocodataset.org/val2017/000000397133.jpg",
+    "license_status": "KNOWN",
+    "license_name": "Attribution License",
+    "license_url": "http://creativecommons.org/licenses/by/2.0/",
+    "redistribution_status": "PERMITTED_WITH_ATTRIBUTION",
+    "annotation_source_type": "HUMAN_ANNOTATION",
+    "annotation_verified": false,
+    "image_dimensions": {
+      "width": 640,
+      "height": 427
+    },
+    "manifest_image_id": 397133,
+    "human_annotation_hash": "82b4ef50fb7a7604f86a87e108e5dccdafdfb9a90664aaf12c90e72439309290",
+    "model_name": "facebook/mask2former-swin-tiny-coco-instance",
+    "model_revision": "22c4a2f15dc88149b8b8d9f4d42c54431fbd66f6",
+    "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
+    "device": "mps",
+    "inference_mode": "UNPROMPTED_INSTANCE_SEGMENTATION",
+    "output_sha256": "a5c4d915157d12e4eed08167d79ad35a4451d2b1dca4f6ac3cbddb759d45bb21",
+    "rust_accelerated": true
+  },
+  "receipt_sha256": "231f070ab1b46c16f0cf68f09083ff6fdab1535fd33b2e91aed5c14c9c498899"
+}

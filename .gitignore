@@ -71,3 +71,5 @@ target/
 
 # Local COCO images — never commit dataset images
 data/images/
+data/untouched_eval/images/
+data/untouched_eval/india_images/
