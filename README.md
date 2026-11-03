@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Rust Accelerated](https://img.shields.io/badge/Rust-optional%20kernels-orange.svg)](native/proofcausality_core/)
-[![Tests](https://img.shields.io/badge/tests-188%20passed-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-206%20passed-brightgreen.svg)](tests/)
 [![Meta Hackathon 2026](https://img.shields.io/badge/Meta_Global_AI_Hackathon-Indie_Developer-purple.svg)](https://cerebralvalley.ai/e/meta-ai-developer-hackathon)
 
 ProofCausality AI investigates reliable visual evidence verification for annotation-quality workflows and physical-action assessment.
@@ -53,9 +53,10 @@ Release **`v0.2.6`** delivers comprehensive defect remediation, distribution saf
    - Audited all 33 tracked images in `data/coco_val2017_subset/` ([DATASET_LICENSING_AUDIT.md](docs/research/DATASET_LICENSING_AUDIT.md)).
    - Enforced `.gitattributes` `export-ignore` rules on release archives to exclude restricted third-party photographs, while supporting reproducible user-side acquisition via `scripts/download_coco_subset.py`.
 6. **Unified Quality Assurance**:
-   - 188 Python regression tests passed.
+   - 206 Python regression tests passed.
    - 19 Rust native SIMD kernel tests passed.
-   - 10/10 Google Chrome Playwright browser tests passed (0 console errors).
+   - 5/5 Google Chrome Playwright browser acceptance cases passed (0 console errors).
+   - Fresh 50-image diagnostic MPS evaluation: 332 ground-truth instances and 366 predictions; taxonomy-aware recall **51.51%** (171/332) at IoU 0.50 and **33.13%** (110/332) at IoU 0.75. This is not external scientific validation.
 
 ---
 
@@ -163,7 +164,7 @@ The web interface features the **Neural Vision Audit** tab with:
 - **Total tests in `tests/test_receipts.py`**: **11 tests** collected and verified by pytest.
 - **Baseline before hotfix**: 1 test (`test_receipt_generation_and_verification`).
 - **Newly added by hotfix**: 10 tests (11 new tests replacing the 1 old test, net +10 tests).
-- **Repository-wide total**: **188 tests passed** (comprehensive regression, security, model error safety, provenance trust boundary, and release packaging verification).
+- **Repository-wide total**: **206 tests passed** (comprehensive regression, security, model error safety, provenance trust boundary, and release packaging verification).
 
 ---
 
@@ -347,7 +348,21 @@ python3 -m evaluation.benchmarks.genuine_model_benchmark
 
 The model weights are CC BY-NC 4.0 according to the upstream Mask2Former model zoo; the Hugging Face model-card license field is only `other`. Do not use this checkpoint as evidence of official Meta hackathon API integration.
 
-### 5. Start the Interactive Application
+### 5. Reproduce the final diagnostic benchmark
+
+With the declared COCO photographs and five attributed India-context photographs acquired
+locally under their documented licenses, provide the official COCO annotations explicitly:
+
+```bash
+PROOFCAUSALITY_COCO_ANNOTATIONS=/path/to/instances_val2017.json \
+  python evaluation/run_final_validation.py
+```
+
+The command writes machine-readable results under
+`evaluation/experiments/final_validation/`. The source distribution intentionally excludes
+third-party photographs; see the licensing audit before acquiring them.
+
+### 6. Start the Interactive Application
 ```bash
 python3 -m uvicorn backend.app:app --host 0.0.0.0 --port 8000
 ```

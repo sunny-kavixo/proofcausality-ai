@@ -1,7 +1,7 @@
 {
   "status": "PASS",
-  "timestamp_utc": "2026-10-31T09:26:53.012282+00:00",
-  "wall_clock_seconds": 26.55,
+  "timestamp_utc": "2026-11-03T04:42:42.528829+00:00",
+  "wall_clock_seconds": 26.28,
   "platform": "macOS-27.0.1-arm64-arm-64bit",
   "device": "mps",
   "dataset_partition": {
@@ -9608,8 +9608,8 @@
     ]
   },
   "receipt": {
-    "report_id": "RUN-EVAL50-20261031092653",
-    "timestamp": "2026-10-31T09:26:53.011306+00:00",
+    "report_id": "RUN-EVAL50-20261103044242",
+    "timestamp": "2026-11-03T04:42:42.527802+00:00",
     "software_version": "0.2.6",
     "engine_name": "ProofCausality-TaxonomyV1",
     "inputs_hash": "6abb034405cf3b958f075335941ceac5dd898a977257279af15f4184755683f4",
@@ -9630,7 +9630,7 @@
       "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
       "taxonomy_version": "v1.0.0"
     },
-    "receipt_sha256": "875db87b07d72e304c349ef618a2fee3e10f19eba9f9d01b1dc14525c012b1ac"
+    "receipt_sha256": "85d6c3317ed59b654555a11ce5c11cd64ccb03ab275b17320ee4ac63998a81d1"
   },
   "receipt_verified": true
 }

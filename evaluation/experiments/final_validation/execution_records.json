@@ -12,7 +12,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "f045430f4bc83bbbd37de87aa8222c8efaa2c9891e0e2e2461970d8279bac0ae",
-    "latency_ms": 422.14,
+    "latency_ms": 415.433,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -33,7 +33,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "f410e67b66305a75b0b465fc20854887ed6efd66a4e8a42329703fdbde7bb660",
-    "latency_ms": 165.13,
+    "latency_ms": 152.632,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -54,7 +54,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "0e13abd6105004ca60a4757437ed9649cd1270d006f84e2a9d7a464f630179df",
-    "latency_ms": 155.482,
+    "latency_ms": 149.64,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -75,7 +75,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "5f76c708fc2801794d6eb64483f185c29287f50b3b8dd5669680d63fe611b834",
-    "latency_ms": 151.474,
+    "latency_ms": 150.753,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -96,7 +96,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "d37dc54df4cbcd4acd940c206252bb06cd9ba31ebc97de26291044383b74b6fd",
-    "latency_ms": 150.891,
+    "latency_ms": 149.679,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -117,7 +117,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "254ec18e429530e1049cfa2c600949acdcc4a85849afa63414740d90b9eac8c9",
-    "latency_ms": 150.289,
+    "latency_ms": 147.923,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -138,7 +138,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "74dde3410647f7d004c1d3917434ccb4f6527ed0b03994683e1cb82adeba3ca8",
-    "latency_ms": 150.035,
+    "latency_ms": 152.836,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -159,7 +159,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "6394af0b8a3e590b00e74771b461e9cfff638bb061baadc09ff2a85f87f568f7",
-    "latency_ms": 152.325,
+    "latency_ms": 150.943,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -180,7 +180,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "40485bd082486e77f9b8f1d0fd7729539524bafbfc3a12cc1c63a8f34d68027f",
-    "latency_ms": 149.97,
+    "latency_ms": 154.286,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -201,7 +201,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "2949c4fdb35fa049c7a3276cd224726da6b11bbde49fbae526586137e8976588",
-    "latency_ms": 150.923,
+    "latency_ms": 150.846,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -222,7 +222,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "273efb0232d11dfb0fa63f98d3e33e0b8872b81255ee45b538ce1ec270f99867",
-    "latency_ms": 159.165,
+    "latency_ms": 189.18,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -243,7 +243,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "c7d3e9c4453a7f63ad406e47195ba44e8d7a5dc08cc4386b99fec86992a4f59a",
-    "latency_ms": 164.921,
+    "latency_ms": 197.392,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -264,7 +264,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "757d406d3348cfee64a95dbebbb4e5089a1076d293592706fb15dee41e7b3f5f",
-    "latency_ms": 165.807,
+    "latency_ms": 183.704,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -285,7 +285,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "fbb7d367f9a3684d41e7d9dcbe09a94a7373b621d15ef9d50dc062472456be35",
-    "latency_ms": 160.14,
+    "latency_ms": 153.982,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -306,7 +306,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "63ea6a447094f70388a1a69f4ce5545b786c13ea8bcefbd9c631bbf134054c13",
-    "latency_ms": 170.156,
+    "latency_ms": 156.588,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -327,7 +327,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "f14e1e66a2c4c8e00f941b72c3a017d326f525ddf45d3a0be0eb09872a9073ee",
-    "latency_ms": 162.317,
+    "latency_ms": 173.87,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -348,7 +348,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "0c4f839879dff247f97c1218aa080b17ad85039a464928b48367c6e7a7b69929",
-    "latency_ms": 164.17,
+    "latency_ms": 163.13,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -369,7 +369,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "4b63c3823919996ec33a52b4ce113256de86d5f9017bb01a6760f923ecef9fa7",
-    "latency_ms": 155.097,
+    "latency_ms": 157.357,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -390,7 +390,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "f5c5febff70818c9a82e766c99e46db683937cb8b2f4c704be38b13879fec688",
-    "latency_ms": 157.214,
+    "latency_ms": 151.806,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -411,7 +411,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "2834472fff890100fadcdc69ced7c7546bdba71f48ed6f30d3d1b9fbe72ac2c7",
-    "latency_ms": 169.038,
+    "latency_ms": 176.31,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -432,7 +432,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "53bc6921667a43d74f04d49e5380024eaa83eaf98072feb3dee2489f76bd3766",
-    "latency_ms": 148.768,
+    "latency_ms": 159.799,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -453,7 +453,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "5d62b04d5dc0f584c742a012d20a44868b3fca4110c4b65de3f3beb3adb9bb39",
-    "latency_ms": 163.585,
+    "latency_ms": 179.939,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -474,7 +474,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "d9553cd8497b5da19e1d5c9d5ae99e7eee05d40f120a22f61431f2235901b594",
-    "latency_ms": 156.496,
+    "latency_ms": 152.441,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -495,7 +495,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "f101d71ed87a6190d449cd89c3ce9c4181ffe0c4df506f42d44b97573e80721d",
-    "latency_ms": 149.768,
+    "latency_ms": 151.008,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -516,7 +516,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "b6d8269fd42c3b2fe49c3bcecca6f597ec346d6cf53f5c7a418c82d5c6f59d35",
-    "latency_ms": 146.732,
+    "latency_ms": 148.544,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -537,7 +537,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "a99bd721a1a524e1285b4870f6d1cfc25f125789abdbbb1d131194464af38abf",
-    "latency_ms": 205.278,
+    "latency_ms": 151.769,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -558,7 +558,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "6f3f96363e7d33c6028645c1b39dc5f74d9db729dd72dbdade95235e3a3d7e7f",
-    "latency_ms": 151.242,
+    "latency_ms": 154.898,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -579,7 +579,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "1e1ffaf9fea2c019ed147e2af3ae65edfd169ffbbee3886f50b92255748702ca",
-    "latency_ms": 152.551,
+    "latency_ms": 152.13,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -600,7 +600,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "44e3353b1ca7a8d69ec3a0211141876783f644426f71686b29f8c60dfe9704ac",
-    "latency_ms": 152.551,
+    "latency_ms": 151.029,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -621,7 +621,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "f7fb051eb24a2b7adcd5c50ec741935f136ae6c2d29ebc5c7542b200c1060b5d",
-    "latency_ms": 153.513,
+    "latency_ms": 151.939,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -642,7 +642,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "dae2e95876b1cade7476bfe14ce945b0fb42ff3e003f85969e668cbfb68f2d70",
-    "latency_ms": 150.09,
+    "latency_ms": 152.085,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -663,7 +663,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "198fa10f107c3b2d090a04655c3d2b7380795f5731cec90c71c10f516285fb8c",
-    "latency_ms": 166.661,
+    "latency_ms": 165.647,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -684,7 +684,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "6885a9cc44efd91d111658be73a8bda85b6401b082a81d462dbf1573956c4da6",
-    "latency_ms": 146.964,
+    "latency_ms": 154.484,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -705,7 +705,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "5544c01677e8a470f1b824878dd5487c4f7322122ff95519a106f526d0c39bb1",
-    "latency_ms": 161.858,
+    "latency_ms": 168.086,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -726,7 +726,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "b49157bab22de9e5e9d18dd5705af48e6a627d0e6430e5847854287d121b1786",
-    "latency_ms": 153.009,
+    "latency_ms": 149.322,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -747,7 +747,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "b10b906ea68f2bfaa7f2ec91b4f434a8dc9c6e73a4adbfc72309d84bef52c724",
-    "latency_ms": 147.164,
+    "latency_ms": 155.453,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -768,7 +768,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "1d50f4cc7a5867ed3fc7b49961e62e92f396173d3d2aa53d7b1009c6888dd50d",
-    "latency_ms": 148.375,
+    "latency_ms": 151.433,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -789,7 +789,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "9cc98d7f90b3590a697880d0efec6e76d70461515c090b2b8287ca14299f9ebf",
-    "latency_ms": 154.101,
+    "latency_ms": 150.414,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -810,7 +810,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "c623757581a409eb092f5a2daca4f4222946eb6a8f53965bd5fcdc77fb18552c",
-    "latency_ms": 150.887,
+    "latency_ms": 152.913,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -831,7 +831,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "443bb49d81b3dc80060d350ecf6a358a0c30cafdeb8428de5fe87692de337e15",
-    "latency_ms": 149.129,
+    "latency_ms": 152.187,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -852,7 +852,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "910ae0eb5be666d902ccf26e771a15711729959fdb03844dd8699a840eb1e373",
-    "latency_ms": 157.38,
+    "latency_ms": 155.167,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -873,7 +873,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "b36eee8643436071ec3ceaf5b6501b841e14d954bc47bfbf0b640fb5ab89afd7",
-    "latency_ms": 152.711,
+    "latency_ms": 151.484,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -894,7 +894,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "b72018df06e746264acffc442fbd3649d9005ba4dd86636e92fb9e51e5f8b12a",
-    "latency_ms": 156.345,
+    "latency_ms": 155.112,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -915,7 +915,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "f05ecb519da7b59db8f29dcce1a3773c5b01767edb8a7a9b882a870d869ed1a6",
-    "latency_ms": 157.143,
+    "latency_ms": 158.644,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -936,7 +936,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "d1f296b8583d6f2e0ab1341f33dfd89d0f1f0996c00bab302ddb28d3aad2b645",
-    "latency_ms": 167.707,
+    "latency_ms": 165.242,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -957,7 +957,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "98eecd701349c6dd940fdfe19f1913761389f125561d785811a76b8f5493d4d5",
-    "latency_ms": 160.236,
+    "latency_ms": 157.74,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -978,7 +978,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "ada1291ecff331d145998c4013bff35e239c92761492e211c836f296c8c168cb",
-    "latency_ms": 162.532,
+    "latency_ms": 158.129,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -999,7 +999,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "38b6ffacab898881bb1690d78ae5405e6389483827bfcc30ca48b703ff210ae5",
-    "latency_ms": 156.29,
+    "latency_ms": 151.756,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -1020,7 +1020,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "5c23f2c913061e9b36ee91b79773f76a5b9c290152c2eada00a0ad8e97de1c41",
-    "latency_ms": 148.068,
+    "latency_ms": 150.621,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",
@@ -1041,7 +1041,7 @@
     "checkpoint_sha256": "3550e8b21381d082c4d12b06a4b7c5f0f4a530125eee4c5f264b1e5f43dfab80",
     "checkpoint_size_bytes": 189998168,
     "output_sha256": "1a866e4fa156ea88809972e3c76a13348d3d5e4e5a011ca786493d51fd801b45",
-    "latency_ms": 150.025,
+    "latency_ms": 151.994,
     "execution_status": "SUCCEEDED",
     "runtime": {
       "python": "3.12.14",

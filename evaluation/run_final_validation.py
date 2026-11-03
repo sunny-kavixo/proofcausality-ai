@@ -12,6 +12,7 @@ Executes end-to-end scientific validation:
 
 from __future__ import annotations
 
+import argparse
 from collections import defaultdict
 import csv
 from datetime import datetime, timezone
@@ -20,6 +21,7 @@ import json
 import os
 from pathlib import Path
 import platform
+import sys
 import ssl
 import time
 import urllib.request
@@ -27,6 +29,10 @@ import urllib.request
 import numpy as np
 from PIL import Image, ImageDraw
 import certifi
+
+ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from backend.evidence.image_processing import (
     create_disagreement_visual_overlay,
@@ -46,8 +52,7 @@ from backend.providers.local_segmentation import (
 )
 from evaluation.grouped_statistics import grouped_bootstrap_interval
 
-ROOT = Path(__file__).resolve().parent.parent
-SCRATCH_ANNOTATIONS = Path("/Users/sunny/.gemini/antigravity-ide/brain/cb772cb7-2a41-4da4-8533-e38ce2883a9e/scratch/instances_val2017.json")
+DEFAULT_ANNOTATIONS = ROOT / "data" / "instances_val2017.json"
 DATA_DIR = ROOT / "data" / "untouched_eval"
 OUTPUT_DIR = ROOT / "evaluation" / "experiments" / "final_validation"
 
@@ -192,12 +197,14 @@ def compute_mask_scale(area_pixels: int) -> str:
     return "large"
 
 
-def acquire_coco_50_selection() -> tuple[list[dict], list[dict], dict[int, str], dict[int, dict]]:
+def acquire_coco_50_selection(
+    annotations_path: Path,
+) -> tuple[list[dict], list[dict], dict[int, str], dict[int, dict]]:
     """Select 50 diverse untouched COCO val2017 images with pre-declared IDs and category coverage."""
-    if not SCRATCH_ANNOTATIONS.exists():
-        raise FileNotFoundError(f"Required official COCO metadata missing at: {SCRATCH_ANNOTATIONS}")
+    if not annotations_path.exists():
+        raise FileNotFoundError(f"Required official COCO metadata missing at: {annotations_path}")
 
-    with open(SCRATCH_ANNOTATIONS, "r", encoding="utf-8") as f:
+    with open(annotations_path, "r", encoding="utf-8") as f:
         coco = json.load(f)
 
     categories = {c["id"]: c["name"] for c in coco["categories"]}
@@ -303,7 +310,7 @@ def acquire_indian_context_images(dest_dir: Path) -> list[dict]:
 import io
 
 
-def run_benchmark() -> dict:
+def run_benchmark(annotations_path: Path) -> dict:
     t_start = time.perf_counter()
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     gallery_dir = OUTPUT_DIR / "hard_case_gallery"
@@ -313,7 +320,7 @@ def run_benchmark() -> dict:
     india_images_dir = DATA_DIR / "india_images"
 
     print("Step 1: Selecting 50 pre-declared untouched COCO val2017 images...")
-    coco_images, coco_annotations, categories, licenses = acquire_coco_50_selection()
+    coco_images, coco_annotations, categories, licenses = acquire_coco_50_selection(annotations_path)
     print(f"Selected {len(coco_images)} COCO images with {len(coco_annotations)} annotations.")
 
     print("Step 2: Downloading and verifying COCO image bytes...")
@@ -786,7 +793,10 @@ def run_benchmark() -> dict:
         ],
         "india_context_images": india_cases,
     }, indent=2))
-    (OUTPUT_DIR / "raw_predictions.json").write_text(json.dumps(raw_predictions, indent=2))
+    raw_predictions_text = "[\n" + ",\n".join(
+        f"  {json.dumps(record)}" for record in raw_predictions
+    ) + "\n]\n"
+    (OUTPUT_DIR / "raw_predictions.json").write_text(raw_predictions_text)
     (OUTPUT_DIR / "execution_records.json").write_text(json.dumps(execution_records, indent=2))
     (OUTPUT_DIR / "per_ground_truth.json").write_text(json.dumps(eval_results["taxonomy_aware_v1"]["per_gt_rows"], indent=2))
     (OUTPUT_DIR / "per_image.json").write_text(json.dumps(eval_results["taxonomy_aware_v1"]["per_img_rows"], indent=2))
@@ -796,20 +806,44 @@ def run_benchmark() -> dict:
     # Gallery attribution notice
     attribution_text = (
         "# Hard-Case Failure Gallery Attribution & Redistribution Notice\n\n"
-        "All visual overlay PNGs in this directory are diagnostic research derivatives "
-        "created for scientific validation of segmentation failures.\n\n"
-        "## Underlying Photographic Sources\n"
-        "1. **MS COCO 2017 Validation Set Photographs**:\n"
-        "   - Copyright held by respective Flickr photographers.\n"
-        "   - Licenses: CC BY 2.0, CC BY-SA 2.0, CC BY-NC-SA 2.0.\n"
-        "2. **Indian-Context Photographic Sources**:\n"
-        "   - Bikes Street Parking: Pratyush Sen (CC0 1.0 Universal)\n"
-        "   - Bari-Jajapur Road Crossing: Surya Narayan (CC BY 3.0 Unported)\n"
-        "   - A Local Market in Delhi: Flicka (CC BY-SA 4.0 International)\n"
-        "   - A Rest in the Shade (Delhi Auto Rickshaw): Marc van der Chijs (CC BY-SA 2.0 Generic)\n"
-        "   - Bajaj Motorcycle Urban View: Vatsal Soni (CC BY-SA 4.0 International)\n\n"
-        "Redistribution requires preserving creator attribution and upstream license obligations. "
-        "The repository's MIT license does NOT apply to these third-party photographic assets.\n"
+        "All visual overlay PNGs in this directory are diagnostic research derivatives created "
+        "for scientific validation and failure analysis of instance segmentation.\n\n"
+        "## Underlying Photographic Sources & Licenses\n\n"
+        "1. **Bikes Street Parking (`india_01_bikes_parking`)**:\n"
+        "   - **Creator**: Pratyush Sen\n"
+        "   - **Source**: Wikimedia Commons / Open Photography\n"
+        "   - **License**: CC0 1.0 Universal (Public Domain Dedication)\n"
+        "   - **License URL**: https://creativecommons.org/publicdomain/zero/1.0/\n\n"
+        "2. **Bari-Jajapur Road Crossing (`india_02_bari_jajapur`)**:\n"
+        "   - **Creator**: Surya Narayan\n"
+        "   - **Source**: Wikimedia Commons\n"
+        "   - **License**: Creative Commons Attribution 3.0 Unported (CC BY 3.0)\n"
+        "   - **License URL**: https://creativecommons.org/licenses/by/3.0/\n\n"
+        "3. **A Local Market in Delhi (`india_03_delhi_market`)**:\n"
+        "   - **Creator**: Flicka\n"
+        "   - **Source**: Wikimedia Commons\n"
+        "   - **License**: Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)\n"
+        "   - **License URL**: https://creativecommons.org/licenses/by-sa/4.0/\n\n"
+        "4. **A Rest in the Shade / Auto Rickshaw (`india_04_delhi_autorickshaw`)**:\n"
+        "   - **Creator**: Marc van der Chijs\n"
+        "   - **Source**: Flickr / Wikimedia Commons\n"
+        "   - **License**: Creative Commons Attribution-ShareAlike 2.0 Generic (CC BY-SA 2.0)\n"
+        "   - **License URL**: https://creativecommons.org/licenses/by-sa/2.0/\n\n"
+        "5. **Bajaj Motorcycle Urban View (`india_05_bajaj_motorcycle`)**:\n"
+        "   - **Creator**: Vatsal Soni\n"
+        "   - **Source**: Wikimedia Commons\n"
+        "   - **License**: Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)\n"
+        "   - **License URL**: https://creativecommons.org/licenses/by-sa/4.0/\n\n"
+        "## Creative Commons ShareAlike (CC BY-SA) Derivative Notice\n\n"
+        "In compliance with the ShareAlike condition of CC BY-SA 2.0 and CC BY-SA 4.0:\n"
+        "- All derivative overlay images derived from CC BY-SA works (`hardcase_india_03_*`, "
+        "`hardcase_india_04_*`, and `hardcase_india_05_*`) are hereby released under the "
+        "**Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)** license.\n"
+        "- **Modifications**: Computer vision neural segmentation prediction masks, reference "
+        "bounding polygons, confidence scores, and diagnostic text labels have been composited "
+        "over the original source photographs.\n"
+        "- The repository software license (MIT) applies strictly to the source code and does "
+        "**NOT** apply to any photographic assets or derivative overlays in this directory.\n\n"
     )
     (gallery_dir / "ATTRIBUTION.md").write_text(attribution_text)
 
@@ -818,6 +852,14 @@ def run_benchmark() -> dict:
 
 
 if __name__ == "__main__":
-    res = run_benchmark()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--annotations-json",
+        type=Path,
+        default=Path(os.environ.get("PROOFCAUSALITY_COCO_ANNOTATIONS", DEFAULT_ANNOTATIONS)),
+        help="Official COCO instances_val2017.json path (or set PROOFCAUSALITY_COCO_ANNOTATIONS)",
+    )
+    args = parser.parse_args()
+    res = run_benchmark(args.annotations_json)
     print("Summary:")
     print(json.dumps(res, indent=2))
