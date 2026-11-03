@@ -1,7 +1,7 @@
 # Final Repository Audit — v0.2.8 candidate + ProofLoop
 
 **Audit date:** 2026-11-03
-**Current audited commit:** `77e0d9ebdd1f00adf88dc9c9e25f4794f1bb2e4d` (built on preserved start commit `6f9ba97`)
+**Current audited commit:** `ac3d2560037d9912344700caf9b65aad9d4a347b` (built on preserved start commit `6f9ba97`)
 **Scope:** Git-tracked repository files, runtime paths, tests, release evidence, and the ProofLoop change set.
 
 ## Executive result
