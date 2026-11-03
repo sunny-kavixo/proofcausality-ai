@@ -107,7 +107,7 @@
   <!-- COLUMN 3: DECISION & RECOVERY -->
   <rect x="830" y="110" width="220" height="540" rx="8" fill="url(#cardGrad)" stroke="#1f2937" stroke-width="1.5" />
   <rect x="830" y="110" width="220" height="36" rx="8" fill="#1f2937" />
-  <text x="940" y="133" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#93c5fd" letter-spacing="0.5">3. ARBITRATION & RECOVERY</text>
+  <text x="940" y="133" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#93c5fd" letter-spacing="0.5">3. ARBITRATION &amp; RECOVERY</text>
 
   <rect x="850" y="165" width="180" height="100" rx="6" fill="#0b0f19" stroke="#374151" />
   <text x="940" y="190" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#f8fafc">Decision Layer</text>

@@ -1,4 +1,4 @@
-# FINAL META HACKATHON SUBMISSION HANDOFF — PROOFCAUSALITY AI (v0.2.7)
+# FINAL META HACKATHON SUBMISSION HANDOFF — PROOFCAUSALITY AI (v0.2.8)
 
 **Project Name:** ProofCausality AI  
 **Repository:** [https://github.com/sunny-kavixo/proofcausality-ai](https://github.com/sunny-kavixo/proofcausality-ai)  
@@ -7,7 +7,7 @@
 **Theme:** Push the Frontier  
 **Official Portal:** [https://cerebralvalley.ai/e/meta-ai-developer-hackathon](https://cerebralvalley.ai/e/meta-ai-developer-hackathon)  
 **Submission deadline:** The current public event page states **November 4, 2026, 9:00 PM ET**, equivalent to **November 5, 2026, 07:30 IST** after the 2026 EST change. The authenticated participant dashboard was not accessed; confirm it before submission.
-**Latest published release:** `v0.2.7` ([GitHub Release](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.7))
+**Latest published release:** `v0.2.8` ([GitHub Release](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.8))
 
 ---
 
@@ -98,7 +98,7 @@ Evaluated on 37 benchmark cases (12 curated tabletop geometric metadata pairs + 
 
 ### 1. Installation from Release Archive (Zero-Config)
 ```bash
-# Clone or download release v0.2.7
+# Clone or download release v0.2.8
 git clone https://github.com/sunny-kavixo/proofcausality-ai.git
 cd proofcausality-ai
 
@@ -107,7 +107,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 
-# Run complete test suite (the v0.2.7 baseline had 206 Python tests; run this command for the current checkout)
+# Run complete test suite (v0.2.8 has 217 Python tests; v0.2.7 had 206 baseline tests)
 python3 -m pytest -q
 ```
 
@@ -158,4 +158,18 @@ ProofCausality AI introduces **Evidence Calculus**:
 ## 10. Remaining Owner-Only Actions
 
 1. **Demonstration Video:** Record and upload the 2–3 minute video presentation following the script above to YouTube (public or unlisted).
-2. **Portal Submission:** Paste the submission description, repository link ([https://github.com/sunny-kavixo/proofcausality-ai](https://github.com/sunny-kavixo/proofcausality-ai)), release link ([https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.7](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.7)), and YouTube URL into the authenticated participant dashboard after verifying its exact deadline.
+2. **Portal Submission:** Paste the submission description, repository link ([https://github.com/sunny-kavixo/proofcausality-ai](https://github.com/sunny-kavixo/proofcausality-ai)), release link ([https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.8](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.8)), and YouTube URL into the authenticated participant dashboard after verifying its exact deadline.
+
+## 11. Final Submission Checklist
+
+| Item | Status | Evidence or owner action |
+| :--- | :---: | :--- |
+| Public repository and preserved history | **READY** | `main` is current; v0.2.7 remains preserved. |
+| Published v0.2.8 release and checksums | **READY** | [GitHub release v0.2.8](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.8) |
+| Final CI and test verification | **READY** | GitHub Actions run [41726973837](https://github.com/sunny-kavixo/proofcausality-ai/actions/runs/41726973837); 217 Python and 19 Rust tests passed. |
+| README assets, links, diagrams, and release references | **READY** | Verified in the final publication audit. |
+| Real-media ProofLoop demonstration | **READY** | Server-derived measurements, distinct image hashes, valid receipts, and explicit scientific limitations are documented. |
+| Meta model integration disclosure | **READY / BLOCKED** | Hosted Meta inference remains `META_INFERENCE_BLOCKED` without owner credentials; do not claim live Meta inference. |
+| Scientific claims and limitations | **READY** | No human-study, temporal-causality, or production-certification claim is made. |
+| 2–3 minute demonstration video | **OWNER ACTION** | Record and upload using the script in Section 8. |
+| Authenticated portal submission | **OWNER ACTION** | Confirm the dashboard deadline/timezone, paste the prepared text, add the video URL, and submit before the portal deadline. |

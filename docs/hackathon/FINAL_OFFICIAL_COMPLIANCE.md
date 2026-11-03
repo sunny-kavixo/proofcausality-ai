@@ -30,7 +30,7 @@
 * **Judging Alignment:**
   1. *Creativity:* Novel Evidence Calculus theory, Evidence Debt quantification, and closed-loop ReCapture guidance.
   2. *Technical Ambition:* Full-stack integration combining high-performance Rust SIMD numerical kernels, FastAPI REST backend, directed acyclic graph (DAG) dependency evaluation, and interactive frontend.
-  3. *Whether it Works:* v0.2.7 evidence includes 206 baseline Python tests, 19 Rust tests, 5/5 Chrome acceptance cases, real image inference, deterministic overlays, and SHA-256 payload-integrity receipts. The v0.2.8 candidate adds a server-derived real-media ProofLoop pair experiment, plus separately labeled controlled metadata results.
+  3. *Whether it Works:* v0.2.7 evidence includes 206 baseline Python tests, 19 Rust tests, 5/5 Chrome acceptance cases, real image inference, deterministic overlays, and SHA-256 payload-integrity receipts. The published v0.2.8 release adds 217 Python tests, a server-derived real-media ProofLoop pair experiment, and separately labeled controlled metadata results.
 * **Status:** **PASS**
 
 ### Selected Theme: Push the Frontier
@@ -106,12 +106,12 @@
 | Deliverable | Official Requirement | Project Artifact | Status |
 | :--- | :--- | :--- | :---: |
 | **1. Public Source Code** | Public GitHub Repository with complete history | [sunny-kavixo/proofcausality-ai](https://github.com/sunny-kavixo/proofcausality-ai) | **PASS** |
-| **2. Release Tag & Archive** | Tagged release with source archive and checksums | Release `v0.2.7` ([SHA-256 Verified](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.7)) | **PASS** |
+| **2. Release Tag & Archive** | Tagged release with source archive and checksums | Release `v0.2.8` ([SHA-256 Verified](https://github.com/sunny-kavixo/proofcausality-ai/releases/tag/v0.2.8)) | **PASS** |
 | **3. Documentation** | Complete architecture, mathematics, and reproduction steps | `README.md`, `docs/architecture/*.svg`, `docs/research/*.md` | **PASS** |
 | **4. Real Working Software** | Reproducible executable without mock dependencies | FastAPI + Vanilla JS + Rust SIMD dylib (zero mocks in app) | **PASS** |
 | **5. Evidence Receipts** | Cryptographic verification of audit payload integrity | Canonical unkeyed SHA-256 JSON receipts | **PASS (INTEGRITY ONLY)** |
-| **6. Demonstration Video** | 2–3 minute video presentation covering problem, demo, and tech | Demo script ready in `META_SUBMISSION_HANDOFF.md` | **BLOCKED (Owner Action)** |
-| **7. Final Submission Form** | Portal entry submitted before Nov 4, 9:00 PM EST | Submission text prepared in `META_SUBMISSION_HANDOFF.md` | **BLOCKED (Owner Action)** |
+| **6. Demonstration Video** | 2–3 minute video presentation covering problem, demo, and tech | Demo script ready in `FINAL_META_SUBMISSION_HANDOFF.md` | **BLOCKED (Owner Action)** |
+| **7. Final Submission Form** | Portal entry submitted before Nov 4, 9:00 PM EST | Submission text and checklist prepared in `FINAL_META_SUBMISSION_HANDOFF.md` | **BLOCKED (Owner Action)** |
 
 ---
 
