@@ -24,7 +24,7 @@ client = TestClient(app)
 def test_version_synchronization_across_repository():
     """Verify that version strings match exactly across all configuration and code files."""
     canonical_version = __version__
-    assert canonical_version == "0.2.6"
+    assert canonical_version == "0.2.7"
     assert get_version() == canonical_version
 
     # 1. pyproject.toml
@@ -76,7 +76,7 @@ def test_release_packaging_archive_safety(tmp_path: Path):
     if not (REPO_ROOT / ".git").exists():
         pytest.skip("Creating a git archive is a checkout-only release-maintainer test")
     # Build test tarball into tmp_path
-    version = "0.2.6"
+    version = "0.2.7"
     prefix = f"proofcausality-ai-{version}/"
     tar_path = tmp_path / f"test-release-{version}.tar.gz"
 

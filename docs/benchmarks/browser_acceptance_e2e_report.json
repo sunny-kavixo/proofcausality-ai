@@ -1,5 +1,5 @@
 {
-  "test_run_timestamp": "2026-11-03T04:29:31Z",
+  "test_run_timestamp": "2026-11-03T05:23:02Z",
   "environment": {
     "python": "3.12.14",
     "base_url": "http://127.0.0.1:8008",
@@ -15,10 +15,10 @@
       "boundary": "0.482",
       "class_match": "MATCH",
       "instances_detected": "26 obj",
-      "latency": "6153.4 ms",
-      "receipt_id": "VREC-EB104FE63326",
-      "receipt_checksum": "554b0b61c2e23aae087501f0177a471ce67333d367a976a49840b4f26d9bc449",
-      "receipt_downloaded_file": "docs/benchmarks/VREC-EB104FE63326.json",
+      "latency": "6650.9 ms",
+      "receipt_id": "VREC-366DB5F72B92",
+      "receipt_checksum": "97b0dccc0ffcb24724f522303a0f3c82e3667d6949fd14ecf1cd3ccaedc9110b",
+      "receipt_downloaded_file": "docs/benchmarks/VREC-366DB5F72B92.json",
       "receipt_download_integrity_verified": true,
       "overlay_bytes_length": 675326,
       "screenshot": "docs/benchmarks/browser_vision_audit_desktop.png"
@@ -55,7 +55,7 @@
       "reason": "LOW_SPATIAL_OVERLAP",
       "instances_detected": "26 obj",
       "iou": "0.218",
-      "receipt_id": "VREC-EC2580FA4DBC",
+      "receipt_id": "VREC-A828F4A859FD",
       "screenshot": "docs/benchmarks/browser_vision_audit_upload.png"
     },
     "mobile_responsive": {

@@ -39,6 +39,7 @@ from backend.evidence.image_processing import (
     create_single_mask_overlay,
     parse_coco_polygon_to_mask,
 )
+from backend import __version__
 from backend.evidence.matching import HungarianInstanceMatcher, compute_iou
 from backend.evidence.receipts import generate_receipt, verify_receipt_integrity
 from backend.evidence.taxonomy import (
@@ -719,7 +720,7 @@ def run_benchmark(annotations_path: Path) -> dict:
     receipt = generate_receipt(
         report_id=receipt_report_id,
         engine_name="ProofCausality-TaxonomyV1",
-        software_version="0.2.6",
+        software_version=__version__,
         inputs_hash=receipt_inputs_hash,
         measurements={
             "baseline_recall_iou50": eval_results["baseline_exact"]["recall_class_aware_iou50"],
